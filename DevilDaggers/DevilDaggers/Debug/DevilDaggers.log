@@ -1,5 +1,0 @@
-﻿  main.cpp
-LINK : warning LNK4098: la biblioteca predeterminada'LIBCMT' entra en conflicto con otras bibliotecas; use la biblioteca /NODEFAULTLIB:biblioteca
-LINK : warning LNK4098: la biblioteca predeterminada'MSVCRT' entra en conflicto con otras bibliotecas; use la biblioteca /NODEFAULTLIB:biblioteca
-glew32s.lib(glew.obj) : warning LNK4099: no se encontr¾ PDB 'vc120.pdb' con 'glew32s.lib(glew.obj)' o en 'F:\UNIVERSIDAD\Cuarto\Octavo Cuatrimestre\Videojuegos\videojuego\DevilDaggers\Debug\vc120.pdb'; se vincularß el objeto sin tener en cuenta informaci¾n de depuraci¾n
-  DevilDaggers.vcxproj -> F:\UNIVERSIDAD\Cuarto\Octavo Cuatrimestre\Videojuegos\videojuego\DevilDaggers\Debug\DevilDaggers.exe

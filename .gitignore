@@ -4,7 +4,8 @@ DevilDaggers/DevilDaggers/DevilDaggers.vcxproj
 DevilDaggers/.vs/
 DevilDaggers/Debug/
 DevilDaggers/DevilDaggers/Debug/
-DevilDaggersx64/Debug/
+DevilDaggers/x64/
+DevilDaggers/DevilDaggers/x64/
 pene.txt
 
 # Created by https://www.gitignore.io/api/windows,visualstudio
