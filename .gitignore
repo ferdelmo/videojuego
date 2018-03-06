@@ -1,9 +1,10 @@
 DevilDaggers/DevilDaggers/DevilDaggers.vcxproj.user
 DevilDaggers/DevilDaggers/DevilDaggers.vcxproj.filters
 DevilDaggers/DevilDaggers/DevilDaggers.vcxproj
-DevilDaggers/.vs/DevilDaggers/v15
-DevilDaggers/Debug
-DevilDaggersx64/Debug
+DevilDaggers/.vs/DevilDaggers/v15/
+DevilDaggers/Debug/
+DevilDaggers/DevilDaggers/Debug/
+DevilDaggersx64/Debug/
 pene.txt
 
 # Created by https://www.gitignore.io/api/windows,visualstudio
