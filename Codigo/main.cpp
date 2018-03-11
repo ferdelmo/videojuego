@@ -11,14 +11,6 @@
 using namespace std;
 
 
-GLfloat points[] = {
-	0.0f, 0.25f, 0.0f,
-	0.25f, -0.25f, 0.25f,
-	-0.25f, -0.25f, 0.0f
-};
-
-
-
 string leerStringFromFIle(string path) {
 	ifstream inFile;
 	inFile.open(path);//open the input file
@@ -58,6 +50,12 @@ int main() {
 	glViewport(0, 0, ancho, alto);
 
 	// triangulo
+	GLfloat points[] = {
+		0, (0 + 0.25f), 0,
+		0 + 0.25f, (0 - 0.25f),0,
+		0 - 0.25f, (0 - 0.25f),0
+	};
+
 	GLfloat colors[] = {
 		1.0f, 0.0f, 0.0f,
 		0.0f, 1.0f, 0.0f,
@@ -72,6 +70,7 @@ int main() {
 	GLuint VAO;
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
+
 
 	glBindBuffer(GL_ARRAY_BUFFER, points_VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(points), points, GL_STATIC_DRAW);
@@ -100,6 +99,9 @@ int main() {
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
 
+	Personaje &per = Personaje::getInstance();
+	glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
+	//glfwSetKeyCallback(window, Personaje::controles);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -125,11 +127,8 @@ int main() {
 
 		/* Poll for and process events */
 		glfwPollEvents();
-
-		glBindBuffer(GL_ARRAY_BUFFER, points_VBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(points), points, GL_STATIC_DRAW);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), NULL);
-		glEnableVertexAttribArray(0);
+		per.controlesInFrame(window);
+		per.renderizar(points_VBO,colors_VBO);
 	}
 
 	glfwTerminate();
