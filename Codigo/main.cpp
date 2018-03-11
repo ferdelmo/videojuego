@@ -82,10 +82,24 @@ int main() {
 	glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), NULL);
 	glEnableVertexAttribArray(1);
-	glBindVertexArray(0);	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);	glCompileShader(vertexShader);	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);	glCompileShader(fragmentShader);	GLuint shaderProgram = glCreateProgram();
+	glBindVertexArray(0);
+
+	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+	glCompileShader(vertexShader);
+
+	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+	glCompileShader(fragmentShader);
+
+	GLuint shaderProgram = glCreateProgram();
 	glAttachShader(shaderProgram, vertexShader);
 	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);	glDeleteShader(vertexShader);	glDeleteShader(fragmentShader);
+	glLinkProgram(shaderProgram);
+
+	glDeleteShader(vertexShader);
+	glDeleteShader(fragmentShader);
+
 
 	while (!glfwWindowShouldClose(window))
 	{
