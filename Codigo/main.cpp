@@ -12,6 +12,8 @@ using namespace std;
 
 int main() {
 	glfwInit();
+
+
 	GLFWwindow* window = glfwCreateWindow(800, 600, "PICHA BRAVA", nullptr,
 		nullptr);
 	if (window == nullptr)
@@ -31,43 +33,25 @@ int main() {
 	int ancho, alto;
 	glfwGetFramebufferSize(window, &ancho, &alto);
 	glViewport(0, 0, ancho, alto);
-
-	// triangulo
-	GLfloat points[] = {
-		0, (0 + 0.25f), 0,
-		0 + 0.25f, (0 - 0.25f),0,
-		0 - 0.25f, (0 - 0.25f),0
-	};
-
-	GLfloat colors[] = {
-		1.0f, 0.0f, 0.0f,
-		0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 1.0f
-	};
-
 	
-
+	//instancia el personage
 	Personaje &per = Personaje::getInstance();
+	//evita perder teclas entre frames
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
 	//glfwSetKeyCallback(window, Personaje::controles)
-	glfwSetMouseButtonCallback(window, Personaje::mouse);
+	//glfwSetMouseButtonCallback(window, Personaje::mouse);
 
 	while (!glfwWindowShouldClose(window))
 	{
-		// Renderizamos
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f); /* especifica el color
-											  usado cuando los color buffers se borran.Por defecto es negro,
-											  aquí lo estamos fijando a un color rojizo. */
-
-		glClear(GL_COLOR_BUFFER_BIT); /* la ventana tomará el color
-									  previamente fijado mediante glClearColor */
-
+		//BORRA EL FONDO
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		//coge las entradas de este frame
 		per.controlesInFrame(window);
+		//renderiza el personaje y las balas
 		per.renderizar();
-							  // Hacemos el intercambio de front y back buffer
+		//pinta lo que haya en los buffers
 		glfwSwapBuffers(window);
-
-		/* Poll for and process events */
+		//lee los eventos
 		glfwPollEvents();
 	}
 
