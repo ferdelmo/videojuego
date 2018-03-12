@@ -14,6 +14,7 @@
 
 #include "Bala.h"
 #include "LoadShader.h"
+#include <SOIL.h>
 
 using namespace std;
 
@@ -48,6 +49,16 @@ class Personaje {
 			0.0f, 1.0f, 0.0f,
 			0.0f, 0.0f, 1.0f
 		};
+		GLfloat texCoords[6] = {
+			0.5f, 1.0f,
+			1.0f, 0.0f,
+			0.0f, 0.0f
+		};		GLuint texCoords_VBO;
+		GLuint texture;
+
+		int texWid, texHei, texChan;
+		unsigned char* texImage = SOIL_load_image("../DevilDaggers/videojuego/Codigo/CARETO.jpg", &texWid,
+			&texHei, &texChan, SOIL_LOAD_RGB);
 		//Rota el punto "punto" sobre centro "angulo" grados(RAD) y lo guarda en rot
 		void rotatePoint(GLfloat centro[], GLfloat punto[], GLfloat angulo, GLfloat rot[]) {
 			rot[0] = cos(angulo)*(punto[0] - centro[0]) - sin(angulo)*(punto[1] - centro[1]) + centro[0];
@@ -94,6 +105,28 @@ class Personaje {
 			glBindBuffer(GL_ARRAY_BUFFER, colors_VBO);
 			// Lo rellena con la informacion del color
 			glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
+			//TEXTURA BUFFER
+			glGenBuffers(1, &texCoords_VBO);
+			// bindea ese buffer
+			glBindBuffer(GL_ARRAY_BUFFER, texCoords_VBO);
+			// Lo rellena con la informacion de las coordenadas
+			glBufferData(GL_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);
+
+			//TEXTURA PROPIA
+			glGenTextures(1, &texture);
+			glBindTexture(GL_TEXTURE_2D, texture);
+
+			glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);			glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+				GL_LINEAR_MIPMAP_LINEAR);
+
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texWid, texHei, 0, GL_RGB,
+				GL_UNSIGNED_BYTE, texImage);
+
+			glGenerateMipmap(GL_TEXTURE_2D);
+			glBindTexture(GL_TEXTURE_2D, 0);
+			SOIL_free_image_data(texImage);
 
 			shaderProgram = LoadShaders("../DevilDaggers/videojuego/Codigo/tri.vert", "../DevilDaggers/videojuego/Codigo/tri.frag");
 		}
@@ -257,7 +290,27 @@ class Personaje {
 				0,                                // stride
 				(void*)0                          // array buffer offset
 			);
+			//texure
+			//argumento 2 textura
+			glEnableVertexAttribArray(2);
+			//bindea el buffer
+			glBindBuffer(GL_ARRAY_BUFFER, texCoords_VBO);
+			// le pasa el color de cada vertice
+			glBufferData(GL_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);
+			glVertexAttribPointer(
+				2,                                // attribute. No particular reason for 1, but must match the layout in the shader.
+				2,                                // size
+				GL_FLOAT,                         // type
+				GL_FALSE,                         // normalized?
+				0,                                // stride
+				(void*)0                          // array buffer offset
+			);
+			/*glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat),
+				NULL); // en este caso el ID es 2 (0 y 1
+					   // corresponden a las posiciones y colores)
+			glEnableVertexAttribArray(2);*/
 			//Dibuja los trinagulos (3 vertices)
+			glBindTexture(GL_TEXTURE_2D, texture);
 			glDrawArrays(GL_TRIANGLES, 0, 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
 			//desactiva estos argumentos una vez usados
 			glDisableVertexAttribArray(0);
