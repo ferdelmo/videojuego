@@ -50,7 +50,7 @@ int main() {
 	Personaje &per = Personaje::getInstance();
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
 	//glfwSetKeyCallback(window, Personaje::controles)
-	//glfwSetMouseButtonCallback(window, Personaje::mouse);
+	glfwSetMouseButtonCallback(window, Personaje::mouse);
 
 	while (!glfwWindowShouldClose(window))
 	{
