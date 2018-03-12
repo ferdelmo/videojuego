@@ -14,7 +14,7 @@ int main() {
 	glfwInit();
 
 
-	GLFWwindow* window = glfwCreateWindow(800, 600, "PICHA BRAVA", nullptr,
+	GLFWwindow* window = glfwCreateWindow(800, 800, "GAME", nullptr,
 		nullptr);
 	if (window == nullptr)
 	{

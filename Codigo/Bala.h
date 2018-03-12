@@ -80,7 +80,7 @@ class Bala {
 			//Llena el buffer con el color
 			glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
 			//carga los shaders
-			shaderProgram = LoadShaders("../DevilDaggers/videojuego/Codigo/tri.vert", "../DevilDaggers/videojuego/Codigo/tri.frag");
+			shaderProgram = LoadShaders("../DevilDaggers/videojuego/Codigo/bala.vert", "../DevilDaggers/videojuego/Codigo/bala.frag");
 			//guarda la marca temporal de inicio de la bala para borrarla pasado x tiempo
 			this->inicio = clock();
 		}

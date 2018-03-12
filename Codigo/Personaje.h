@@ -27,12 +27,13 @@ class Personaje {
 		// propiedades del personaje
 		const GLfloat velocidad = 2.5f;
 		const GLfloat tam = 0.1f;
-		const GLfloat color[3] = { 1,0,0 };
 		GLfloat pos[3] = {0,0,0};
-		GLfloat orientacion = 0;
+		GLfloat orientacion = pi/2;
 		vector<Bala> balas;
 		//Para renderizar
 		GLuint shaderProgram;
+		GLuint VAO;
+		GLuint EBO;
 		GLuint points_VBO;
 		GLuint colors_VBO;
 		//para disparar
@@ -44,18 +45,30 @@ class Personaje {
 		uniform_real_distribution<float> distribution;
 
 
-		GLfloat colors[9] = {
+		GLfloat colors[12] = {
 			1.0f, 0.0f, 0.0f,
 			0.0f, 1.0f, 0.0f,
-			0.0f, 0.0f, 1.0f
+			0.0f, 0.0f, 1.0f,
+			0.0f, 0.0f, 0.0f
 		};
-		GLfloat texCoords[6] = {
-			0.5f, 1.0f,
+		GLfloat texCoords[8] = {
+			1.0f, 1.0f,
 			1.0f, 0.0f,
-			0.0f, 0.0f
+			0.0f, 1.0f,
+			0.0f, 0.0f,
+
 		};		GLuint texCoords_VBO;
 		GLuint texture;
-
+		GLfloat vertices[12] = {
+			0.5f, 0.5f, 0.0f, // Arriba dcha
+			0.5f, -0.5f, 0.0f, // Abajo dcha
+			-0.5f, -0.5f, 0.0f, // Abajo izqda
+			-0.5f, 0.5f, 0.0f // Arriba izqda
+		};
+		GLuint indices[6] = {
+			0, 1, 2, // Triángulo #1
+			1, 3, 2 // Triángulo #2
+		};
 		int texWid, texHei, texChan;
 		unsigned char* texImage = SOIL_load_image("../DevilDaggers/videojuego/Codigo/CARETO.jpg", &texWid,
 			&texHei, &texChan, SOIL_LOAD_RGB);
@@ -78,26 +91,39 @@ class Personaje {
 			gen = mt19937(rd());
 
 			//calcula los puntos del triangulo segun la orientacion
-			GLfloat punto1[3] = { pos[0],pos[1] + tam,pos[2] },
-				punto2[3] = { pos[0] - tam,pos[1] - tam,pos[2] },
-				punto3[3] = { pos[0] + tam,pos[1] - tam,pos[2] };
-			GLfloat punto1a[3] = { 0,0,0 }, punto2a[3] = { 0,0,0 }, punto3a[3] = { 0,0,0 };
-			rotatePoint(pos, punto1, orientacion, punto1a);
-			rotatePoint(pos, punto2, orientacion, punto2a);
-			rotatePoint(pos, punto3, orientacion, punto3a);
-			GLfloat points[] = {
-				punto1a[0], punto1a[1], punto1a[2],
-				punto2a[0], punto2a[1], punto2a[2],
-				punto3a[0], punto3a[1], punto3a[2]
-			};
+			for (int i = 0; i < 4; i++) {
+				GLfloat auxx = 1;
+				if (i / 2 != 0) {
+					auxx = -1;
+				}
+				GLfloat auxy = 1;
+				if (i % 2 != 0) {
+					auxy = -1;
+				}
+				GLfloat puntoaux[3] = { pos[0]+tam*auxx,pos[1]+tam*auxy,pos[2] };
+				GLfloat punto1a[3] = { 0,0,0 };
+				rotatePoint(pos, puntoaux, orientacion, punto1a);
+				for (int j = 0; j < 3; j++) {
+					vertices[i*3 + j] = punto1a[j];
+				}
+			}
+			//VAO
+			glGenVertexArrays(1, &VAO);
+			glBindVertexArray(VAO);
 			//VERTICES
-			// Genera el buffer de los puntos
+			// genera el buffer para vertices
 			glGenBuffers(1, &points_VBO);
-			// bindea ese buffer
+			// bindea el buffer
 			glBindBuffer(GL_ARRAY_BUFFER, points_VBO);
-			// Lo rellena con la informacion de puntos
-			glBufferData(GL_ARRAY_BUFFER, sizeof(points), points, GL_STATIC_DRAW);
-			
+			// Llena el buffer con la informacion de los puntos
+			glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+			// EBO
+			glGenBuffers(1, &EBO);
+			// bindea ese buffer
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+			// Lo rellena con la informacion de indices
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+			glEnableVertexAttribArray(0);
 			//COLOR
 			// Genera el buffer de colores
 			glGenBuffers(1, &colors_VBO);
@@ -105,6 +131,7 @@ class Personaje {
 			glBindBuffer(GL_ARRAY_BUFFER, colors_VBO);
 			// Lo rellena con la informacion del color
 			glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
+			glEnableVertexAttribArray(1);			glBindVertexArray(0);
 			//TEXTURA BUFFER
 			glGenBuffers(1, &texCoords_VBO);
 			// bindea ese buffer
@@ -116,8 +143,8 @@ class Personaje {
 			glGenTextures(1, &texture);
 			glBindTexture(GL_TEXTURE_2D, texture);
 
-			glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);			glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);			glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
 				GL_LINEAR_MIPMAP_LINEAR);
 
@@ -238,35 +265,46 @@ class Personaje {
 		
 		//renderiza el personaje y las balas disparadas
 		void renderizar() {
-			//calcula los puntos del triangulo en funcion de la orientacion
-			GLfloat punto1[3] = { pos[0],pos[1] + tam,pos[2] },
-				punto2[3] = { pos[0] - tam,pos[1] - tam,pos[2] },
-				punto3[3] = { pos[0] + tam,pos[1] - tam,pos[2] };
-			GLfloat punto1a[3] = { 0,0,0 }, punto2a[3] = { 0,0,0 }, punto3a[3] = { 0,0,0 };
-			rotatePoint(pos, punto1, orientacion, punto1a);
-			rotatePoint(pos, punto2, orientacion, punto2a);
-			rotatePoint(pos, punto3, orientacion, punto3a);
-			GLfloat points[] = {
-				punto1a[0], punto1a[1], punto1a[2],
-				punto2a[0], punto2a[1], punto2a[2],
-				punto3a[0], punto3a[1], punto3a[2]
-			};
-			GLfloat colors[] = {
-				1.0f, 0.0f, 0.0f,
-				0.0f, 1.0f, 0.0f,
-				0.0f, 0.0f, 1.0f
-			};
-
-			
+			//calcula los puntos del triangulo segun la orientacion
+			for (int i = 0; i < 4; i++) {
+				GLfloat auxx = 1;
+				if (i / 2 != 0) {
+					auxx = -1;
+				}
+				GLfloat auxy = 1;
+				if (i % 2 != 0) {
+					auxy = -1;
+				}
+				GLfloat puntoaux[3] = { pos[0] + tam * auxx,pos[1] + tam * auxy,pos[2] };
+				GLfloat punto1a[3] = { 0,0,0 };
+				rotatePoint(pos, puntoaux, orientacion, punto1a);
+				for (int j = 0; j < 3; j++) {
+					vertices[i*3 + j] = punto1a[j];
+				}
+			}
 
 			glUseProgram(shaderProgram);
+						glBindVertexArray(VAO); // une el VAO, que contiene toda la
+									//información de los vértices, al contexto
 			//vertices
 			//argumento 0 posicion
 			glEnableVertexAttribArray(0);
 			//bindea el buffer
 			glBindBuffer(GL_ARRAY_BUFFER, points_VBO);
-			//le pasa los vertices
-			glBufferData(GL_ARRAY_BUFFER, sizeof(points), points, GL_STATIC_DRAW);
+			//lo leena con los puntos
+			glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+			glVertexAttribPointer(
+				0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+				3,                  // size
+				GL_FLOAT,           // type
+				GL_FALSE,           // normalized?
+				0,                  // stride
+				(void*)0            // array buffer offset
+			);
+			// bindea ese buffer
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+			// Lo rellena con la informacion de puntos
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 			glVertexAttribPointer(
 				0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
 				3,                  // size
@@ -310,11 +348,13 @@ class Personaje {
 					   // corresponden a las posiciones y colores)
 			glEnableVertexAttribArray(2);*/
 			//Dibuja los trinagulos (3 vertices)
-			glBindTexture(GL_TEXTURE_2D, texture);
-			glDrawArrays(GL_TRIANGLES, 0, 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
+			glBindTexture(GL_TEXTURE_2D, texture);
+			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);  // Starting from vertex 0; 3 vertices total -> 1 triangle
+			glBindVertexArray(0); // deshace la unión del VAO
 			//desactiva estos argumentos una vez usados
 			glDisableVertexAttribArray(0);
 			glDisableVertexAttribArray(1);
+			glDisableVertexAttribArray(2);
 
 			int matar = -1;
 			// recorre la lista de balas disparadas renderizandolas
