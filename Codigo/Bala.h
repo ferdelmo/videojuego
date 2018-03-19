@@ -16,16 +16,17 @@
 #include "LoadShader.h"
 
 class Bala {
-	private:
+	public:
 		//Propiedades de la bala
 		GLfloat pos[3] = { 0,0,0 };
 		const GLfloat tam = 0.01f;
 		float orientacion = 0;
-		float velocidad = 5;
+		float velocidad = 20;
 
+		int danyo = 5;
 		clock_t inicio;
 
-		int tiempoBala = 5;
+		int tiempoBala = 3;
 		//Para renderizar
 		GLuint shaderProgram;
 		GLuint points_VBO = 0;
@@ -80,7 +81,7 @@ class Bala {
 			//Llena el buffer con el color
 			glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
 			//carga los shaders
-			shaderProgram = LoadShaders("../DevilDaggers/videojuego/Codigo/bala.vert", "../DevilDaggers/videojuego/Codigo/bala.frag");
+			shaderProgram = LoadShaders("../DevilDaggers/videojuego/Codigo/Shaders/bala.vert", "../DevilDaggers/videojuego/Codigo/Shaders/bala.frag");
 			//guarda la marca temporal de inicio de la bala para borrarla pasado x tiempo
 			this->inicio = clock();
 		}

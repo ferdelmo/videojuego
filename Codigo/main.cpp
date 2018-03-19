@@ -7,6 +7,7 @@
 #include <sstream>
 
 #include "Personaje.h"
+#include "CalaveraBase.h"
 
 using namespace std;
 
@@ -40,7 +41,8 @@ int main() {
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
 	//glfwSetKeyCallback(window, Personaje::controles)
 	//glfwSetMouseButtonCallback(window, Personaje::mouse);
-
+	CalaveraBase calaverita;
+	bool vivo = true;
 	while (!glfwWindowShouldClose(window))
 	{
 		//BORRA EL FONDO
@@ -49,6 +51,14 @@ int main() {
 		per.controlesInFrame(window);
 		//renderiza el personaje y las balas
 		per.renderizar();
+		glDepthMask(GL_FALSE);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		if (vivo) {
+			vivo = calaverita.renderizar();
+		}
+		glDisable(GL_BLEND);
+		glDepthMask(GL_TRUE);
 		//pinta lo que haya en los buffers
 		glfwSwapBuffers(window);
 		//lee los eventos
