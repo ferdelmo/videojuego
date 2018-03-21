@@ -1,5 +1,5 @@
-#ifndef CALAVERA_BASE_H_
-#define CALAVERA_BASE_H_
+#ifndef DAGA_H_
+#define DAGA_H_
 
 #include <iostream>
 #include <GL/glew.h>
@@ -15,72 +15,84 @@
 #include "Bala.h"
 #include "LoadShader.h"
 #include "Personaje.h"
+#include "CalaveraBase.h"
 #include <SOIL.h>
 
 using namespace std;
 
-class CalaveraBase {
-	private:
-		//PROPIEDADES
-		GLfloat velocidad =8;
-		GLfloat velRot = pi / 10;
-		const GLfloat tam = 0.05f;
-		GLfloat pos[3] = { 1,1,0 };
-		GLfloat orientacion = pi / 2;
-		//Para renderizar
-		GLuint shaderProgram;
-		GLuint VAO;
-		GLuint EBO;
-		GLuint points_VBO;
-		GLuint colors_VBO;
+class Daga {
+	const GLfloat velocidad = 1;
+	const GLfloat tam = 0.05f;
+	GLfloat pos[3] = { 0.9f,0.9f,0 };
+	GLfloat orientacion = pi / 2;
+	//Para renderizar
+	GLuint shaderProgram;
+	GLuint VAO;
+	GLuint EBO;
+	GLuint points_VBO;
+	GLuint colors_VBO;
 
-		int vida = 20;
-		bool muerto = false;
+	int vida = 20;
+	bool muerto = false;
 
-		//direccion para seguir al personaje
-		GLfloat dir[3] = { 0,0,0 };
-		//textura
-		GLfloat colors[12] = {
-			1.0f, 0.0f, 0.0f,
-			0.0f, 1.0f, 0.0f,
-			0.0f, 0.0f, 1.0f,
-			0.0f, 0.0f, 0.0f
-		};
-		GLfloat texCoords[8] = {
-			0.0f, 0.0f,
-			1.0f, 0.0f,
-			0.0f, 1.0f,
-			1.0f, 1.0f
+	//direccion para seguir al personaje
+	GLfloat dir[3] = { 0,0,0 };
+	//textura
+	GLfloat colors[12] = {
+		1.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 1.0f,
+		0.0f, 0.0f, 0.0f
+	};
+	GLfloat texCoords[8] = {
+		0.0f, 0.0f,
+		1.0f, 0.0f,
+		0.0f, 1.0f,
+		1.0f, 1.0f
 
-		};
-		GLuint texCoords_VBO;
-		GLuint texture;
-		GLfloat vertices[12] = {
-			0.5f, 0.5f, 0.0f, // Arriba dcha
-			0.5f, -0.5f, 0.0f, // Abajo dcha
-			-0.5f, -0.5f, 0.0f, // Abajo izqda
-			-0.5f, 0.5f, 0.0f // Arriba izqda
-		};
-		GLuint indices[6] = {
-			0, 1, 2, // Triángulo #1
-			1, 3, 2 // Triángulo #2
-		};
+	};
+	GLuint texCoords_VBO;
+	GLuint texture;
+	GLfloat vertices[12] = {
+		0.5f, 0.5f, 0.0f, // Arriba dcha
+		0.5f, -0.5f, 0.0f, // Abajo dcha
+		-0.5f, -0.5f, 0.0f, // Abajo izqda
+		-0.5f, 0.5f, 0.0f // Arriba izqda
+	};
+	GLuint indices[6] = {
+		0, 1, 2, // Triángulo #1
+		1, 3, 2 // Triángulo #2
+	};
 
-		int texWid, texHei, texChan;
-		unsigned char* texImage = SOIL_load_image("../DevilDaggers/videojuego/Codigo/skull.png", &texWid,
-			&texHei, &texChan, SOIL_LOAD_RGB);
-		//Rota el punto "punto" sobre centro "angulo" grados(RAD) y lo guarda en rot
-		void rotatePoint(GLfloat centro[], GLfloat punto[], GLfloat angulo, GLfloat rot[]) {
-			rot[0] = cos(angulo)*(punto[0] - centro[0]) - sin(angulo)*(punto[1] - centro[1]) + centro[0];
-			rot[1] = sin(angulo)*(punto[0] - centro[0]) + cos(angulo)*(punto[1] - centro[1]) + centro[1];
-			rot[2] = centro[2];
-		}
+	int texWid, texHei, texChan;
+	unsigned char* texImage = SOIL_load_image("../DevilDaggers/videojuego/Codigo/daga.png", &texWid,
+		&texHei, &texChan, SOIL_LOAD_RGB);
+	//Rota el punto "punto" sobre centro "angulo" grados(RAD) y lo guarda en rot
+	void rotatePoint(GLfloat centro[], GLfloat punto[], GLfloat angulo, GLfloat rot[]) {
+		rot[0] = cos(angulo)*(punto[0] - centro[0]) - sin(angulo)*(punto[1] - centro[1]) + centro[0];
+		rot[1] = sin(angulo)*(punto[0] - centro[0]) + cos(angulo)*(punto[1] - centro[1]) + centro[1];
+		rot[2] = centro[2];
+	}
 
-		//para generar numeros aleatorios
-		mt19937 gen;
-		uniform_real_distribution<float> distribution;
+	//GUARDA Y ACTUALIZA LAS CALAVERAS GENERADAS POR ESTA DAGA
+	vector<CalaveraBase> cb;
+
+	//para generar numeros aleatorios
+	mt19937 gen;
+	uniform_real_distribution<float> distribution;
+
+	clock_t ultimaGen;
+	GLfloat tiempoGen = 5;
+
+	bool lanzar = true;
+	
 	public:
-		CalaveraBase() {
+		Daga() {
+			//numeros aleatorios
+			distribution = uniform_real_distribution<float>(-1, 1);
+			random_device rd;
+			// Initialize Mersenne Twister pseudo-random number generator
+			gen = mt19937(rd());
 			//calcula los puntos del triangulo segun la orientacion
 			for (int i = 0; i < 4; i++) {
 				GLfloat auxx = 1;
@@ -98,15 +110,7 @@ class CalaveraBase {
 					vertices[i * 3 + j] = punto1a[j];
 				}
 			}
-			//numeros aleatorios
-			distribution = uniform_real_distribution<float>(-1, 1);
-			random_device rd;
-			// Initialize Mersenne Twister pseudo-random number generator
-			gen = mt19937(rd());
-
-			dir[0] = distribution(gen);
-			dir[1] = distribution(gen);
-
+			ultimaGen = clock();
 			//VAO
 			glGenVertexArrays(1, &VAO);
 			glBindVertexArray(VAO);
@@ -146,11 +150,11 @@ class CalaveraBase {
 			glGenTextures(1, &texture);
 			glBindTexture(GL_TEXTURE_2D, texture);
 
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+			glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+			glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
 				GL_LINEAR_MIPMAP_LINEAR);
 
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texWid, texHei, 0, GL_RGB,
@@ -160,94 +164,23 @@ class CalaveraBase {
 			glBindTexture(GL_TEXTURE_2D, 0);
 			SOIL_free_image_data(texImage);
 
-			shaderProgram = LoadShaders("../DevilDaggers/videojuego/Codigo/Shaders/calavera.vert", "../DevilDaggers/videojuego/Codigo/Shaders/calavera.frag");
+			shaderProgram = LoadShaders("../DevilDaggers/videojuego/Codigo/Shaders/daga.vert", "../DevilDaggers/videojuego/Codigo/Shaders/daga.frag");
 		}
 
-		CalaveraBase(GLfloat x, GLfloat y, GLfloat z) {
-			*this=CalaveraBase();
-			pos[0] = x; pos[1] = y; pos[2] = z;
+		void GenerarCalaveras(int n) {
+			for (int i = 0; i < n; i++) {
+				float x = distribution(gen);
+				float y = distribution(gen);
+				cb.push_back(CalaveraBase(pos[0]+x*tam,pos[1]+y*tam,pos[2]));
+			}
 		}
 
-		void seguir() {
-			Personaje * a = &Personaje::getInstance();
-			GLfloat posP[] = { 0,0,0 };
-			a->getPosition(posP);
-			GLfloat dirx = posP[0] - pos[0], diry = posP[1] - pos[1];
-			GLfloat antigua = orientacion;
-			orientacion = atan2(diry, dirx);
-			float alpha = distribution(gen);
-			//orientacion += alpha * pi / 6;
-			if (orientacion > antigua ) {
-				orientacion = antigua +velRot;
-			}
-			else {
-				orientacion = antigua - velRot;
-			}
-			pos[0] += (0.001f * velocidad)*cos(orientacion);
-			pos[1] += (0.001f * velocidad)*sin(orientacion);
-		}
-		GLfloat distancia(GLfloat x, GLfloat y, GLfloat xp, GLfloat yp) {
-			return (x - xp)*(x - xp) + (y - yp)*(y - yp);
-		}
-		bool vivo() {
-			Personaje * a = &Personaje::getInstance();
-			vector<Bala> * b = a->getBalas();
-			int i = 0;
-			while (i < b->size()) {
-				//cout << distancia(pos[0], pos[1], b[i].pos[0], b[i].pos[1]) << endl;
-				if (distancia(pos[0], pos[1], b->at(i).pos[0], b->at(i).pos[1]) <= 3*tam * tam) {
-					vida -= b->at(i).danyo;
-					cout << vida << endl;
-					cout << "ELIMINADO " << b->size() << endl;
-					a->eliminarBala(i);
-				}
-				else {
-					i++;
-				}
-			}
-			return vida>0;
-		}
-		CalaveraBase operator=(const CalaveraBase& b) {
-			if (this != &b) { // self-assignment check expected
-				for (int i = 0; i < 3; i++) {
-					this->pos[i] = b.pos[i];
-				}
-				this->orientacion = b.orientacion;
-				this->velocidad = b.velocidad;
-				for (int i = 0; i < 12; i++) {
-					this->colors[i] = b.colors[i];
-				}
-				this->shaderProgram = b.shaderProgram;
-				this->points_VBO = b.points_VBO;
-				this->colors_VBO = b.colors_VBO;
-				this->vida = b.vida;
-				this->VAO = b.VAO;
-				this->EBO = EBO;
-				this->muerto = b.muerto;
-
-				
-				for (int i = 0; i < 3; i++) {
-					this->dir[i] = b.dir[i];
-				}
-				for (int i = 0; i < 8; i++) {
-					this->texCoords[i] = b.texCoords[i];
-				}
-				this->texCoords_VBO = b.texCoords_VBO;
-				this->texture=b.texture;
-				for (int i = 0; i < 12; i++) {
-					this->vertices[i] = b.vertices[i];
-				}
-				for (int i = 0; i < 6; i++) {
-					this->indices[i] = b.indices[i];
-				}
-				this->texChan=b.texChan, this->texHei=b.texHei, this->texChan=b.texChan;
-				this->texImage = b.texImage;
-			}
-			return *this;
-		}
 		bool renderizar() {
-			seguir();
-			muerto = !vivo();
+			if ((clock() - ultimaGen) / CLOCKS_PER_SEC > tiempoGen && lanzar){
+				GenerarCalaveras(6);
+				ultimaGen = clock();
+				lanzar=false;
+			}
 			//calcula los puntos del triangulo segun la orientacion
 			for (int i = 0; i < 4; i++) {
 				GLfloat auxx = 1;
@@ -264,7 +197,7 @@ class CalaveraBase {
 				for (int j = 0; j < 3; j++) {
 					vertices[i * 3 + j] = punto1a[j];
 				}
-			} 
+			}
 
 			glUseProgram(shaderProgram);
 
@@ -336,12 +269,27 @@ class CalaveraBase {
 			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);  // Starting from vertex 0; 3 vertices total -> 1 triangle
 			glBindVertexArray(0); // deshace la unión del VAO
 
-									//desactiva estos argumentos una vez usados
+								  //desactiva estos argumentos una vez usados
 			glDisableVertexAttribArray(0);
 			glDisableVertexAttribArray(1);
 			glDisableVertexAttribArray(2);
+			//renderizar GEMAS
+
+			//RENDERIZAR CALAVERAS
+			int i = 0;
+			while (i < cb.size()) {
+				bool vivo = cb[i].renderizar();
+				if (!vivo) {
+					cout << "CALAVERA ELMINADA" << cb.size() << endl;
+					cb.erase(cb.begin() + i);
+				}
+				else {
+					i++;
+				}
+			}
+
 			return !muerto;
 		}
 };
 
-#endif;
+#endif

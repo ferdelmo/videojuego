@@ -168,8 +168,8 @@ class Personaje {
 
 		//CONSTRUCTOR EN UNA POSICION ESPECIFICA
 		Personaje(GLfloat x, GLfloat y, GLfloat z) {
+			//*this = Personaje();
 			pos[0] = x; pos[1] = y; pos[2] = z;
-			Personaje();
 		}
 
 		void getPosition(GLfloat posi[]) {
@@ -178,8 +178,12 @@ class Personaje {
 			posi[2] = pos[2];
 		}
 
-		vector<Bala> getBalas() {
-			return balas;
+		vector<Bala> * getBalas() {
+			return &balas;
+		}
+
+		void eliminarBala(int i) {
+			balas.erase(balas.begin() + i);
 		}
 
 		//DEVUELVE LA UNICA INSTANCIA DE PERSONAJE
@@ -273,6 +277,7 @@ class Personaje {
 			float dirx = x - pos[0];
 			float diry = y - pos[1];
 			orientacion = atan2(-dirx,diry);
+			//cout << orientacion << endl;
 			//mira si se ha disparado y ha pasado el tiempo de cadencia
 			state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
 			int stateR = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
@@ -388,18 +393,18 @@ class Personaje {
 			glDisableVertexAttribArray(1);
 			glDisableVertexAttribArray(2);
 
-			int matar = -1;
 			// recorre la lista de balas disparadas renderizandolas
-			for (int i = 0; i < balas.size(); i++) {
+			int i = 0;
+			while (i<balas.size()) {
 				//si la bala se destruye la borra del vector
 				bool nomuerto = balas[i].renderizar();
 				if (!nomuerto) {
-					matar = i;
+					cout << "ELIMINADO " << balas.size() << endl;
+					balas.erase(balas.begin() + i);
 				}
-			}
-			if (matar >= 0) {
-				cout << "ELIMINADO " << balas.size() << endl;
-				balas.erase(balas.begin() + matar);
+				else {
+					i++;
+				}
 			}
 			
 		}

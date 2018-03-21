@@ -7,7 +7,7 @@
 #include <sstream>
 
 #include "Personaje.h"
-#include "CalaveraBase.h"
+#include "Daga.h"
 
 using namespace std;
 
@@ -41,7 +41,7 @@ int main() {
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
 	//glfwSetKeyCallback(window, Personaje::controles)
 	//glfwSetMouseButtonCallback(window, Personaje::mouse);
-	CalaveraBase calaverita;
+	Daga d;
 	bool vivo = true;
 	while (!glfwWindowShouldClose(window))
 	{
@@ -54,9 +54,7 @@ int main() {
 		glDepthMask(GL_FALSE);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		if (vivo) {
-			vivo = calaverita.renderizar();
-		}
+		d.renderizar();
 		glDisable(GL_BLEND);
 		glDepthMask(GL_TRUE);
 		//pinta lo que haya en los buffers
