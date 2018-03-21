@@ -13,11 +13,13 @@
 
 #include "CalaveraBase.h"
 #include "LoadShader.h"
+#include "Escena.h"
 #include <SOIL.h>
 
 using namespace std;
 
-Daga::Daga() {
+Daga::Daga(Escena * es) {
+	this->es = es;
 	//numeros aleatorios
 	distribution = uniform_real_distribution<float>(-1, 1);
 	random_device rd;
@@ -101,7 +103,7 @@ void Daga::GenerarCalaveras(int n) {
 	for (int i = 0; i < n; i++) {
 		float x = distribution(gen);
 		float y = distribution(gen);
-		cb.push_back(make_shared<CalaveraBase>(CalaveraBase(pos[0] + x * tam, pos[1] + y * tam, pos[2])));
+		es->add(make_shared<CalaveraBase>(CalaveraBase(pos[0] + x * tam, pos[1] + y * tam, pos[2],es)));
 	}
 }
 
@@ -203,20 +205,6 @@ bool Daga::renderizar() {
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);
-	//renderizar GEMAS
-
-	//RENDERIZAR CALAVERAS
-	int i = 0;
-	while (i < cb.size()) {
-		bool vivo = cb[i]->renderizar();
-		if (!vivo) {
-			cout << "CALAVERA ELMINADA" << cb.size() << endl;
-			cb.erase(cb.begin() + i);
-		}
-		else {
-			i++;
-		}
-	}
 
 	return !muerto;
 }

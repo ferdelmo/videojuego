@@ -12,6 +12,8 @@
 
 using namespace std;
 
+class Escena;
+
 class CalaveraBase {
 	private:
 
@@ -74,10 +76,13 @@ class CalaveraBase {
 		//para generar numeros aleatorios
 		mt19937 gen;
 		uniform_real_distribution<float> distribution;
-	public:
-		CalaveraBase();
 
-		CalaveraBase(GLfloat x, GLfloat y, GLfloat z);
+		Escena * es;
+
+	public:
+		CalaveraBase(Escena * es);
+
+		CalaveraBase(GLfloat x, GLfloat y, GLfloat z, Escena * es);
 
 		void seguir();
 

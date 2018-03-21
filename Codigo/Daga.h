@@ -16,7 +16,7 @@
 
 using namespace std;
 
-class CalaveraBase;
+class Escena;
 
 class Daga {
 
@@ -74,8 +74,8 @@ class Daga {
 		rot[2] = centro[2];
 	}
 
-	//GUARDA Y ACTUALIZA LAS CALAVERAS GENERADAS POR ESTA DAGA
-	vector<shared_ptr<CalaveraBase>> cb;
+	//Escena
+	Escena * es;
 
 	//para generar numeros aleatorios
 	mt19937 gen;
@@ -87,7 +87,7 @@ class Daga {
 	bool lanzar = true;
 	
 	public:
-		Daga();
+		Daga(Escena * es);
 
 		void GenerarCalaveras(int n);
 

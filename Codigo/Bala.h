@@ -32,6 +32,8 @@ class Bala {
 			1.0f, 0.0f, 1.0f
 		};
 
+		bool muerto = false;
+
 		void rotatePoint(GLfloat centro[], GLfloat punto[], GLfloat angulo, GLfloat rot[]);
 
 		Bala(GLfloat inicio[], float o);
@@ -39,6 +41,8 @@ class Bala {
 		Bala operator=(const Bala& b);
 
 		void avanzar();
+
+		void morir();
 
 		bool renderizar();
 };

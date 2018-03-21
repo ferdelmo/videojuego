@@ -15,10 +15,12 @@
 #include "LoadShader.h"
 #include "Personaje.h"
 #include "Bala.h"
+#include "Escena.h"
 
 using namespace std;
 
-CalaveraBase::CalaveraBase() {
+CalaveraBase::CalaveraBase(Escena * es) {
+	this->es = es;
 	//calcula los puntos del triangulo segun la orientacion
 	for (int i = 0; i < 4; i++) {
 		GLfloat auxx = 1;
@@ -101,13 +103,93 @@ CalaveraBase::CalaveraBase() {
 	shaderProgram = LoadShaders("../DevilDaggers/videojuego/Codigo/Shaders/calavera.vert", "../DevilDaggers/videojuego/Codigo/Shaders/calavera.frag");
 }
 
-CalaveraBase::CalaveraBase(GLfloat x, GLfloat y, GLfloat z) {
-	*this = CalaveraBase();
+CalaveraBase::CalaveraBase(GLfloat x, GLfloat y, GLfloat z, Escena * es) {
 	pos[0] = x; pos[1] = y; pos[2] = z;
+	this->es = es;
+	//calcula los puntos del triangulo segun la orientacion
+	for (int i = 0; i < 4; i++) {
+		GLfloat auxx = 1;
+		if (i / 2 != 0) {
+			auxx = -1;
+		}
+		GLfloat auxy = 1;
+		if (i % 2 != 0) {
+			auxy = -1;
+		}
+		GLfloat puntoaux[3] = { pos[0] + tam * auxx,pos[1] + tam * auxy,pos[2] };
+		GLfloat punto1a[3] = { 0,0,0 };
+		rotatePoint(pos, puntoaux, orientacion, punto1a);
+		for (int j = 0; j < 3; j++) {
+			vertices[i * 3 + j] = punto1a[j];
+		}
+	}
+	//numeros aleatorios
+	distribution = uniform_real_distribution<float>(-1, 1);
+	random_device rd;
+	// Initialize Mersenne Twister pseudo-random number generator
+	gen = mt19937(rd());
+
+	dir[0] = distribution(gen);
+	dir[1] = distribution(gen);
+
+	//VAO
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
+	//VERTICES
+	// genera el buffer para vertices
+	glGenBuffers(1, &points_VBO);
+	// bindea el buffer
+	glBindBuffer(GL_ARRAY_BUFFER, points_VBO);
+	// Llena el buffer con la informacion de los puntos
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	// EBO
+	glGenBuffers(1, &EBO);
+	// bindea ese buffer
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	// Lo rellena con la informacion de indices
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+
+	//COLOR
+	// Genera el buffer de colores
+	glGenBuffers(1, &colors_VBO);
+	// bindea ese buffer
+	glBindBuffer(GL_ARRAY_BUFFER, colors_VBO);
+	// Lo rellena con la informacion del color
+	glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(1);
+	glBindVertexArray(0);
+
+	//TEXTURA BUFFER
+	glGenBuffers(1, &texCoords_VBO);
+	// bindea ese buffer
+	glBindBuffer(GL_ARRAY_BUFFER, texCoords_VBO);
+	// Lo rellena con la informacion de las coordenadas
+	glBufferData(GL_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);
+
+	//TEXTURA PROPIA
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+		GL_LINEAR_MIPMAP_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texWid, texHei, 0, GL_RGB,
+		GL_UNSIGNED_BYTE, texImage);
+
+	glGenerateMipmap(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	SOIL_free_image_data(texImage);
+
+	shaderProgram = LoadShaders("../DevilDaggers/videojuego/Codigo/Shaders/calavera.vert", "../DevilDaggers/videojuego/Codigo/Shaders/calavera.frag");
 }
 
 void CalaveraBase::seguir() {
-	Personaje * a = &Personaje::getInstance();
+	shared_ptr<Personaje> a= es->getPer();
 	GLfloat posP[] = { 0,0,0 };
 	a->getPosition(posP);
 	GLfloat dirx = posP[0] - pos[0], diry = posP[1] - pos[1];
@@ -128,16 +210,16 @@ GLfloat CalaveraBase::distancia(GLfloat x, GLfloat y, GLfloat xp, GLfloat yp) {
 	return (x - xp)*(x - xp) + (y - yp)*(y - yp);
 }
 bool CalaveraBase::vivo() {
-	Personaje * a = &Personaje::getInstance();
-	vector<Bala> * b = a->getBalas();
+	shared_ptr<Personaje> a = es->getPer();
+	vector<shared_ptr<Bala>> * b = es->getBalas();
 	int i = 0;
 	while (i < b->size()) {
 		//cout << distancia(pos[0], pos[1], b[i].pos[0], b[i].pos[1]) << endl;
-		if (distancia(pos[0], pos[1], b->at(i).pos[0], b->at(i).pos[1]) <= 3 * tam * tam) {
-			vida -= b->at(i).danyo;
+		if (distancia(pos[0], pos[1], b->at(i)->pos[0], b->at(i)->pos[1]) <= 3 * tam * tam) {
+			vida -= b->at(i)->danyo;
+			b->erase(b->begin() + i);
 			cout << vida << endl;
 			cout << "ELIMINADO " << b->size() << endl;
-			a->eliminarBala(i);
 		}
 		else {
 			i++;

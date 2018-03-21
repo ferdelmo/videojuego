@@ -9,8 +9,8 @@
 #include <thread>
 
 #include "Personaje.h"
+#include "Escena.h"
 #include "Daga.h"
-
 
 using namespace std;
 
@@ -39,30 +39,30 @@ int main() {
 	glViewport(0, 0, ancho, alto);
 	
 	//instancia el personage
-	Personaje &per = Personaje::getInstance();
+	Escena es;
+	Personaje per = Personaje(&es);
+	per.setWindow(window);
 	//evita perder teclas entre frames
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
 	//glfwSetKeyCallback(window, Personaje::controles)
 	//glfwSetMouseButtonCallback(window, Personaje::mouse);
-	Daga d;
-	bool vivo = true;
-	clock_t inicio, finbucle;
+	Daga d(&es);
+	es.add(make_shared<Personaje>(per));
+	es.add(make_shared<Daga>(d));
+	clock_t inicio;
 	while (!glfwWindowShouldClose(window))
 	{
 		//chrono c++11
 		inicio = clock();
 		//BORRA EL FONDO
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		//coge las entradas de este frame
-		per.controlesInFrame(window);
-		//renderiza el personaje y las balas
-		per.renderizar();
-		glDepthMask(GL_FALSE);
+		//renderiza escena
+		/*glDepthMask(GL_FALSE);
 		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		d.renderizar();
-		glDisable(GL_BLEND);
-		glDepthMask(GL_TRUE);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
+		es.renderizar();
+		/*glDisable(GL_BLEND);
+		glDepthMask(GL_TRUE);*/
 		//pinta lo que haya en los buffers
 		glfwSwapBuffers(window);
 		//lee los eventos

@@ -14,14 +14,15 @@
 
 #include "LoadShader.h"
 #include "Bala.h"
+#include "Escena.h"
 
 using namespace std;
 
 //CONSTRUCTOR POR DEFECTO
-Personaje::Personaje() {
+Personaje::Personaje(Escena * es) {
+	this->es = es;
 	//prepara las balas
 	ultimaBala = clock();
-	balas = vector<Bala>();
 	//numeros aleatorios
 	distribution = uniform_real_distribution<float>(0, 1);
 	random_device rd;
@@ -102,9 +103,9 @@ Personaje::Personaje() {
 }
 
 //CONSTRUCTOR EN UNA POSICION ESPECIFICA
-Personaje::Personaje(GLfloat x, GLfloat y, GLfloat z) {
-	//*this = Personaje();
+Personaje::Personaje(GLfloat x, GLfloat y, GLfloat z, Escena * es) {
 	pos[0] = x; pos[1] = y; pos[2] = z;
+	this->es = es;
 }
 
 void Personaje::getPosition(GLfloat posi[]) {
@@ -113,30 +114,6 @@ void Personaje::getPosition(GLfloat posi[]) {
 	posi[2] = pos[2];
 }
 
-vector<Bala> * Personaje::getBalas() {
-	return &balas;
-}
-
-void Personaje::eliminarBala(int i) {
-	balas.erase(balas.begin() + i);
-}
-
-//DEVUELVE LA UNICA INSTANCIA DE PERSONAJE
-Personaje& Personaje::getInstance() // Singleton is accessed via getInstance()
-{
-	static Personaje instance; // lazy singleton, instantiated on first use
-	return instance;
-}
-
-//CONTROLES POR INTERRUPCION TECLAS
-void Personaje::controles(GLFWwindow* window, int key, int scancode, int action, int mods) {
-	getInstance().controlesP(window, key, scancode, action, mods);
-}
-
-//CONTROLES POR INTERRUPCION RATON
-void Personaje::mouse(GLFWwindow* window, int button, int action, int mods) {
-	getInstance().mouseP(window, button, action, mods);
-}
 //FUNCION AUXILIAR CONTROLES POR INTERRUPCION TECLAS
 void Personaje::controlesP(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
@@ -170,7 +147,7 @@ void Personaje::escopetazo() {
 		GLfloat punto1[3] = { pos[0],pos[1] + tam,pos[2] + ale / 10 };
 		GLfloat punto1a[3] = { 0,0,0 };
 		rotatePoint(pos, punto1, orientacion, punto1a);
-		balas.push_back(Bala(punto1a, orientacion + pi / 2 + angle));
+		es->add(make_shared<Bala>(Bala(punto1a, orientacion + pi / 2 + angle)));
 		cout << "BALITA " << angle << endl;
 	}
 }
@@ -179,11 +156,15 @@ void Personaje::lanzarBala() {
 	GLfloat punto1[3] = { pos[0],pos[1] + tam,pos[2] };
 	GLfloat punto1a[3] = { 0,0,0 };
 	rotatePoint(pos, punto1, orientacion, punto1a);
-	balas.push_back(Bala(punto1a, orientacion + pi / 2));
+	es->add(make_shared<Bala>(Bala(punto1a, orientacion + pi / 2)));
 	cout << "BALITA" << endl;
 }
 
-void Personaje::controlesInFrame(GLFWwindow* window) {
+void Personaje::setWindow(GLFWwindow* window) {
+	this->window = window;
+}
+
+void Personaje::controlesInFrame() {
 	int state = glfwGetKey(window, GLFW_KEY_W);
 	if (state == GLFW_PRESS) {
 		pos[1] += velocidad * 0.005;
@@ -235,6 +216,7 @@ void Personaje::controlesInFrame(GLFWwindow* window) {
 
 //renderiza el personaje y las balas disparadas
 bool Personaje::renderizar() {
+	controlesInFrame();
 	//calcula los puntos del triangulo segun la orientacion
 	for (int i = 0; i < 4; i++) {
 		GLfloat auxx = 1;
@@ -328,18 +310,5 @@ bool Personaje::renderizar() {
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);
 
-	// recorre la lista de balas disparadas renderizandolas
-	int i = 0;
-	while (i<balas.size()) {
-		//si la bala se destruye la borra del vector
-		bool nomuerto = balas[i].renderizar();
-		if (!nomuerto) {
-			cout << "ELIMINADO " << balas.size() << endl;
-			balas.erase(balas.begin() + i);
-		}
-		else {
-			i++;
-		}
-	}
 	return true;
 }

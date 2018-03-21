@@ -81,6 +81,10 @@ void Bala::avanzar() {
 	pos[1] += (velocidad * 0.005)*sin(orientacion);
 }
 
+void Bala::morir() {
+	muerto = true;
+}
+
 //renderiza una bala y devuelve true si la bala debe seguir renderizandose (bala viva)
 bool Bala::renderizar () {
 	//avanza cada frame
@@ -137,8 +141,9 @@ bool Bala::renderizar () {
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 
+	muerto = muerto || ((clock() - inicio) / CLOCKS_PER_SEC) < tiempoBala;
 	//devuelve true si a pasado menos tiempo que tiempo bala
-	return ((clock() - inicio) / CLOCKS_PER_SEC) < tiempoBala;
+	return muerto;
 }
 
 //Rota el punto "punto" sobre centro "angulo" grados(RAD) y lo guarda en rot

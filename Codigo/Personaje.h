@@ -12,9 +12,10 @@
 #include <vector>
 #include <stdlib.h>
 
+
 using namespace std;
 
-class Bala;
+class Escena;
 
 class Personaje {
 	public: 
@@ -25,7 +26,6 @@ class Personaje {
 		const GLfloat tam = 0.1f;
 		GLfloat pos[3] = {0,0,0};
 		GLfloat orientacion = pi/2;
-		vector<Bala> balas;
 		//Para renderizar
 		GLuint shaderProgram;
 		GLuint VAO;
@@ -41,6 +41,8 @@ class Personaje {
 		uniform_real_distribution<float> distribution;
 
 		bool escopeta = true;
+
+		Escena * es;
 
 		//textura
 		GLfloat colors[12] = {
@@ -71,6 +73,9 @@ class Personaje {
 		int texWid, texHei, texChan;
 		unsigned char* texImage = SOIL_load_image("../DevilDaggers/videojuego/Codigo/CARETO.jpg", &texWid,
 			&texHei, &texChan, SOIL_LOAD_RGB);
+
+		GLFWwindow* window;
+
 		//Rota el punto "punto" sobre centro "angulo" grados(RAD) y lo guarda en rot
 		void rotatePoint(GLfloat centro[], GLfloat punto[], GLfloat angulo, GLfloat rot[]) {
 			rot[0] = cos(angulo)*(punto[0] - centro[0]) - sin(angulo)*(punto[1] - centro[1]) + centro[0];
@@ -79,25 +84,13 @@ class Personaje {
 		}
 	public:
 		//CONSTRUCTOR POR DEFECTO
-		Personaje();
+		Personaje(Escena * es);
 
 		//CONSTRUCTOR EN UNA POSICION ESPECIFICA
-		Personaje(GLfloat x, GLfloat y, GLfloat z);
+		Personaje(GLfloat x, GLfloat y, GLfloat z, Escena * es);
 
 		void getPosition(GLfloat posi[]);
 
-		vector<Bala> * getBalas();
-
-		void eliminarBala(int i);
-
-		//DEVUELVE LA UNICA INSTANCIA DE PERSONAJE
-		static Personaje& getInstance();
-
-		//CONTROLES POR INTERRUPCION TECLAS
-		static void controles(GLFWwindow* window, int key, int scancode, int action, int mods);
-
-		//CONTROLES POR INTERRUPCION RATON
-		static void mouse(GLFWwindow* window, int button, int action, int mods);
 		//FUNCION AUXILIAR CONTROLES POR INTERRUPCION TECLAS
 		void controlesP(GLFWwindow* window, int key, int scancode, int action, int mods);
 		//FUNCION AUXILIAR CONTROLES POR INTERRUPCION raton
@@ -108,7 +101,9 @@ class Personaje {
 		//dispara una bala
 		void lanzarBala();
 
-		void controlesInFrame(GLFWwindow* window);
+		void setWindow(GLFWwindow* window);
+
+		void controlesInFrame();
 		
 		//renderiza el personaje y las balas disparadas
 		bool renderizar();
