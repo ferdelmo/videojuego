@@ -5,9 +5,12 @@
 #include <glm/glm.hpp>
 #include <fstream>
 #include <sstream>
+#include <ctime>
+#include <thread>
 
 #include "Personaje.h"
 #include "Daga.h"
+
 
 using namespace std;
 
@@ -43,8 +46,11 @@ int main() {
 	//glfwSetMouseButtonCallback(window, Personaje::mouse);
 	Daga d;
 	bool vivo = true;
+	clock_t inicio, finbucle;
 	while (!glfwWindowShouldClose(window))
 	{
+		//chrono c++11
+		inicio = clock();
 		//BORRA EL FONDO
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		//coge las entradas de este frame
@@ -61,6 +67,8 @@ int main() {
 		glfwSwapBuffers(window);
 		//lee los eventos
 		glfwPollEvents();
+		int ms = (1000 / 60.0) - (clock() - inicio) / (CLOCKS_PER_SEC / 1000);
+		this_thread::sleep_for(chrono::milliseconds(ms));
 	}
 
 	glfwTerminate();
