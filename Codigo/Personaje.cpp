@@ -15,6 +15,7 @@
 #include "LoadShader.h"
 #include "Bala.h"
 #include "Escena.h"
+#include "CalaveraBase.h"
 
 using namespace std;
 
@@ -214,6 +215,25 @@ void Personaje::controlesInFrame() {
 	}
 }
 
+GLfloat Personaje::distancia(GLfloat x, GLfloat y, GLfloat xp, GLfloat yp) {
+	return (x - xp)*(x - xp) + (y - yp)*(y - yp);
+}
+
+bool Personaje::sigueVivo() {
+	int i = 0;
+	vector<shared_ptr<CalaveraBase>> * cb = es->getCalaveras();
+	while (i < cb->size()) {
+		//cout << distancia(pos[0], pos[1], b[i].pos[0], b[i].pos[1]) << endl;
+		if (distancia(pos[0], pos[1], cb->at(i)->pos[0], cb->at(i)->pos[1]) <= 3 * tam * tam) {
+			vivo = false;
+		}
+		else {
+			i++;
+		}
+	}
+	return vivo;
+}
+
 //renderiza el personaje y las balas disparadas
 bool Personaje::renderizar() {
 	controlesInFrame();
@@ -310,5 +330,5 @@ bool Personaje::renderizar() {
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);
 
-	return true;
+	return vivo;
 }

@@ -46,7 +46,7 @@ int main() {
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
 	//glfwSetKeyCallback(window, Personaje::controles)
 	//glfwSetMouseButtonCallback(window, Personaje::mouse);
-	Daga d(&es);
+	Daga d(&es,2);
 	es.add(make_shared<Personaje>(per));
 	es.add(make_shared<Daga>(d));
 	clock_t inicio;

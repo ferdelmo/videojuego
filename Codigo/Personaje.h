@@ -41,6 +41,7 @@ class Personaje {
 		uniform_real_distribution<float> distribution;
 
 		bool escopeta = true;
+		bool vivo = true;
 
 		Escena * es;
 
@@ -105,6 +106,10 @@ class Personaje {
 
 		void controlesInFrame();
 		
+		bool sigueVivo();
+
+		GLfloat distancia(GLfloat x, GLfloat y, GLfloat xp, GLfloat yp);
+
 		//renderiza el personaje y las balas disparadas
 		bool renderizar();
 };

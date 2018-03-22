@@ -4,6 +4,7 @@
 #include "Bala.h"
 #include "Daga.h"
 #include "CalaveraBase.h"
+#include "Gema.h"
 
 using namespace std;
 
@@ -29,6 +30,10 @@ void Escena::add(shared_ptr<Personaje> p) {
 	per = p;
 }
 
+void Escena::add(shared_ptr<Gema> g) {
+	gemas.push_back(g);
+}
+
 vector<shared_ptr<Bala>> * Escena::getBalas() {
 	return &balas;
 }
@@ -39,6 +44,10 @@ vector<shared_ptr<CalaveraBase>> * Escena::getCalaveras() {
 
 vector<shared_ptr<Daga>> * Escena::getDagas() {
 	return &dagas;
+}
+
+vector<shared_ptr<Gema>> * Escena::getGemas() {
+	return &gemas;
 }
 
 shared_ptr<Personaje> Escena::getPer() {
@@ -71,6 +80,16 @@ void Escena::renderizar() {
 		bool seguir = dagas[i]->renderizar();
 		if (!seguir) {
 			dagas.erase(dagas.begin() + i);
+		}
+		else {
+			i++;
+		}
+	}
+	i = 0;
+	while (i<gemas.size()) {
+		bool seguir = gemas[i]->renderizar();
+		if (!seguir) {
+			gemas.erase(gemas.begin() + i);
 		}
 		else {
 			i++;

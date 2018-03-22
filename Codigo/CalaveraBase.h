@@ -15,7 +15,7 @@ using namespace std;
 class Escena;
 
 class CalaveraBase {
-	private:
+	public:
 
 		const double pi = atan(1) * 4;
 		//PROPIEDADES

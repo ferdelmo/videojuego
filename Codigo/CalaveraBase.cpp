@@ -210,7 +210,6 @@ GLfloat CalaveraBase::distancia(GLfloat x, GLfloat y, GLfloat xp, GLfloat yp) {
 	return (x - xp)*(x - xp) + (y - yp)*(y - yp);
 }
 bool CalaveraBase::vivo() {
-	shared_ptr<Personaje> a = es->getPer();
 	vector<shared_ptr<Bala>> * b = es->getBalas();
 	int i = 0;
 	while (i < b->size()) {

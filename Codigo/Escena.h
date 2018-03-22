@@ -15,11 +15,14 @@ class Personaje;
 
 class Bala;
 
+class Gema;
+
 class Escena {
 	private:
 		vector<shared_ptr<Bala>> balas;
 		vector<shared_ptr<CalaveraBase>> calaveras;
 		vector<shared_ptr<Daga>> dagas;
+		vector<shared_ptr<Gema>> gemas;
 		shared_ptr<Personaje> per;
 	public:
 		Escena();
@@ -32,11 +35,15 @@ class Escena {
 
 		void add(shared_ptr<Personaje> p);
 
+		void add(shared_ptr<Gema> g);
+
 		vector<shared_ptr<Bala>> * getBalas();
 
 		vector<shared_ptr<CalaveraBase>> * getCalaveras();
 
 		vector<shared_ptr<Daga>> * getDagas();
+
+		vector<shared_ptr<Gema>> * getGemas();
 
 		shared_ptr<Personaje> getPer();
 

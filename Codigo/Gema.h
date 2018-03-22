@@ -1,31 +1,26 @@
-#ifndef DAGA_H_
-#define DAGA_H_
+#ifndef GEMA_H_
+#define GEMA_H_
 
-#include <iostream>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
-
 #include <SOIL.h>
+
 #include <random>
 #include <cmath>
-#include <ctime>
-#include <vector>
-#include <memory>
-
 
 using namespace std;
 
 class Escena;
 
-class Gema;
-
-class Daga {
+class Gema {
+public:
+	// propiedades del personaje
 
 	const double pi = atan(1) * 4;
-	const GLfloat velocidad = 1;
-	const GLfloat tam = 0.05f;
-	GLfloat pos[3] = { 0.9f,0.9f,0 };
+	const GLfloat velocidad = 3.75;
+	const GLfloat tam = 0.025f;
+	GLfloat pos[3] = { 0,0,0 };
 	GLfloat orientacion = pi / 2;
 	//Para renderizar
 	GLuint shaderProgram;
@@ -34,11 +29,12 @@ class Daga {
 	GLuint points_VBO;
 	GLuint colors_VBO;
 
-	int vida = 20;
-	bool muerto = false;
+	//para generar numeros aleatorios
+	mt19937 gen;
+	uniform_real_distribution<float> distribution;
 
-	//direccion para seguir al personaje
-	GLfloat dir[3] = { 0,0,0 };
+	Escena * es;
+
 	//textura
 	GLfloat colors[12] = {
 		1.0f, 0.0f, 0.0f,
@@ -47,10 +43,10 @@ class Daga {
 		0.0f, 0.0f, 0.0f
 	};
 	GLfloat texCoords[8] = {
-		0.0f, 0.0f,
+		1.0f, 1.0f,
 		1.0f, 0.0f,
 		0.0f, 1.0f,
-		1.0f, 1.0f
+		0.0f, 0.0f,
 
 	};
 	GLuint texCoords_VBO;
@@ -65,10 +61,10 @@ class Daga {
 		0, 1, 2, // Triángulo #1
 		1, 3, 2 // Triángulo #2
 	};
-
 	int texWid, texHei, texChan;
-	unsigned char* texImage = SOIL_load_image("../DevilDaggers/videojuego/Codigo/daga.png", &texWid,
+	unsigned char* texImage = SOIL_load_image("../DevilDaggers/videojuego/Codigo/Gema.png", &texWid,
 		&texHei, &texChan, SOIL_LOAD_RGB);
+
 	//Rota el punto "punto" sobre centro "angulo" grados(RAD) y lo guarda en rot
 	void rotatePoint(GLfloat centro[], GLfloat punto[], GLfloat angulo, GLfloat rot[]) {
 		rot[0] = cos(angulo)*(punto[0] - centro[0]) - sin(angulo)*(punto[1] - centro[1]) + centro[0];
@@ -76,29 +72,24 @@ class Daga {
 		rot[2] = centro[2];
 	}
 
-	//Escena
-	Escena * es;
+	int vida = 20;
+	bool noCogida = true;
+public:
+	//CONSTRUCTOR POR DEFECTO
+	Gema(Escena * es);
 
-	//para generar numeros aleatorios
-	mt19937 gen;
-	uniform_real_distribution<float> distribution;
+	//CONSTRUCTOR EN UNA POSICION ESPECIFICA
+	Gema(GLfloat x, GLfloat y, GLfloat z, Escena * es);
 
-	clock_t ultimaGen;
-	GLfloat tiempoGen = 5;
+	bool renderizar();
 
-	bool lanzar = true;
-	
-	//cuando tenga 0 muere la torre
-	vector<shared_ptr<Gema>> gemas;
+	GLfloat distancia(GLfloat x, GLfloat y, GLfloat xp, GLfloat yp);
 
-	public:
-		Daga(Escena * es, int numGemas);
+	void seguirPersonaje();
 
-		bool sigueVivo();
+	bool colisionBala();
 
-		void GenerarCalaveras(int n);
-
-		bool renderizar();
+	int getVida();
 };
 
 #endif
