@@ -15,8 +15,8 @@ using namespace std;
 
 class Fondo : public Renderizable {
 	public:
-		Fondo(GLFWwindow * window, string imgFondo, GLfloat tam)
-			: Renderizable(window, imgFondo, "../DevilDaggers/videojuego/Codigo/Shaders/fondo.vert", "../DevilDaggers/videojuego/Codigo/Shaders/fondo.frag", tam,5) {
+		Fondo(GLFWwindow * window, string imgFondo, GLfloat tam, GLfloat offset)
+			: Renderizable(window, imgFondo, "../DevilDaggers/videojuego/Codigo/Shaders/fondo.vert", "../DevilDaggers/videojuego/Codigo/Shaders/fondo.frag", tam, offset) {
 		
 		}
 			

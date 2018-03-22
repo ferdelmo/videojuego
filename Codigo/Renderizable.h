@@ -68,7 +68,7 @@ class Renderizable {
 		Renderizable(GLFWwindow * window,string textura, string vertSha, string fragSha, GLfloat tam);
 
 		//CONSTRUCTOR POR DEFECTO
-		Renderizable(GLFWwindow * window, string textura, string vertSha, string fragSha, GLfloat tam, GLint tipoTextura);
+		Renderizable(GLFWwindow * window, string textura, string vertSha, string fragSha, GLfloat tam, GLfloat offset);
 
 		Renderizable operator=(const Renderizable& b);
 		//Renderiza

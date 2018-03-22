@@ -81,11 +81,14 @@ Renderizable::Renderizable(GLFWwindow * window, string textura, string vertSha, 
 	shaderProgram = LoadShaders(vertSha.c_str(), fragSha.c_str());
 }
 
-Renderizable::Renderizable(GLFWwindow * window, string textura, string vertSha, string fragSha, GLfloat tam, GLint tipoTextura) {
+Renderizable::Renderizable(GLFWwindow * window, string textura, string vertSha, string fragSha, GLfloat tam, GLfloat offset) {
 	this->tam = tam;
 	this->window = window;
 	texImage = SOIL_load_image(textura.c_str(), &texWid,
 		&texHei, &texChan, SOIL_LOAD_RGBA);
+	for (int i = 0; i < 8; i++) {
+		texCoords[i] *= offset;
+	}
 	//calcula los puntos del triangulo segun la orientacion
 	for (int i = 0; i < 4; i++) {
 		GLfloat auxx = 1;
@@ -143,7 +146,7 @@ Renderizable::Renderizable(GLFWwindow * window, string textura, string vertSha, 
 	glBindTexture(GL_TEXTURE_2D, texture);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,

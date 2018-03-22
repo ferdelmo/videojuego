@@ -19,7 +19,7 @@ int main() {
 	glfwInit();
 
 
-	GLFWwindow* window = glfwCreateWindow(800, 800, "GAME", nullptr,
+	GLFWwindow* window = glfwCreateWindow(1920, 1080, "GAME", nullptr,
 		nullptr);
 	if (window == nullptr)
 	{
@@ -51,7 +51,7 @@ int main() {
 	es.add(make_shared<Personaje>(per));
 	es.add(make_shared<Daga>(d));
 	clock_t inicio;
-	Fondo fondo(window, "../DevilDaggers/videojuego/Codigo/suelo.png", 0.5f);
+	Fondo fondo(window, "../DevilDaggers/videojuego/Codigo/suelo.png", 4,20);
 	while (!glfwWindowShouldClose(window))
 	{
 		//chrono c++11
