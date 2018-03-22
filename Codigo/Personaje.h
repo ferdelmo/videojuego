@@ -32,6 +32,7 @@ class Personaje {
 		GLuint EBO;
 		GLuint points_VBO;
 		GLuint colors_VBO;
+		GLuint numGemas = 0;
 		//para disparar
 		clock_t ultimaBala;
 		float cadencia=50;
@@ -42,6 +43,7 @@ class Personaje {
 
 		bool escopeta = true;
 		bool vivo = true;
+
 
 		Escena * es;
 
@@ -91,7 +93,8 @@ class Personaje {
 		Personaje(GLfloat x, GLfloat y, GLfloat z, Escena * es);
 
 		void getPosition(GLfloat posi[]);
-
+		
+		void addGema();
 		//FUNCION AUXILIAR CONTROLES POR INTERRUPCION TECLAS
 		void controlesP(GLFWwindow* window, int key, int scancode, int action, int mods);
 		//FUNCION AUXILIAR CONTROLES POR INTERRUPCION raton
@@ -103,6 +106,8 @@ class Personaje {
 		void lanzarBala();
 
 		void setWindow(GLFWwindow* window);
+		
+		bool getPulsado();
 
 		void controlesInFrame();
 		

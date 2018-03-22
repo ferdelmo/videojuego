@@ -8,6 +8,7 @@
 #include <stdlib.h>
 
 #include "LoadShader.h"
+#include "Personaje.h"
 #include "Bala.h"
 #include "Escena.h"
 
@@ -184,18 +185,21 @@ GLfloat Gema::distancia(GLfloat x, GLfloat y, GLfloat xp, GLfloat yp) {
 bool Gema::colisionBala() {
 	vector<shared_ptr<Bala>> * b = es->getBalas();
 	int i = 0;
-	cout << vida << endl;
+	//cout << vida << endl;
 	while (i < b->size()) {
 		//cout << distancia(pos[0], pos[1], b[i].pos[0], b[i].pos[1]) << endl;
 		if (distancia(pos[0], pos[1], b->at(i)->pos[0], b->at(i)->pos[1]) <= 3 * tam * tam) {
 			vida -= b->at(i)->danyo;
 			b->erase(b->begin() + i);
-			cout << vida << endl;
-			cout << "ELIMINADO " << b->size() << endl;
+			//cout << vida << endl;
+			//cout << "ELIMINADO " << b->size() << endl;
 		}
 		else {
 			i++;
 		}
+	}
+	if (vida <= 0) {
+		tiempecito = clock();
 	}
 	return vida > 0;
 }
@@ -203,6 +207,8 @@ bool Gema::colisionBala() {
 int Gema::getVida() {
 	return vida;
 }
+
+
 /*
 
 	DAVID AQUI TIENES QUE HACER LA FUNCION QUE SIGUE AL POERSONAJE
@@ -213,13 +219,48 @@ int Gema::getVida() {
 	no todo en esta funcion claro, tambien habra que tocar persoanje
 
 */
+
 void Gema::seguirPersonaje() {
-	cout << "DESPEGADA DE LA TORRE" << endl;
+	shared_ptr<Personaje> a = es->getPer();
+	GLfloat posP[] = { 0,0,0 };
+	a->getPosition(posP);
+	GLfloat dirx = posP[0] - pos[0], diry = posP[1] - pos[1];
+	GLfloat antigua = orientacion;
+	orientacion = atan2(diry, dirx);
+	
+	if (!a->getPulsado()) {
+		//cout << "A SEGUIIIIIR" << endl;
+		float alpha = distribution(gen);
+		//orientacion += alpha * pi / 6;
+		if (orientacion > antigua) {
+			orientacion = antigua + velRot;
+		}
+		else {
+			orientacion = antigua - velRot;
+		}
+		pos[0] += (0.005 * velocidad)*cos(orientacion);
+		pos[1] += (0.005 * velocidad)*sin(orientacion);
+	}
+	else {
+		//cout << "NO SEGUIIIIIR" << endl;
+	}
+	
+	//cout << "tiempo = " << tiempecito << endl;
+	//cout << "DESPEGADA DE LA TORRE" << endl;
 }
 
 //renderiza el personaje y las balas disparadas
 bool Gema::renderizar() {
 	//si ya vida <=0 osea, ya no esta en la torre, entonces sigue al personaje
+	shared_ptr<Personaje> a = es->getPer();
+	GLfloat posP[] = { 0,0,0 };
+	a->getPosition(posP);
+	
+	if (distancia(pos[0], pos[1], posP[0], posP[1]) <= a->tam*a->tam && vida <= 0) {
+		a->addGema();
+		cout << "El personaje tiene: " << a->numGemas << " gemas." << endl;
+		return false;
+	} 
 	if (vida <= 0) {
 		seguirPersonaje();
 	}
@@ -243,6 +284,7 @@ bool Gema::renderizar() {
 		for (int j = 0; j < 3; j++) {
 			vertices[i * 3 + j] = punto1a[j];
 		}
+
 	}
 
 	glUseProgram(shaderProgram);
@@ -319,6 +361,10 @@ bool Gema::renderizar() {
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);
+
+	if (double(clock() - tiempecito)/CLOCKS_PER_SEC >= 10.0 && vida <= 0) {
+		return false;
+	}
 
 	return vida>0 || noCogida;
 }

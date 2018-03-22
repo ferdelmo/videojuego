@@ -115,6 +115,9 @@ void Personaje::getPosition(GLfloat posi[]) {
 	posi[2] = pos[2];
 }
 
+void Personaje::addGema() {
+	this->numGemas++;
+}
 //FUNCION AUXILIAR CONTROLES POR INTERRUPCION TECLAS
 void Personaje::controlesP(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
@@ -142,6 +145,7 @@ void Personaje::mouseP(GLFWwindow* window, int button, int action, int mods) {
 }
 //dispara un escopetazo
 void Personaje::escopetazo() {
+	//cout << "ESCOPETAZO " << endl;
 	for (int i = 0; i < 6; i++) {
 		float ale = distribution(gen);
 		float angle = (ale*pi / 6) - pi / 12;
@@ -149,7 +153,7 @@ void Personaje::escopetazo() {
 		GLfloat punto1a[3] = { 0,0,0 };
 		rotatePoint(pos, punto1, orientacion, punto1a);
 		es->add(make_shared<Bala>(Bala(punto1a, orientacion + pi / 2 + angle)));
-		cout << "BALITA " << angle << endl;
+		//cout << "BALITA " << angle << endl;
 	}
 }
 //dispara una bala
@@ -158,11 +162,15 @@ void Personaje::lanzarBala() {
 	GLfloat punto1a[3] = { 0,0,0 };
 	rotatePoint(pos, punto1, orientacion, punto1a);
 	es->add(make_shared<Bala>(Bala(punto1a, orientacion + pi / 2)));
-	cout << "BALITA" << endl;
+	//cout << "BALITA" << endl;
 }
 
 void Personaje::setWindow(GLFWwindow* window) {
 	this->window = window;
+}
+
+bool Personaje::getPulsado() {
+	return GLFW_PRESS == glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) || GLFW_PRESS == glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
 }
 
 void Personaje::controlesInFrame() {

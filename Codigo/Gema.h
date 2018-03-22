@@ -7,6 +7,7 @@
 #include <SOIL.h>
 
 #include <random>
+#include <ctime>
 #include <cmath>
 
 using namespace std;
@@ -18,8 +19,10 @@ public:
 	// propiedades del personaje
 
 	const double pi = atan(1) * 4;
-	const GLfloat velocidad = 3.75;
+	const GLfloat velocidad = 3.75/6;
+	GLfloat velRot = pi / 10;
 	const GLfloat tam = 0.025f;
+	clock_t tiempecito = 0;
 	GLfloat pos[3] = { 0,0,0 };
 	GLfloat orientacion = pi / 2;
 	//Para renderizar
@@ -28,7 +31,6 @@ public:
 	GLuint EBO;
 	GLuint points_VBO;
 	GLuint colors_VBO;
-
 	//para generar numeros aleatorios
 	mt19937 gen;
 	uniform_real_distribution<float> distribution;

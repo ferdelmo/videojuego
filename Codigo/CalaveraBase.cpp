@@ -15,6 +15,7 @@
 #include "LoadShader.h"
 #include "Personaje.h"
 #include "Bala.h"
+#include "Gema.h"
 #include "Escena.h"
 
 using namespace std;
