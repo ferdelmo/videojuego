@@ -1,4 +1,4 @@
-#include "CalaveraBase.h"
+#include "CalaveraBaseII.h"
 
 #include <iostream>
 #include <GL/glew.h>
@@ -17,12 +17,11 @@
 #include "Bala.h"
 #include "Gema.h"
 #include "Escena.h"
-#include "Camara.h"
 
 using namespace std;
 
-CalaveraBase::CalaveraBase(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow* window, Camara * c) 
-	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/skull.png", "../DevilDaggers/videojuego/Codigo/Shaders/calavera.vert", "../DevilDaggers/videojuego/Codigo/Shaders/calavera.frag",0.05f,c) {
+CalaveraBaseII::CalaveraBaseII(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow* window, Camara * c)
+	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/skull.png", "../DevilDaggers/videojuego/Codigo/Shaders/calavera.vert", "../DevilDaggers/videojuego/Codigo/Shaders/calavera.frag", 0.07f, c) {
 	pos[0] = x; pos[1] = y; pos[2] = z;
 	this->es = es;
 	GLfloat texCoords[8] = {
@@ -45,7 +44,7 @@ CalaveraBase::CalaveraBase(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwin
 	dir[1] = distribution(gen);
 }
 
-void CalaveraBase::seguir() {
+void CalaveraBaseII::seguir() {
 	shared_ptr<Personaje> a= es->getPer();
 	GLfloat posP[] = { 0,0,0 };
 	a->getPosition(posP);
@@ -54,22 +53,20 @@ void CalaveraBase::seguir() {
 	orientacion = atan2(diry, dirx);
 	float alpha = distribution(gen);
 	//orientacion += alpha * pi / 6;
-	if (orientacion > antigua) {
-		orientacion = antigua + velRot;
-	}
-	else {
-		orientacion = antigua - velRot;
-	}
-	pos[0] += (0.005 * velocidad)*cos(orientacion);
-	pos[1] += (0.005 * velocidad)*sin(orientacion);
+	GLfloat moduloDir = sqrt(dirx*dirx + diry * diry);
+	GLfloat dirxNorm = dirx / moduloDir;
+	GLfloat diryNorm = diry / moduloDir;
+	pos[0] += (0.005f * velocidad)*dirxNorm;
+	pos[1] += (0.005f * velocidad)*diryNorm;
 }
-GLfloat CalaveraBase::distancia(GLfloat x, GLfloat y, GLfloat xp, GLfloat yp) {
+
+GLfloat CalaveraBaseII::distancia(GLfloat x, GLfloat y, GLfloat xp, GLfloat yp) {
 	return (x - xp)*(x - xp) + (y - yp)*(y - yp);
 }
-bool CalaveraBase::vivo() {
+bool CalaveraBaseII::vivo() {
 	vector<shared_ptr<Bala>> * b = es->getBalas();
 	int i = 0;
-	while (i < b->size()) {
+	while (i < b->size()) {	
 		//cout << distancia(pos[0], pos[1], b[i].pos[0], b[i].pos[1]) << endl;
 		if (distancia(pos[0], pos[1], b->at(i)->pos[0], b->at(i)->pos[1]) <= 3 * tam * tam) {
 			vida -= b->at(i)->danyo;
@@ -81,11 +78,18 @@ bool CalaveraBase::vivo() {
 			i++;
 		}
 	}
+	if (vida <= 0) {
+		cout << "Ha muerto" << endl;
+		/*shared_ptr<Gema> sg = make_shared<Gema>(Gema(pos[0], pos[1], pos[2], es, window));
+		sg->setVida(0);
+		es->add(sg);*/
+		//es->anyadirGema(pos[0], pos[1], pos[2]);
+	}
 	return vida>0;
 }
-CalaveraBase CalaveraBase::operator=(const CalaveraBase& b) {
+CalaveraBaseII CalaveraBaseII::operator=(const CalaveraBaseII& b) {
 	if (this != &b) { // self-assignment check expected
-		//cout << "SE LLAMA A CALAVERA" << endl;
+		cout << "SE LLAMA A CALAVERA" << endl;
 		this->velocidad = b.velocidad;
 		this->velRot = b.velRot;
 		this->vida = b.vida;
@@ -101,7 +105,7 @@ CalaveraBase CalaveraBase::operator=(const CalaveraBase& b) {
 	return *this;
 }
 
-void CalaveraBase::mover() {
+void CalaveraBaseII::mover() {
 	seguir();
 	sigue = vivo();
 }

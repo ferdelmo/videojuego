@@ -26,11 +26,12 @@ class Camara;
 
 class Daga : public Renderizable {
 
-	GLfloat velocidad = 1;
+	GLfloat velocidad = 1, velRot = 0.005f;
 
-	int vida = 20;
+	GLfloat vida = 20/8;
 	bool muerto = false;
-
+	clock_t tiempecito = 0;
+	int generadas = -1;
 	//direccion para seguir al personaje
 	GLfloat dir[3] = { 0,0,0 };
 

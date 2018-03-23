@@ -36,7 +36,7 @@ class Personaje : public Renderizable{
 
 		bool escopeta = true;
 		bool vivo = true;
-
+		bool escopetaGema = false;
 
 		Escena * es;
 

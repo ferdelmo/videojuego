@@ -49,35 +49,29 @@ bool Gema::colisionBala() {
 int Gema::getVida() {
 	return vida;
 }
+void Gema::setVida(int v) {
+	vida = v;
+}
 
 
 void Gema::seguirPersonaje() {
 	shared_ptr<Personaje> a = es->getPer();
-	GLfloat posP[] = { 0,0,0 };
-	a->getPosition(posP);
-	GLfloat dirx = posP[0] - pos[0], diry = posP[1] - pos[1];
-	GLfloat antigua = orientacion;
-	orientacion = atan2(diry, dirx);
-	
 	if (!a->getPulsado()) {
-		//cout << "A SEGUIIIIIR" << endl;
-		float alpha = distribution(gen);
-		//orientacion += alpha * pi / 6;
-		if (orientacion > antigua) {
-			orientacion = antigua + velRot;
-		}
-		else {
-			orientacion = antigua - velRot;
-		}
-		pos[0] += (0.005 * velocidad)*cos(orientacion);
-		pos[1] += (0.005 * velocidad)*sin(orientacion);
+		GLfloat posP[] = { 0,0,0 };
+		a->getPosition(posP);
+		GLfloat dirx = posP[0] - pos[0], diry = posP[1] - pos[1];
+		GLfloat moduloDir = sqrt(dirx*dirx + diry * diry);
+		GLfloat dirxNorm = dirx / moduloDir;
+		GLfloat diryNorm = diry / moduloDir;
+		pos[0] += (0.005f * velocidad)*dirxNorm;
+		pos[1] += (0.005f * velocidad)*diryNorm;
 	}
-	else {
-		//cout << "NO SEGUIIIIIR" << endl;
-	}
-	
-	//cout << "tiempo = " << tiempecito << endl;
-	//cout << "DESPEGADA DE LA TORRE" << endl;
+}
+
+void Gema::setPos(GLfloat nuevaX, GLfloat nuevaY, GLfloat nuevaZ) {
+	pos[0] = nuevaX;
+	pos[1] = nuevaY;
+	pos[2] = nuevaZ;
 }
 
 void Gema::mover() {
@@ -92,6 +86,7 @@ void Gema::mover() {
 		noCogida = false;
 	}
 	if (vida <= 0) {
+		cout << "seguir al personaje " << endl;
 		seguirPersonaje();
 	}
 	if (double(clock() - tiempecito) / CLOCKS_PER_SEC >= 10.0 && vida <= 0) {

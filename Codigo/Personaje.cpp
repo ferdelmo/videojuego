@@ -77,6 +77,7 @@ void Personaje::escopetazo() {
 		GLfloat punto1a[3] = { 0,0,0 };
 		rotatePoint(pos, punto1, orientacion, punto1a);
 		es->add(make_shared<Bala>(Bala(punto1a, orientacion + pi / 2 + angle,window,cam)));
+
 	}
 }
 //dispara una bala
@@ -92,10 +93,11 @@ void Personaje::setWindow(GLFWwindow* window) {
 }
 
 bool Personaje::getPulsado() {
-	return GLFW_PRESS == glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) || GLFW_PRESS == glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+	return GLFW_PRESS == glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) || escopetaGema/*GLFW_PRESS == glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT)*/;
 }
 
 void Personaje::controlesInFrame() {
+	escopetaGema = false;
 	int state = glfwGetKey(window, GLFW_KEY_W);
 	if (state == GLFW_PRESS) {
 		pos[1] += velocidad * 0.005;
@@ -137,6 +139,7 @@ void Personaje::controlesInFrame() {
 	}
 	else if (stateR == GLFW_PRESS && escopeta) {
 		escopetazo();
+		escopetaGema = true;
 		escopeta = false;
 	}
 	else if (stateR == GLFW_RELEASE) {

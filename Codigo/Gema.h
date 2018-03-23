@@ -39,14 +39,18 @@ public:
 
 	//CONSTRUCTOR EN UNA POSICION ESPECIFICA
 	Gema(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow* window, Camara * c);
-	
+
 	void mover();
+	
+	void setPos(GLfloat nuevaX, GLfloat nuevaY, GLfloat nuevaZ);
 
 	void seguirPersonaje();
 
 	bool colisionBala();
 
 	int getVida();
+	
+	void setVida(int v);
 };
 
 #endif

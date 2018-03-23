@@ -12,6 +12,7 @@
 #include <stdlib.h>
 
 #include "CalaveraBase.h"
+#include "CalaveraBaseII.h"
 #include "LoadShader.h"
 #include "Escena.h"
 #include "Gema.h"
@@ -51,6 +52,9 @@ void Daga::GenerarCalaveras(int n) {
 		float y = distribution(gen);
 		es->add(make_shared<CalaveraBase>(CalaveraBase(pos[0] + x * tam, pos[1] + y * tam, pos[2],es,window,cam)));
 	}
+	float x = distribution(gen);
+	float y = distribution(gen);
+	es->add(make_shared<CalaveraBaseII>(CalaveraBaseII(pos[0] + x * tam, pos[1] + y * tam, pos[2], es, window, cam)));
 }
 
 bool Daga::sigueVivo() {
@@ -69,4 +73,28 @@ bool Daga::sigueVivo() {
 
 void Daga::mover() {
 	sigue = sigueVivo();
+	GLfloat nuevaX, nuevaY, nuevaZ;
+	GLfloat posP[] = { 0,0,0 };
+	GLfloat dirx = posP[0] - pos[0], diry = posP[1] - pos[1];
+	GLfloat moduloDir = sqrt(dirx*dirx + diry * diry);
+	GLfloat dirxNorm = dirx / moduloDir;
+	GLfloat diryNorm = diry / moduloDir;
+	if (distancia(pos[0], pos[1], 0, 0) > tam/2.5) { 
+		pos[0] += (0.005f * velocidad)*dirxNorm;
+		pos[1] += (0.005f * velocidad)*diryNorm;
+	}
+	orientacion += velRot;
+	GLfloat div = 2 * pi / gemas.size(); //para colocarlas alrededor de la torre
+	for (int i = 0; i < gemas.size(); i++) {
+		nuevaX = pos[0] + (tam * cos(i*div));
+		nuevaY = pos[1] + (tam * sin(i*div));
+
+		gemas.at(i)->setPos(nuevaX, nuevaY, gemas.at(i)->pos[2]);
+	}
+	//cout << int(clock() - tiempecito) / CLOCKS_PER_SEC << endl;
+	if ((int(clock() - tiempecito) / CLOCKS_PER_SEC) %10 == 0 && generadas != int(clock() - tiempecito) / CLOCKS_PER_SEC) {
+		GenerarCalaveras(4);
+		//cout << "GENERANDOOOO" << endl;
+		generadas = int(clock() - tiempecito) / CLOCKS_PER_SEC;
+	}
 }
