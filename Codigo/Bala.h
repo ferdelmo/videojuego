@@ -12,6 +12,8 @@
 
 using namespace std;
 
+class Camara;
+
 class Bala : public Renderizable {
 	public:
 		//Propiedades de la bala
@@ -24,7 +26,7 @@ class Bala : public Renderizable {
 
 		bool muerto = false;
 
-		Bala(GLfloat inicio[], float o, GLFWwindow* window);
+		Bala(GLfloat inicio[], float o, GLFWwindow* window, Camara * c);
 
 		Bala operator=(const Bala& b);
 

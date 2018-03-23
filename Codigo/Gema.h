@@ -16,6 +16,8 @@ using namespace std;
 
 class Escena;
 
+class Camara;
+
 class Gema : public Renderizable {
 public:
 	// propiedades del personaje
@@ -36,7 +38,7 @@ public:
 public:
 
 	//CONSTRUCTOR EN UNA POSICION ESPECIFICA
-	Gema(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow* window);
+	Gema(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow* window, Camara * c);
 	
 	void mover();
 

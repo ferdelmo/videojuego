@@ -10,12 +10,13 @@
 #include <string>
 
 #include "LoadShader.h"
+#include "Camara.h"
 
 using namespace std;
 
 //Genera una bala en la posicion inicio con orientacion o
-Bala::Bala(GLfloat inicio[], float o, GLFWwindow* window)
-	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/bala.png", "../DevilDaggers/videojuego/Codigo/Shaders/gema.vert", "../DevilDaggers/videojuego/Codigo/Shaders/gema.frag", 0.01f){
+Bala::Bala(GLfloat inicio[], float o, GLFWwindow* window, Camara * c)
+	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/bala.png", "../DevilDaggers/videojuego/Codigo/Shaders/gema.vert", "../DevilDaggers/videojuego/Codigo/Shaders/gema.frag", 0.01f, c){
 	this->window = window;
 	for (int i = 0; i < 3; i++) {
 		pos[i] = inicio[i];

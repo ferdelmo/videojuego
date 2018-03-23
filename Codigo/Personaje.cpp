@@ -16,12 +16,13 @@
 #include "Bala.h"
 #include "Escena.h"
 #include "CalaveraBase.h"
+#include "Camara.h"
 
 using namespace std;
 
 //CONSTRUCTOR POR DEFECTO
-Personaje::Personaje(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow * window) 
-	: Renderizable(window,"../DevilDaggers/videojuego/Codigo/CARETO.jpg","../DevilDaggers/videojuego/Codigo/Shaders/tri.vert","../DevilDaggers/videojuego/Codigo/Shaders/tri.frag", 0.1f) {
+Personaje::Personaje(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow * window, Camara * c) 
+	: Renderizable(window,"../DevilDaggers/videojuego/Codigo/CARETO.jpg","../DevilDaggers/videojuego/Codigo/Shaders/nuevo.vert","../DevilDaggers/videojuego/Codigo/Shaders/nuevo.frag", 0.1f,c) {
 	this->es = es;
 	//prepara las balas
 	ultimaBala = clock();
@@ -74,12 +75,8 @@ void Personaje::escopetazo() {
 		float angle = (ale*pi / 6) - pi / 12;
 		GLfloat punto1[3] = { pos[0],pos[1] + tam,pos[2] + ale / 10 };
 		GLfloat punto1a[3] = { 0,0,0 };
-		int px, py;
-		glfwGetWindowSize(window, &px, &py);
-		punto1a[0] *= py * 1.0f / px;
 		rotatePoint(pos, punto1, orientacion, punto1a);
-		es->add(make_shared<Bala>(Bala(punto1a, orientacion + pi / 2 + angle,window)));
-		cout << "BALITA " << angle << endl;
+		es->add(make_shared<Bala>(Bala(punto1a, orientacion + pi / 2 + angle,window,cam)));
 	}
 }
 //dispara una bala
@@ -87,7 +84,7 @@ void Personaje::lanzarBala() {
 	GLfloat punto1[3] = { pos[0],pos[1] + tam,pos[2] };
 	GLfloat punto1a[3] = { 0,0,0 };
 	rotatePoint(pos, punto1, orientacion, punto1a);
-	es->add(make_shared<Bala>(Bala(punto1a, orientacion + pi / 2,window)));
+	es->add(make_shared<Bala>(Bala(punto1a, orientacion + pi / 2,window,cam)));
 }
 
 void Personaje::setWindow(GLFWwindow* window) {
@@ -123,10 +120,9 @@ void Personaje::controlesInFrame() {
 	//calula la posicion relativa de la raton en la pantalla
 	x = (x / px - 0.5f) * 2;
 	y = (abs(y - py) / py - 0.5f) * 2;
+	y *= py * 1.0f / px;
 	//calcula la orientacion para que mire al raton
-	float dirx = x - pos[0];
-	float diry = y - pos[1];
-	orientacion = atan2(-dirx, diry);
+	orientacion = atan2(-x, y);
 	//cout << orientacion << endl;
 	//mira si se ha disparado y ha pasado el tiempo de cadencia
 	state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
@@ -170,6 +166,12 @@ bool Personaje::sigueVivo() {
 }
 
 void Personaje::mover() {
+	cam->View = glm::lookAt(
+		glm::vec3(pos[0], pos[1], 3), // Camera is at (4,3,3), in World Space
+		glm::vec3(pos[0], pos[1], 0), // and looks at the origin
+		glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+	);
+	cam->actualizarMVP();
 	controlesInFrame();
 	//sigue = sigueVivo();
 }

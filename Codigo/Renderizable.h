@@ -1,13 +1,21 @@
 #ifndef RENDERIZABLE_H_
 #define RENDERIZABLE_H_
 
+
+#define GLM_ENABLE_EXPERIMENTAL
+
 #include <iostream>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp> 
+#include <glm/gtx/transform.hpp>
 #include <SOIL.h>
 
+
 using namespace std;
+
+class Camara;
 
 class Renderizable {
 	public:
@@ -55,20 +63,24 @@ class Renderizable {
 
 		GLFWwindow* window;
 
+		GLuint MatrixID;
 		//Rota el punto "punto" sobre centro "angulo" grados(RAD) y lo guarda en rot
 		void rotatePoint(GLfloat centro[], GLfloat punto[], GLfloat angulo, GLfloat rot[]) {
 			rot[0] = cos(angulo)*(punto[0] - centro[0]) - sin(angulo)*(punto[1] - centro[1]) + centro[0];
 			rot[1] = sin(angulo)*(punto[0] - centro[0]) + cos(angulo)*(punto[1] - centro[1]) + centro[1];
 			rot[2] = centro[2];
 		}
-
+		
 		bool sigue=true;
+
+		Camara * cam;
+
 	public:
 		//CONSTRUCTOR POR DEFECTO
-		Renderizable(GLFWwindow * window,string textura, string vertSha, string fragSha, GLfloat tam);
+		Renderizable(GLFWwindow * window,string textura, string vertSha, string fragSha, GLfloat tam, Camara * c);
 
 		//CONSTRUCTOR POR DEFECTO
-		Renderizable(GLFWwindow * window, string textura, string vertSha, string fragSha, GLfloat tam, GLfloat offset);
+		Renderizable(GLFWwindow * window, string textura, string vertSha, string fragSha, GLfloat tam, GLfloat offset, Camara * c);
 
 		Renderizable operator=(const Renderizable& b);
 		//Renderiza

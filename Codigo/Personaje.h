@@ -19,6 +19,8 @@ using namespace std;
 
 class Escena;
 
+class Camara;
+
 class Personaje : public Renderizable{
 	public:
 		const GLfloat velocidad = 3.75;
@@ -40,7 +42,7 @@ class Personaje : public Renderizable{
 
 	public:
 		//CONSTRUCTOR EN UNA POSICION ESPECIFICA
-		Personaje(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow * window);
+		Personaje(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow * window, Camara * c);
 
 		void getPosition(GLfloat posi[]);
 		

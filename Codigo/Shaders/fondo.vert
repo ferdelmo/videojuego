@@ -8,10 +8,15 @@ layout (location = 2) in vec2 vertex_texCoord;
 out vec2 texCoord;
 out vec3 fragmentColor;
 
-void main(){  
-	gl_Position.xyz = vertexPosition_modelspace;
-  	gl_Position.w = 1.0;
+// Values that stay constant for the whole mesh.
+uniform mat4 MVP;
+
+void main(){
+
+	// Output position of the vertex, in clip space : MVP * position
+	gl_Position =  MVP * vec4(vertexPosition_modelspace,1);
 
   	fragmentColor = vertexColor;
   	texCoord = vertex_texCoord;
+
 }

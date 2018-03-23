@@ -15,6 +15,8 @@ using namespace std;
 
 class Escena;
 
+class Camara;
+
 class CalaveraBase : public Renderizable{
 	public:
 		GLfloat velocidad =3;
@@ -33,7 +35,7 @@ class CalaveraBase : public Renderizable{
 		Escena * es;
 
 	public:
-		CalaveraBase(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow* window);
+		CalaveraBase(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow* window, Camara * c);
 
 		void seguir();
 

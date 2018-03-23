@@ -17,11 +17,12 @@
 #include "Bala.h"
 #include "Gema.h"
 #include "Escena.h"
+#include "Camara.h"
 
 using namespace std;
 
-CalaveraBase::CalaveraBase(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow* window) 
-	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/skull.png", "../DevilDaggers/videojuego/Codigo/Shaders/calavera.vert", "../DevilDaggers/videojuego/Codigo/Shaders/calavera.frag",0.05f) {
+CalaveraBase::CalaveraBase(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow* window, Camara * c) 
+	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/skull.png", "../DevilDaggers/videojuego/Codigo/Shaders/calavera.vert", "../DevilDaggers/videojuego/Codigo/Shaders/calavera.frag",0.05f,c) {
 	pos[0] = x; pos[1] = y; pos[2] = z;
 	this->es = es;
 	GLfloat texCoords[8] = {

@@ -22,6 +22,8 @@ class Escena;
 
 class Gema;
 
+class Camara;
+
 class Daga : public Renderizable {
 
 	GLfloat velocidad = 1;
@@ -48,7 +50,7 @@ class Daga : public Renderizable {
 	vector<shared_ptr<Gema>> gemas;
 
 	public:
-		Daga(GLfloat posi[],Escena * es, int numGemas, GLFWwindow* window);
+		Daga(GLfloat posi[],Escena * es, int numGemas, GLFWwindow* window, Camara * c);
 
 		bool sigueVivo();
 

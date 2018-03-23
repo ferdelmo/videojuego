@@ -1,11 +1,13 @@
 #include "Renderizable.h"
 #include "LoadShader.h"
+#include "Camara.h"
 
 using namespace std;
 
-Renderizable::Renderizable(GLFWwindow * window, string textura, string vertSha, string fragSha, GLfloat tam){
+Renderizable::Renderizable(GLFWwindow * window, string textura, string vertSha, string fragSha, GLfloat tam, Camara * c){
 	this->tam = tam;
 	this->window = window;
+	cam = c;
 	texImage = SOIL_load_image(textura.c_str(), &texWid,
 		&texHei, &texChan, SOIL_LOAD_RGBA);
 	//calcula los puntos del triangulo segun la orientacion
@@ -79,11 +81,15 @@ Renderizable::Renderizable(GLFWwindow * window, string textura, string vertSha, 
 	SOIL_free_image_data(texImage);
 
 	shaderProgram = LoadShaders(vertSha.c_str(), fragSha.c_str());
+	cout << "NO FUINCIONA LECHES" << endl;
+ 	MatrixID = glGetUniformLocation(shaderProgram, "MVP");
+	 // Remember, matrix multiplication is the other way around
 }
 
-Renderizable::Renderizable(GLFWwindow * window, string textura, string vertSha, string fragSha, GLfloat tam, GLfloat offset) {
+Renderizable::Renderizable(GLFWwindow * window, string textura, string vertSha, string fragSha, GLfloat tam, GLfloat offset, Camara * c) {
 	this->tam = tam;
 	this->window = window;
+	cam = c;
 	texImage = SOIL_load_image(textura.c_str(), &texWid,
 		&texHei, &texChan, SOIL_LOAD_RGBA);
 	for (int i = 0; i < 8; i++) {
@@ -203,8 +209,6 @@ Renderizable Renderizable::operator=(const Renderizable& b) {
 
 bool Renderizable::renderizar() {
 	mover();
-	int px, py;
-	glfwGetWindowSize(window, &px, &py);
 	//calcula los puntos del triangulo segun la orientacion
 	for (int i = 0; i < 4; i++) {
 		GLfloat auxx = 1;
@@ -219,9 +223,6 @@ bool Renderizable::renderizar() {
 		GLfloat punto1a[3] = { 0,0,0 };
 		rotatePoint(pos, puntoaux, orientacion, punto1a);
 		for (int j = 0; j < 3; j++) {
-			if (j == 0) {
-				punto1a[j] *= py * 1.0f / px;
-			}
 			vertices[i * 3 + j] = punto1a[j];
 		}
 	}
@@ -231,6 +232,8 @@ bool Renderizable::renderizar() {
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glUseProgram(shaderProgram);
+
+	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &(cam->MVP[0][0]));
 
 	glBindVertexArray(VAO); // une el VAO, que contiene toda la
 							//información de los vértices, al contexto
