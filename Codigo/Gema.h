@@ -22,7 +22,7 @@ class Gema : public Renderizable {
 public:
 	// propiedades del personaje
 
-	const GLfloat velocidad = 3.75/6;
+	const GLfloat velocidad = 3.75f;
 	GLfloat velRot = pi / 10;
 	clock_t tiempecito = 0;
 	
@@ -47,10 +47,6 @@ public:
 	void seguirPersonaje();
 
 	bool colisionBala();
-
-	int getVida();
-	
-	void setVida(int v);
 };
 
 #endif

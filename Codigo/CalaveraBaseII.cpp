@@ -17,11 +17,12 @@
 #include "Bala.h"
 #include "Gema.h"
 #include "Escena.h"
+#include "Camara.h"
 
 using namespace std;
 
 CalaveraBaseII::CalaveraBaseII(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow* window, Camara * c)
-	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/skull.png", "../DevilDaggers/videojuego/Codigo/Shaders/calavera.vert", "../DevilDaggers/videojuego/Codigo/Shaders/calavera.frag", 0.07f, c) {
+	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/skull.png", "../DevilDaggers/videojuego/Codigo/Shaders/calaveraII.vert", "../DevilDaggers/videojuego/Codigo/Shaders/calaveraII.frag", 0.07f, c) {
 	pos[0] = x; pos[1] = y; pos[2] = z;
 	this->es = es;
 	GLfloat texCoords[8] = {
@@ -79,17 +80,16 @@ bool CalaveraBaseII::vivo() {
 		}
 	}
 	if (vida <= 0) {
-		cout << "Ha muerto" << endl;
-		/*shared_ptr<Gema> sg = make_shared<Gema>(Gema(pos[0], pos[1], pos[2], es, window));
-		sg->setVida(0);
-		es->add(sg);*/
-		//es->anyadirGema(pos[0], pos[1], pos[2]);
+		cout << "GENERA GEMA" << endl;
+		shared_ptr<Gema> sg = make_shared<Gema>(Gema(pos[0], pos[1], pos[2], es, window,cam));
+		sg->vida = 0;
+		sg->tiempecito = clock();
+		es->add(sg);
 	}
 	return vida>0;
 }
 CalaveraBaseII CalaveraBaseII::operator=(const CalaveraBaseII& b) {
 	if (this != &b) { // self-assignment check expected
-		cout << "SE LLAMA A CALAVERA" << endl;
 		this->velocidad = b.velocidad;
 		this->velRot = b.velRot;
 		this->vida = b.vida;

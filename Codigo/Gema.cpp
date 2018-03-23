@@ -46,14 +46,6 @@ bool Gema::colisionBala() {
 	return vida > 0;
 }
 
-int Gema::getVida() {
-	return vida;
-}
-void Gema::setVida(int v) {
-	vida = v;
-}
-
-
 void Gema::seguirPersonaje() {
 	shared_ptr<Personaje> a = es->getPer();
 	if (!a->getPulsado()) {
@@ -86,7 +78,7 @@ void Gema::mover() {
 		noCogida = false;
 	}
 	if (vida <= 0) {
-		cout << "seguir al personaje " << endl;
+		//cout << "seguir al personaje " << endl;
 		seguirPersonaje();
 	}
 	if (double(clock() - tiempecito) / CLOCKS_PER_SEC >= 10.0 && vida <= 0) {

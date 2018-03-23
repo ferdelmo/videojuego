@@ -28,6 +28,8 @@ class Bala : public Renderizable {
 
 		Bala(GLfloat inicio[], float o, GLFWwindow* window, Camara * c);
 
+		Bala(GLfloat inicio[], float o, GLFWwindow* window, Camara * c, GLuint sha);
+
 		Bala operator=(const Bala& b);
 
 		void avanzar();

@@ -56,7 +56,6 @@ int main() {
 		100.0f             // Plano de corte lejano. Tan pequeño como se pueda.
 	);
 	cam.actualizarMVP();
-	
 
 	//instancia el personage
 	Escena es;

@@ -13,10 +13,15 @@ Escena::Escena() {
 	balas = vector<shared_ptr<Bala>>();
 	dagas = vector<shared_ptr<Daga>>();
 	calaveras = vector<shared_ptr<CalaveraBase>>();
+	calaverasII = vector<shared_ptr<CalaveraBaseII>>();
 }
 
 void Escena::add(shared_ptr<Bala> b) {
 	balas.push_back(b);
+}
+
+void Escena::add(vector<shared_ptr<Bala>> bs) {
+	balas.insert(balas.end(),bs.begin(),bs.end());
 }
 
 void Escena::add(shared_ptr<CalaveraBase> cb) {
@@ -38,12 +43,6 @@ void Escena::add(shared_ptr<Gema> g) {
 	gemas.push_back(g);
 }
 
-void Escena::anyadirGema(GLfloat x, GLfloat y, GLfloat z) {
-	shared_ptr<Personaje> a = getPer();
-	shared_ptr<Gema> sg = make_shared<Gema>(Gema(x, y, z, this, a->window, 0));
-	add(sg);
-
-}
 vector<shared_ptr<Bala>> * Escena::getBalas() {
 	return &balas;
 }
@@ -94,12 +93,7 @@ void Escena::renderizar() {
 	while (i<calaverasII.size()) {
 		bool seguir = calaverasII[i]->renderizar();
 		if (!seguir) {
-			GLfloat x, y, z;
-			x = calaverasII.at(i)->pos[0];
-			y = calaverasII.at(i)->pos[1];
-			z = calaverasII.at(i)->pos[2];
 			calaverasII.erase(calaverasII.begin() + i);
-			anyadirGema(x, y, z);
 		}
 		else {
 			i++;

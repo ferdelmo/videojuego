@@ -82,6 +82,8 @@ class Renderizable {
 		//CONSTRUCTOR POR DEFECTO
 		Renderizable(GLFWwindow * window, string textura, string vertSha, string fragSha, GLfloat tam, GLfloat offset, Camara * c);
 
+		Renderizable(GLFWwindow * window, string textura, GLfloat tam, Camara * c, GLuint sha);
+
 		Renderizable operator=(const Renderizable& b);
 		//Renderiza
 		bool renderizar();

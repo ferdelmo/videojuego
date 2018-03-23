@@ -15,7 +15,9 @@ using namespace std;
 
 class Escena;
 
-class CalaveraBaseII : public Renderizable{
+class Camara;
+
+class CalaveraBaseII : public Renderizable {
 	public:
 		GLfloat velocidad =3;
 		GLfloat velRot = pi / 10;

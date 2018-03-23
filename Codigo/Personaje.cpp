@@ -31,6 +31,7 @@ Personaje::Personaje(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow * 
 	random_device rd;
 	// Initialize Mersenne Twister pseudo-random number generator
 	gen = mt19937(rd());
+	shaderProgramBala = LoadShaders("../DevilDaggers/videojuego/Codigo/Shaders/gema.vert", "../DevilDaggers/videojuego/Codigo/Shaders/gema.frag");
 }
 
 void Personaje::getPosition(GLfloat posi[]) {
@@ -69,23 +70,25 @@ void Personaje::mouseP(GLFWwindow* window, int button, int action, int mods) {
 }
 //dispara un escopetazo
 void Personaje::escopetazo() {
+	int n = 3;
 	//cout << "ESCOPETAZO " << endl;
-	for (int i = 0; i < 6; i++) {
+	vector<shared_ptr<Bala>> bs = vector<shared_ptr<Bala>>(n);
+	for (int i = 0; i < n; i++) {
 		float ale = distribution(gen);
 		float angle = (ale*pi / 6) - pi / 12;
 		GLfloat punto1[3] = { pos[0],pos[1] + tam,pos[2] + ale / 10 };
 		GLfloat punto1a[3] = { 0,0,0 };
 		rotatePoint(pos, punto1, orientacion, punto1a);
-		es->add(make_shared<Bala>(Bala(punto1a, orientacion + pi / 2 + angle,window,cam)));
-
+		bs[i]=make_shared<Bala>(Bala(punto1a, orientacion + pi / 2 + angle,window,cam, shaderProgramBala));
 	}
+	es->add(bs);
 }
 //dispara una bala
 void Personaje::lanzarBala() {
 	GLfloat punto1[3] = { pos[0],pos[1] + tam,pos[2] };
 	GLfloat punto1a[3] = { 0,0,0 };
 	rotatePoint(pos, punto1, orientacion, punto1a);
-	es->add(make_shared<Bala>(Bala(punto1a, orientacion + pi / 2,window,cam)));
+	es->add(make_shared<Bala>(Bala(punto1a, orientacion + pi / 2,window,cam, shaderProgramBala)));
 }
 
 void Personaje::setWindow(GLFWwindow* window) {
@@ -93,7 +96,7 @@ void Personaje::setWindow(GLFWwindow* window) {
 }
 
 bool Personaje::getPulsado() {
-	return GLFW_PRESS == glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) || escopetaGema/*GLFW_PRESS == glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT)*/;
+	return disparando;
 }
 
 void Personaje::controlesInFrame() {
@@ -129,6 +132,8 @@ void Personaje::controlesInFrame() {
 	//mira si se ha disparado y ha pasado el tiempo de cadencia
 	state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
 	int stateR = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
+
+	disparando = state == GLFW_PRESS;
 	if (state == GLFW_PRESS && (clock() - ultimaBala) / (CLOCKS_PER_SEC / 1000) > cadencia) {
 		lanzarBala();
 		ultimaBala = clock();
@@ -139,6 +144,8 @@ void Personaje::controlesInFrame() {
 	}
 	else if (stateR == GLFW_PRESS && escopeta) {
 		escopetazo();
+
+		disparando = true;
 		escopetaGema = true;
 		escopeta = false;
 	}

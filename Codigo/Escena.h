@@ -35,6 +35,8 @@ class Escena {
 
 		void add(shared_ptr<Bala> b);
 
+		void add(vector<shared_ptr<Bala>> bs);
+
 		void add(shared_ptr<CalaveraBase> cb);
 
 		void add(shared_ptr<CalaveraBaseII> cb);
@@ -42,8 +44,6 @@ class Escena {
 		void add(shared_ptr<Daga> d);
 
 		void add(shared_ptr<Personaje> p);
-
-		void anyadirGema(GLfloat x, GLfloat y, GLfloat z);
 
 		void add(shared_ptr<Gema> g);
 
