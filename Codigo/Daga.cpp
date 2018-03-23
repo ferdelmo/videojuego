@@ -44,6 +44,7 @@ Daga::Daga(GLfloat posi[],Escena * es, int numGemas, GLFWwindow* window, Camara 
 	gen = mt19937(rd());
 	
 	ultimaGen = clock();
+	GenerarCalaveras(6);
 }
 
 void Daga::GenerarCalaveras(int n) {

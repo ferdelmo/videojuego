@@ -166,6 +166,7 @@ Renderizable::Renderizable(GLFWwindow * window, string textura, string vertSha, 
 	SOIL_free_image_data(texImage);
 
 	shaderProgram = LoadShaders(vertSha.c_str(), fragSha.c_str());
+	MatrixID = glGetUniformLocation(shaderProgram, "MVP");
 }
 
 Renderizable Renderizable::operator=(const Renderizable& b) {
