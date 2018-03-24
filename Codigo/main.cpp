@@ -16,11 +16,18 @@
 #include "Camara.h"
 #include "Partida.h"
 
+#include "MenuPrincipal.h"
+#include "Puntuaciones.h"
+#include "Creditos.h"
+
 using namespace std;
 
 int main() {
 	glfwInit();
 
+	/*const GLFWvidmode *res = glfwGetVideoMode(glfwGetPrimaryMonitor());
+	GLFWwindow* window = glfwCreateWindow(res->width, res->height, "GAME", nullptr,
+	nullptr);*/
 
 	GLFWwindow* window = glfwCreateWindow(1920, 1080, "GAME", nullptr,
 		nullptr);
@@ -71,28 +78,69 @@ int main() {
 	es.setFondo(make_shared<Fondo>(fondo));
 	Partida par(&es);
 	par.start();
+
+	// Pantallas
+	MenuPrincipal menu = MenuPrincipal(window);
+	Puntuaciones puntuaciones = Puntuaciones(window);
+	Creditos creditos = Creditos(window);
+
+	int mode = 1;
+
 	while (!glfwWindowShouldClose(window))
 	{
-		//chrono c++11
-		inicio = clock();
 		//BORRA EL FONDO
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		//renderiza escena
-		//glDepthMask(GL_FALSE);
-		/*glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
-		//glViewport(-es.getPer()->pos[0]*ancho, -es.getPer()->pos[1]*alto, ancho, alto);
-		par.actualizar();
-		fondo.renderizar();
-		es.renderizar();
-		/*glDisable(GL_BLEND);
-		glDepthMask(GL_TRUE);*/
-		//pinta lo que haya en los buffers
-		glfwSwapBuffers(window);
-		//lee los eventos
-		glfwPollEvents();
-		int ms = (1000.0f /60.0f) - (clock() - inicio) / (CLOCKS_PER_SEC / 1000);
-		this_thread::sleep_for(chrono::milliseconds(ms));
+		if (mode == 1) {
+			mode = menu.renderizar();
+			//pinta lo que haya en los buffers
+			glfwSwapBuffers(window);
+			//lee los eventos
+			glfwPollEvents();
+		}
+		else if (mode == 2) {
+			//chrono c++11
+			inicio = clock();
+			//BORRA EL FONDO
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			//renderiza escena
+			//glDepthMask(GL_FALSE);
+			/*glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
+			//glViewport(-es.getPer()->pos[0]*ancho, -es.getPer()->pos[1]*alto, ancho, alto);
+			par.actualizar();
+			fondo.renderizar();
+			es.renderizar();
+			/*glDisable(GL_BLEND);
+			glDepthMask(GL_TRUE);*/
+			//pinta lo que haya en los buffers
+			glfwSwapBuffers(window);
+			//lee los eventos
+			glfwPollEvents();
+			int ms = (1000.0f / 60.0f) - (clock() - inicio) / (CLOCKS_PER_SEC / 1000);
+			this_thread::sleep_for(chrono::milliseconds(ms));
+		}
+		else if (mode == 3) {
+
+		}
+		else if (mode == 4) {
+			mode = puntuaciones.renderizar();
+			//pinta lo que haya en los buffers
+			glfwSwapBuffers(window);
+			//lee los eventos
+			glfwPollEvents();
+		}
+		else if (mode == 5) {
+			mode = creditos.renderizar();
+			//pinta lo que haya en los buffers
+			glfwSwapBuffers(window);
+			//lee los eventos
+			glfwPollEvents();
+		}
+		else {
+			glfwDestroyWindow(window);
+			//cout << mode << endl;
+		}
+
 	}
 	par.stop();
 	glfwTerminate();
