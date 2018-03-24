@@ -38,7 +38,7 @@ class Personaje : public Renderizable{
 		bool escopetaGema = false;
 		bool disparando = false;
 
-		GLuint shaderProgramBala;
+		GLuint shaderProgramBala; 
 
 		Escena * es;
 
