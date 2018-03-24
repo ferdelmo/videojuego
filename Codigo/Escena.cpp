@@ -3,8 +3,6 @@
 #include "Personaje.h"
 #include "Bala.h"
 #include "Daga.h"
-#include "DagaII.h"
-#include "DagaIII.h"
 #include "CalaveraBase.h"
 #include "CalaveraBaseII.h"
 #include "Gema.h"
@@ -17,8 +15,6 @@ Escena::Escena() {
 	balas = vector<shared_ptr<Bala>>();
 	gemas = vector<shared_ptr<Gema>>();
 	dagas = vector<shared_ptr<Daga>>();
-	dagasII = vector<shared_ptr<DagaII>>();
-	dagasIII = vector<shared_ptr<DagaIII>>();
 	calaveras = vector<shared_ptr<CalaveraBase>>();
 	calaverasII = vector<shared_ptr<CalaveraBaseII>>();
 	calaverasIII = vector<shared_ptr<CalaveraBaseIII>>();
@@ -46,14 +42,6 @@ void Escena::add(shared_ptr<CalaveraBaseIII> cb) {
 
 void Escena::add(shared_ptr<Daga> d) {
 	dagas.push_back(d);
-}
-
-void Escena::add(shared_ptr<DagaII> d) {
-	dagasII.push_back(d);
-}
-
-void Escena::add(shared_ptr<DagaIII> d) {
-	dagasIII.push_back(d);
 }
 
 void Escena::add(shared_ptr<Personaje> p) {
@@ -92,13 +80,6 @@ vector<shared_ptr<Daga>> * Escena::getDagas() {
 	return &dagas;
 }
 
-vector<shared_ptr<DagaII>> * Escena::getDagasII() {
-	return &dagasII;
-}
-
-vector<shared_ptr<DagaIII>> * Escena::getDagasIII() {
-	return &dagasIII;
-}
 vector<shared_ptr<Gema>> * Escena::getGemas() {
 	return &gemas;
 }
@@ -167,7 +148,6 @@ void Escena::renderizar() {
 		else {
 			i++;
 		}
-		//	cout << "Hay :" << gemas.size() << " gemas " << endl;
 	}
 	if (per->vivo) {
 		bool perso = per->renderizar();

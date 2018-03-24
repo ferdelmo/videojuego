@@ -18,10 +18,6 @@ class CalaveraBaseIII;
 
 class Daga;
 
-class DagaII;
-
-class DagaIII;
-
 class Personaje;
 
 class Bala;
@@ -37,8 +33,6 @@ class Escena {
 		vector<shared_ptr<CalaveraBaseII>> calaverasII;
 		vector<shared_ptr<CalaveraBaseIII>> calaverasIII;
 		vector<shared_ptr<Daga>> dagas;
-		vector<shared_ptr<DagaII>> dagasII;
-		vector<shared_ptr<DagaIII>> dagasIII;
 		vector<shared_ptr<Gema>> gemas;
 		shared_ptr<Personaje> per;
 		shared_ptr<Fondo> fon;
@@ -57,10 +51,6 @@ class Escena {
 
 		void add(shared_ptr<Daga> d);
 
-		void add(shared_ptr<DagaII> d);
-
-		void add(shared_ptr<DagaIII> d);
-
 		void add(shared_ptr<Personaje> p);
 
 		void add(shared_ptr<Gema> g);
@@ -78,10 +68,6 @@ class Escena {
 		vector<shared_ptr<CalaveraBaseIII>> * getCalaverasIII();
 
 		vector<shared_ptr<Daga>> * getDagas();
-
-		vector<shared_ptr<DagaII>> * getDagasII();
-
-		vector<shared_ptr<DagaIII>> * getDagasIII();
 
 		vector<shared_ptr<Gema>> * getGemas();
 

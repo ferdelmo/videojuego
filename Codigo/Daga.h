@@ -35,7 +35,7 @@ class Daga : public Renderizable {
 	int generadas = -1;
 	//direccion para seguir al personaje
 	GLfloat dir[3] = { 0,0,0 };
-
+	int nivel = 0;
 	//Escena
 	Escena * es;
 
@@ -59,6 +59,10 @@ class Daga : public Renderizable {
 		bool sigueVivo();
 
 		void GenerarCalaveras(int n);
+
+		void GenerarCalaverasII(int n);
+
+		void GenerarCalaverasIII(int n);
 
 		void mover();
 };
