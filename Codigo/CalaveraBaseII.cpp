@@ -22,7 +22,7 @@
 using namespace std;
 
 CalaveraBaseII::CalaveraBaseII(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow* window, Camara * c)
-	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/skull.png", "../DevilDaggers/videojuego/Codigo/Shaders/calaveraII.vert", "../DevilDaggers/videojuego/Codigo/Shaders/calaveraII.frag", 0.07f, c) {
+	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/skull_II.png", "../DevilDaggers/videojuego/Codigo/Shaders/calaveraII.vert", "../DevilDaggers/videojuego/Codigo/Shaders/calaveraII.frag", 0.07f, c) {
 	pos[0] = x; pos[1] = y; pos[2] = z;
 	this->es = es;
 	GLfloat texCoords[8] = {
@@ -59,11 +59,11 @@ void CalaveraBaseII::seguir() {
 	GLfloat diryNorm = diry / moduloDir;
 	pos[0] += (0.005f * velocidad)*dirxNorm;
 	pos[1] += (0.005f * velocidad)*diryNorm;
+	if (distancia(pos[0], pos[1], posP[0], posP[1]) <= tam * tam + a->tam * a->tam) {
+		a->morir();
+	}
 }
 
-GLfloat CalaveraBaseII::distancia(GLfloat x, GLfloat y, GLfloat xp, GLfloat yp) {
-	return (x - xp)*(x - xp) + (y - yp)*(y - yp);
-}
 bool CalaveraBaseII::vivo() {
 	vector<shared_ptr<Bala>> * b = es->getBalas();
 	int i = 0;

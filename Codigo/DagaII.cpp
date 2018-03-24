@@ -1,4 +1,4 @@
-#include "Daga.h"
+#include "DagaII.h"
 
 #include <iostream>
 #include <GL/glew.h>
@@ -22,7 +22,7 @@
 
 using namespace std;
 
-Daga::Daga(GLfloat posi[],Escena * es, int numGemas, GLFWwindow* window, Camara * c)
+DagaII::DagaII(GLfloat posi[],Escena * es, int numGemas, GLFWwindow* window, Camara * c)
 	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/daga.png", "../DevilDaggers/videojuego/Codigo/Shaders/daga.vert", "../DevilDaggers/videojuego/Codigo/Shaders/daga.frag", 0.075f,c){
 	this->es = es;
 	for (int i = 0; i < 3; i++) {
@@ -48,7 +48,7 @@ Daga::Daga(GLfloat posi[],Escena * es, int numGemas, GLFWwindow* window, Camara 
 	ultimaGen = clock();
 }
 
-void Daga::GenerarCalaveras(int n) {
+void DagaII::GenerarCalaveras(int n) {
 	for (int i = 0; i < n; i++) {
 		float x = distribution(gen);
 		float y = distribution(gen);
@@ -56,10 +56,10 @@ void Daga::GenerarCalaveras(int n) {
 	}
 	float x = distribution(gen);
 	float y = distribution(gen);
-	es->add(make_shared<CalaveraBaseIII>(CalaveraBaseIII(pos[0] + x * tam, pos[1] + y * tam, pos[2], es, window, cam)));
+	es->add(make_shared<CalaveraBaseII>(CalaveraBaseII(pos[0] + x * tam, pos[1] + y * tam, pos[2], es, window, cam)));
 }
 
-bool Daga::sigueVivo() {
+bool DagaII::sigueVivo() {
 	int i = 0;
 	while (i < gemas.size()) {
 		bool siguenViva = gemas[i]->colisionBala();
@@ -73,7 +73,7 @@ bool Daga::sigueVivo() {
 	return gemas.size() > 0;
 }
 
-void Daga::mover() {
+void DagaII::mover() {
 	shared_ptr<Personaje> a = es->getPer();
 	GLfloat posPer[] = { 0,0,0 };
 	a->getPosition(posPer);

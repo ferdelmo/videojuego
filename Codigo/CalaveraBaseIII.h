@@ -1,5 +1,5 @@
-#ifndef CALAVERA_BASE_II_H_
-#define CALAVERA_BASE_II_H_
+#ifndef CALAVERA_BASE_III_H_
+#define CALAVERA_BASE_III_H_
 
 #include <iostream>
 #include <GL/glew.h>
@@ -17,12 +17,12 @@ class Escena;
 
 class Camara;
 
-class CalaveraBaseII : public Renderizable {
+class CalaveraBaseIII : public Renderizable {
 	public:
-		GLfloat velocidad =3;
+		GLfloat velocidad = 3.5;
 		GLfloat velRot = pi / 10;
-
-		int vida = 25;
+		bool llegar = false;
+		int vida = 35;
 		bool muerto = false;
 
 		//direccion para seguir al personaje
@@ -35,7 +35,7 @@ class CalaveraBaseII : public Renderizable {
 		Escena * es;
 
 	public:
-		CalaveraBaseII(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow* window, Camara * c);
+		CalaveraBaseIII(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow* window, Camara * c);
 
 		void seguir();
 
@@ -43,7 +43,7 @@ class CalaveraBaseII : public Renderizable {
 
 		void mover();
 
-		CalaveraBaseII operator=(const CalaveraBaseII& b);
+		CalaveraBaseIII operator=(const CalaveraBaseIII& b);
 };
 
 #endif;

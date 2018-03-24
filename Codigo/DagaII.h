@@ -1,5 +1,5 @@
-#ifndef DAGA_H_
-#define DAGA_H_
+#ifndef DAGAII_H_
+#define DAGAII_H_
 
 #include <iostream>
 #include <GL/glew.h>
@@ -26,7 +26,7 @@ class Camara;
 
 class Personaje;
 
-class Daga : public Renderizable {
+class DagaII : public Renderizable {
 
 	GLfloat velocidad = 1, velRot = 0.005f;
 
@@ -53,7 +53,7 @@ class Daga : public Renderizable {
 	vector<shared_ptr<Gema>> gemas;
 
 	public:
-		Daga(GLfloat posi[],Escena * es, int numGemas, GLFWwindow* window, Camara * c);
+		DagaII(GLfloat posi[],Escena * es, int numGemas, GLFWwindow* window, Camara * c);
 
 		bool sigueVivo();
 

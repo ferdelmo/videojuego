@@ -3,17 +3,25 @@
 #include "Personaje.h"
 #include "Bala.h"
 #include "Daga.h"
+#include "DagaII.h"
+#include "DagaIII.h"
 #include "CalaveraBase.h"
 #include "CalaveraBaseII.h"
 #include "Gema.h"
+#include "CalaveraBaseIII.h"
+#include "Fondo.h"
 
 using namespace std;
 
 Escena::Escena() {
 	balas = vector<shared_ptr<Bala>>();
+	gemas = vector<shared_ptr<Gema>>();
 	dagas = vector<shared_ptr<Daga>>();
+	dagasII = vector<shared_ptr<DagaII>>();
+	dagasIII = vector<shared_ptr<DagaIII>>();
 	calaveras = vector<shared_ptr<CalaveraBase>>();
 	calaverasII = vector<shared_ptr<CalaveraBaseII>>();
+	calaverasIII = vector<shared_ptr<CalaveraBaseIII>>();
 }
 
 void Escena::add(shared_ptr<Bala> b) {
@@ -31,8 +39,21 @@ void Escena::add(shared_ptr<CalaveraBase> cb) {
 void Escena::add(shared_ptr<CalaveraBaseII> cb) {
 	calaverasII.push_back(cb);
 }
+
+void Escena::add(shared_ptr<CalaveraBaseIII> cb) {
+	calaverasIII.push_back(cb);
+}
+
 void Escena::add(shared_ptr<Daga> d) {
 	dagas.push_back(d);
+}
+
+void Escena::add(shared_ptr<DagaII> d) {
+	dagasII.push_back(d);
+}
+
+void Escena::add(shared_ptr<DagaIII> d) {
+	dagasIII.push_back(d);
 }
 
 void Escena::add(shared_ptr<Personaje> p) {
@@ -41,6 +62,14 @@ void Escena::add(shared_ptr<Personaje> p) {
 
 void Escena::add(shared_ptr<Gema> g) {
 	gemas.push_back(g);
+}
+
+void Escena::setFondo(shared_ptr<Fondo> f) {
+	fon = f;
+}
+
+GLfloat Escena::getLimites() {
+	return fon->tam;
 }
 
 vector<shared_ptr<Bala>> * Escena::getBalas() {
@@ -55,11 +84,21 @@ vector<shared_ptr<CalaveraBaseII>> * Escena::getCalaverasII() {
 	return &calaverasII;
 }
 
+vector<shared_ptr<CalaveraBaseIII>> * Escena::getCalaverasIII() {
+	return &calaverasIII;
+}
 
 vector<shared_ptr<Daga>> * Escena::getDagas() {
 	return &dagas;
 }
 
+vector<shared_ptr<DagaII>> * Escena::getDagasII() {
+	return &dagasII;
+}
+
+vector<shared_ptr<DagaIII>> * Escena::getDagasIII() {
+	return &dagasIII;
+}
 vector<shared_ptr<Gema>> * Escena::getGemas() {
 	return &gemas;
 }
@@ -100,6 +139,16 @@ void Escena::renderizar() {
 		}
 	}
 	i = 0;
+	while (i<calaverasIII.size()) {
+		bool seguir = calaverasIII[i]->renderizar();
+		if (!seguir) {
+			calaverasIII.erase(calaverasIII.begin() + i);
+		}
+		else {
+			i++;
+		}
+	}
+	i = 0;
 	while (i<dagas.size()) {
 		bool seguir = dagas[i]->renderizar();
 		if (!seguir) {
@@ -120,5 +169,7 @@ void Escena::renderizar() {
 		}
 		//	cout << "Hay :" << gemas.size() << " gemas " << endl;
 	}
-	bool perso = per->renderizar();
+	if (per->vivo) {
+		bool perso = per->renderizar();
+	}
 }

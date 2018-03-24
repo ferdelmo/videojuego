@@ -68,6 +68,10 @@ void Personaje::mouseP(GLFWwindow* window, int button, int action, int mods) {
 		escopetazo();
 	}
 }
+
+void Personaje::morir() {
+	vivo = false;
+}
 //dispara un escopetazo
 void Personaje::escopetazo() {
 	int n = 3;
@@ -183,5 +187,8 @@ void Personaje::mover() {
 	);
 	cam->actualizarMVP();
 	controlesInFrame();
+	if ((pos[0] > es->getLimites() || pos[0] < -es->getLimites()) || (pos[1] > es->getLimites() || pos[1] < -es->getLimites())) {
+		morir();
+	}
 	//sigue = sigueVivo();
 }

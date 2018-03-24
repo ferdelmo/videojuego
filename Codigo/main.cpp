@@ -70,6 +70,7 @@ int main() {
 	es.add(make_shared<Daga>(d));
 	clock_t inicio;
 	Fondo fondo(window, "../DevilDaggers/videojuego/Codigo/suelo.png", 4,20, &cam);
+	es.setFondo(make_shared<Fondo>(fondo));
 	while (!glfwWindowShouldClose(window))
 	{
 		//chrono c++11

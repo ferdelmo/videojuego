@@ -54,6 +54,7 @@ class Personaje : public Renderizable{
 		void controlesP(GLFWwindow* window, int key, int scancode, int action, int mods);
 		//FUNCION AUXILIAR CONTROLES POR INTERRUPCION raton
 		void mouseP(GLFWwindow* window, int button, int action, int mods);
+		void morir();
 		//dispara un escopetazo
 		void escopetazo();
 
