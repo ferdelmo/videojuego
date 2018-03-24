@@ -36,6 +36,8 @@ class Escena {
 		vector<shared_ptr<Gema>> gemas;
 		shared_ptr<Personaje> per;
 		shared_ptr<Fondo> fon;
+
+		GLuint VAO;
 	public:
 		Escena();
 

@@ -18,6 +18,8 @@ Escena::Escena() {
 	calaveras = vector<shared_ptr<CalaveraBase>>();
 	calaverasII = vector<shared_ptr<CalaveraBaseII>>();
 	calaverasIII = vector<shared_ptr<CalaveraBaseIII>>();
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
 }
 
 void Escena::add(shared_ptr<Bala> b) {
@@ -89,9 +91,10 @@ shared_ptr<Personaje> Escena::getPer() {
 }
 
 void Escena::renderizar() {
+	fon->renderizar(VAO);
 	int i = 0;
 	while (i<balas.size()) {
-		bool seguir = balas[i]->renderizar();
+		bool seguir = balas[i]->renderizar(VAO);
 		if (!seguir) {
 			balas.erase(balas.begin() + i);
 		}
@@ -101,7 +104,7 @@ void Escena::renderizar() {
 	}
 	i = 0;
 	while (i<calaveras.size()) {
-		bool seguir = calaveras[i]->renderizar();
+		bool seguir = calaveras[i]->renderizar(VAO);
 		if (!seguir) {
 			calaveras.erase(calaveras.begin() + i);
 		}
@@ -111,7 +114,7 @@ void Escena::renderizar() {
 	}
 	i = 0;
 	while (i<calaverasII.size()) {
-		bool seguir = calaverasII[i]->renderizar();
+		bool seguir = calaverasII[i]->renderizar(VAO);
 		if (!seguir) {
 			calaverasII.erase(calaverasII.begin() + i);
 		}
@@ -121,7 +124,7 @@ void Escena::renderizar() {
 	}
 	i = 0;
 	while (i<calaverasIII.size()) {
-		bool seguir = calaverasIII[i]->renderizar();
+		bool seguir = calaverasIII[i]->renderizar(VAO);
 		if (!seguir) {
 			calaverasIII.erase(calaverasIII.begin() + i);
 		}
@@ -131,7 +134,7 @@ void Escena::renderizar() {
 	}
 	i = 0;
 	while (i<dagas.size()) {
-		bool seguir = dagas[i]->renderizar();
+		bool seguir = dagas[i]->renderizar(VAO);
 		if (!seguir) {
 			dagas.erase(dagas.begin() + i);
 		}
@@ -141,7 +144,7 @@ void Escena::renderizar() {
 	}
 	i = 0;
 	while (i<gemas.size()) {
-		bool seguir = gemas[i]->renderizar();
+		bool seguir = gemas[i]->renderizar(VAO);
 		if (!seguir) {
 			gemas.erase(gemas.begin() + i);
 		}
@@ -150,6 +153,6 @@ void Escena::renderizar() {
 		}
 	}
 	if (per->vivo) {
-		bool perso = per->renderizar();
+		bool perso = per->renderizar(VAO);
 	}
 }

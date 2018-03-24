@@ -174,7 +174,6 @@ Renderizable::Renderizable(GLFWwindow * window, string textura, GLfloat tam, Cam
 	cam = c;
 	texImage = SOIL_load_image(textura.c_str(), &texWid,
 		&texHei, &texChan, SOIL_LOAD_RGBA);
-
 	//calcula los puntos del triangulo segun la orientacion
 	for (int i = 0; i < 4; i++) {
 		GLfloat auxx = 1;
@@ -193,8 +192,8 @@ Renderizable::Renderizable(GLFWwindow * window, string textura, GLfloat tam, Cam
 		}
 	}
 	//VAO
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
+	//glGenVertexArrays(1, &VAO);
+	//glBindVertexArray(VAO);
 	//VERTICES
 	// genera el buffer para vertices
 	glGenBuffers(1, &points_VBO);
@@ -231,8 +230,8 @@ Renderizable::Renderizable(GLFWwindow * window, string textura, GLfloat tam, Cam
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
@@ -289,7 +288,7 @@ Renderizable Renderizable::operator=(const Renderizable& b) {
 	return *this;
 }
 
-bool Renderizable::renderizar() {
+bool Renderizable::renderizar(GLuint VAO) {
 	mover();
 	//calcula los puntos del triangulo segun la orientacion
 	for (int i = 0; i < 4; i++) {

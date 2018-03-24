@@ -58,6 +58,8 @@ Daga::Daga(GLfloat posi[],Escena * es, int numGemas, GLFWwindow* window, Camara 
 
 	tiempecito = clock();
 	sha = LoadShaders("../DevilDaggers/videojuego/Codigo/Shaders/calavera.vert", "../DevilDaggers/videojuego/Codigo/Shaders/calavera.frag");
+	sha2 = LoadShaders("../DevilDaggers/videojuego/Codigo/Shaders/calavera.vert", "../DevilDaggers/videojuego/Codigo/Shaders/calavera.frag");
+	sha3 = LoadShaders("../DevilDaggers/videojuego/Codigo/Shaders/calavera.vert", "../DevilDaggers/videojuego/Codigo/Shaders/calavera.frag");
 }
 
 Daga::Daga(GLfloat posi[], Escena * es, int numGemas, GLFWwindow* window, Camara * c, GLuint sha)
@@ -91,7 +93,9 @@ Daga::Daga(GLfloat posi[], Escena * es, int numGemas, GLFWwindow* window, Camara
 
 	tiempecito = clock();
 
-	sha = LoadShaders("../DevilDaggers/videojuego/Codigo/Shaders/calavera.vert", "../DevilDaggers/videojuego/Codigo/Shaders/calavera.frag");
+	this->sha = LoadShaders("../DevilDaggers/videojuego/Codigo/Shaders/calavera.vert", "../DevilDaggers/videojuego/Codigo/Shaders/calavera.frag");
+	sha2 = LoadShaders("../DevilDaggers/videojuego/Codigo/Shaders/calaveraII.vert", "../DevilDaggers/videojuego/Codigo/Shaders/calaveraII.frag");
+	sha3 = LoadShaders("../DevilDaggers/videojuego/Codigo/Shaders/calaveraIII.vert", "../DevilDaggers/videojuego/Codigo/Shaders/calaveraIII.frag");
 }
 
 void Daga::GenerarCalaveras(int n) {
@@ -102,7 +106,7 @@ void Daga::GenerarCalaveras(int n) {
 	}
 	float x = distribution(gen);
 	float y = distribution(gen);
-	es->add(make_shared<CalaveraBaseIII>(CalaveraBaseIII(pos[0] + x * tam, pos[1] + y * tam, pos[2], es, window, cam,sha)));
+	es->add(make_shared<CalaveraBaseIII>(CalaveraBaseIII(pos[0] + x * tam, pos[1] + y * tam, pos[2], es, window, cam,sha3)));
 }
 
 void Daga::GenerarCalaverasII(int n) {
@@ -113,7 +117,7 @@ void Daga::GenerarCalaverasII(int n) {
 	}
 	float x = distribution(gen);
 	float y = distribution(gen);
-	es->add(make_shared<CalaveraBaseII>(CalaveraBaseII(pos[0] + x * tam, pos[1] + y * tam, pos[2], es, window, cam, sha)));
+	es->add(make_shared<CalaveraBaseII>(CalaveraBaseII(pos[0] + x * tam, pos[1] + y * tam, pos[2], es, window, cam, sha2)));
 }
 
 void Daga::GenerarCalaverasIII(int n) {
@@ -124,10 +128,10 @@ void Daga::GenerarCalaverasIII(int n) {
 	}
 	float x = distribution(gen);
 	float y = distribution(gen);
-	es->add(make_shared<CalaveraBaseII>(CalaveraBaseII(pos[0] + x * tam, pos[1] + y * tam, pos[2], es, window, cam, sha)));
+	es->add(make_shared<CalaveraBaseII>(CalaveraBaseII(pos[0] + x * tam, pos[1] + y * tam, pos[2], es, window, cam, sha2)));
 	x = distribution(gen);
 	y = distribution(gen);
-	es->add(make_shared<CalaveraBaseIII>(CalaveraBaseIII(pos[0] + x * tam, pos[1] + y * tam, pos[2], es, window, cam, sha)));
+	es->add(make_shared<CalaveraBaseIII>(CalaveraBaseIII(pos[0] + x * tam, pos[1] + y * tam, pos[2], es, window, cam, sha3)));
 
 }
 

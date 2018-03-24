@@ -86,7 +86,7 @@ class Renderizable {
 
 		Renderizable operator=(const Renderizable& b);
 		//Renderiza
-		bool renderizar();
+		bool renderizar(GLuint VAO);
 		//mover
 		virtual void mover();
 		//calcula la distancia^2 entre {x,y} y {xp,yp}

@@ -108,7 +108,6 @@ int main() {
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
 			//glViewport(-es.getPer()->pos[0]*ancho, -es.getPer()->pos[1]*alto, ancho, alto);
 			par.actualizar();
-			fondo.renderizar();
 			es.renderizar();
 			/*glDisable(GL_BLEND);
 			glDepthMask(GL_TRUE);*/

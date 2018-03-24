@@ -22,7 +22,7 @@
 using namespace std;
 
 CalaveraBaseIII::CalaveraBaseIII(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow* window, Camara * c)
-	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/skull_III.png", "../DevilDaggers/videojuego/Codigo/Shaders/calaveraIII.vert", "../DevilDaggers/videojuego/Codigo/Shaders/calaveraIII.frag", 0.08f, c) {
+	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/skull_III.png", "../DevilDaggers/videojuego/Codigo/Shaders/calaveraIII.vert", "../DevilDaggers/videojuego/Codigo/Shaders/calaveraIII.frag", 0.1f, c) {
 	pos[0] = x; pos[1] = y; pos[2] = z;
 	this->es = es;
 	GLfloat texCoords[8] = {
@@ -56,7 +56,7 @@ CalaveraBaseIII::CalaveraBaseIII(GLfloat x, GLfloat y, GLfloat z, Escena * es, G
 }
 
 CalaveraBaseIII::CalaveraBaseIII(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow* window, Camara * c, GLuint sha) 
-	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/skull_III.png", 0.05f, c, sha) {
+	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/skull_III.png", 0.1f, c, sha) {
 	pos[0] = x; pos[1] = y; pos[2] = z;
 	this->es = es;
 	GLfloat texCoords[8] = {

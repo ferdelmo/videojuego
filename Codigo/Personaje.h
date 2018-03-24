@@ -28,7 +28,7 @@ class Personaje : public Renderizable{
 
 		//para disparar
 		clock_t ultimaBala;
-		float cadencia=15;
+		float cadencia=25;
 		//para generar numeros aleatorios
 		mt19937 gen;
 		uniform_real_distribution<float> distribution;
