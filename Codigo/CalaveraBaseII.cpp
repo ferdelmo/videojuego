@@ -43,6 +43,50 @@ CalaveraBaseII::CalaveraBaseII(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLF
 
 	dir[0] = distribution(gen);
 	dir[1] = distribution(gen);
+	int nivelPer = log10(es->getPer()->numGemas);
+	if (nivelPer + 1 <= 1) {
+		vida = 25;
+	}
+	else if (nivelPer + 1 == 2) {
+		vida = 50;
+	}
+	else {
+		vida = 100;
+	}
+}
+
+CalaveraBaseII::CalaveraBaseII(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow* window, Camara * c, GLuint sha) 
+	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/skull_II.png", 0.05f, c, sha) {
+	pos[0] = x; pos[1] = y; pos[2] = z;
+	this->es = es;
+	GLfloat texCoords[8] = {
+		0.0f, 0.0f,
+		1.0f, 0.0f,
+		0.0f, 1.0f,
+		1.0f, 1.0f
+
+	};
+	for (int i = 0; i < 8; i++) {
+		this->texCoords[i] = texCoords[i];
+	}
+	//numeros aleatorios
+	distribution = uniform_real_distribution<float>(-1, 1);
+	random_device rd;
+	// Initialize Mersenne Twister pseudo-random number generator
+	gen = mt19937(rd());
+
+	dir[0] = distribution(gen);
+	dir[1] = distribution(gen);
+	int nivelPer = log10(es->getPer()->numGemas);
+	if (nivelPer + 1 <= 1) {
+		vida = 25;
+	}
+	else if (nivelPer + 1 == 2) {
+		vida = 50;
+	}
+	else {
+		vida = 100;
+	}
 }
 
 void CalaveraBaseII::seguir() {
@@ -68,19 +112,15 @@ bool CalaveraBaseII::vivo() {
 	vector<shared_ptr<Bala>> * b = es->getBalas();
 	int i = 0;
 	while (i < b->size()) {	
-		//cout << distancia(pos[0], pos[1], b[i].pos[0], b[i].pos[1]) << endl;
 		if (distancia(pos[0], pos[1], b->at(i)->pos[0], b->at(i)->pos[1]) <= 3 * tam * tam) {
 			vida -= b->at(i)->danyo;
 			b->erase(b->begin() + i);
-			cout << vida << endl;
-			//cout << "ELIMINADO " << b->size() << endl;
 		}
 		else {
 			i++;
 		}
 	}
 	if (vida <= 0) {
-		cout << "GENERA GEMA" << endl;
 		shared_ptr<Gema> sg = make_shared<Gema>(Gema(pos[0], pos[1], pos[2], es, window,cam));
 		sg->vida = 0;
 		sg->tiempecito = clock();

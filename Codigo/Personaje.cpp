@@ -32,6 +32,8 @@ Personaje::Personaje(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow * 
 	// Initialize Mersenne Twister pseudo-random number generator
 	gen = mt19937(rd());
 	shaderProgramBala = LoadShaders("../DevilDaggers/videojuego/Codigo/Shaders/gema.vert", "../DevilDaggers/videojuego/Codigo/Shaders/gema.frag");
+
+	numGemas = 1;
 }
 
 void Personaje::getPosition(GLfloat posi[]) {
@@ -83,7 +85,7 @@ void Personaje::escopetazo() {
 		GLfloat punto1[3] = { pos[0],pos[1] + tam,pos[2] + ale / 10 };
 		GLfloat punto1a[3] = { 0,0,0 };
 		rotatePoint(pos, punto1, orientacion, punto1a);
-		bs[i]=make_shared<Bala>(Bala(punto1a, orientacion + pi / 2 + angle,window,cam, shaderProgramBala));
+		bs[i]=make_shared<Bala>(Bala(punto1a, orientacion + pi / 2 + angle,window,cam, shaderProgramBala, log10(numGemas)+1));
 	}
 	es->add(bs);
 }
@@ -92,7 +94,7 @@ void Personaje::lanzarBala() {
 	GLfloat punto1[3] = { pos[0],pos[1] + tam,pos[2] };
 	GLfloat punto1a[3] = { 0,0,0 };
 	rotatePoint(pos, punto1, orientacion, punto1a);
-	es->add(make_shared<Bala>(Bala(punto1a, orientacion + pi / 2,window,cam, shaderProgramBala)));
+	es->add(make_shared<Bala>(Bala(punto1a, orientacion + pi / 2,window,cam, shaderProgramBala, log10(numGemas) + 1)));
 }
 
 void Personaje::setWindow(GLFWwindow* window) {
@@ -163,22 +165,6 @@ GLfloat Personaje::distancia(GLfloat x, GLfloat y, GLfloat xp, GLfloat yp) {
 	return (x - xp)*(x - xp) + (y - yp)*(y - yp);
 }
 
-bool Personaje::sigueVivo() {
-	int i = 0;
-	vector<shared_ptr<CalaveraBase>> * cb = es->getCalaveras();
-	while (i < cb->size()) {
-		//cout << distancia(pos[0], pos[1], b[i].pos[0], b[i].pos[1]) << endl;
-		if (distancia(pos[0], pos[1], cb->at(i)->pos[0], cb->at(i)->pos[1]) <= 3 * tam * tam) {
-			vivo = false;
-			i++;
-		}
-		else {
-			i++;
-		}
-	}
-	return vivo;
-}
-
 void Personaje::mover() {
 	cam->View = glm::lookAt(
 		glm::vec3(pos[0], pos[1], 3), // Camera is at (4,3,3), in World Space
@@ -190,5 +176,4 @@ void Personaje::mover() {
 	if ((pos[0] > es->getLimites() || pos[0] < -es->getLimites()) || (pos[1] > es->getLimites() || pos[1] < -es->getLimites())) {
 		morir();
 	}
-	//sigue = sigueVivo();
 }

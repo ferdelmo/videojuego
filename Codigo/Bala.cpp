@@ -15,24 +15,42 @@
 using namespace std;
 
 //Genera una bala en la posicion inicio con orientacion o
-Bala::Bala(GLfloat inicio[], float o, GLFWwindow* window, Camara * c)
-	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/bala.png", "../DevilDaggers/videojuego/Codigo/Shaders/bala.vert", "../DevilDaggers/videojuego/Codigo/Shaders/bala.frag", 0.01f, c){
+Bala::Bala(GLfloat inicio[], float o, GLFWwindow* window, Camara * c, int nivel)
+	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/bala"+to_string(nivel)+".png", "../DevilDaggers/videojuego/Codigo/Shaders/bala.vert", "../DevilDaggers/videojuego/Codigo/Shaders/bala.frag", 0.025f, c){
 	this->window = window;
 	for (int i = 0; i < 3; i++) {
 		pos[i] = inicio[i];
 	}
 	orientacion = o;
 	this->inicio = clock();
+	if (nivel <= 1) {
+		danyo = 5;
+	}
+	else if (nivel == 2) {
+		danyo = 10;
+	}
+	else {
+		danyo = 20;
+	}
 }
 
-Bala::Bala(GLfloat inicio[], float o, GLFWwindow* window, Camara * c, GLuint sha)
-	: Renderizable (window, "../DevilDaggers/videojuego/Codigo/bala.png", 0.01f, c, sha) {
+Bala::Bala(GLfloat inicio[], float o, GLFWwindow* window, Camara * c, GLuint sha, int nivel)
+	: Renderizable (window, "../DevilDaggers/videojuego/Codigo/bala" + to_string(nivel) + ".png", 0.025f, c, sha) {
 	this->window = window;
 	for (int i = 0; i < 3; i++) {
 		pos[i] = inicio[i];
 	}
 	orientacion = o;
 	this->inicio = clock();
+	if (nivel <= 1) {
+		danyo = 5;
+	}
+	else if (nivel == 2) {
+		danyo = 10;
+	}
+	else {
+		danyo = 20;
+	}
 }
 
 // necesario para usar la clase vector, asignacion

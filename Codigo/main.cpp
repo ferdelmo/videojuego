@@ -51,7 +51,7 @@ int main() {
 
 	Camara cam;
 
-	cam.FoV = 45;
+	cam.FoV = 60;
 	cam.View = glm::lookAt(
 		glm::vec3(0, 0, 3), // Camera is at (4,3,3), in World Space
 		glm::vec3(0, 0, 0), // and looks at the origin
@@ -74,7 +74,7 @@ int main() {
 	//glfwSetMouseButtonCallback(window, Personaje::mouse);
 	es.add(make_shared<Personaje>(per));
 	clock_t inicio;
-	Fondo fondo(window, "../DevilDaggers/videojuego/Codigo/suelo.png", 4,20, &cam);
+	Fondo fondo(window, "../DevilDaggers/videojuego/Codigo/suelo.png", 2,10, &cam);
 	es.setFondo(make_shared<Fondo>(fondo));
 	Partida par(&es);
 	par.start();

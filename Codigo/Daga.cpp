@@ -18,6 +18,7 @@
 #include "LoadShader.h"
 #include "Personaje.h"
 #include "Escena.h"
+#include "Bala.h"
 #include "Gema.h"
 #include <SOIL.h>
 #include <string>
@@ -27,7 +28,8 @@ using namespace std;
 Daga::Daga(GLfloat posi[],Escena * es, int numGemas, GLFWwindow* window, Camara * c)
 	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/daga"+to_string(numGemas)+".png", "../DevilDaggers/videojuego/Codigo/Shaders/daga.vert", "../DevilDaggers/videojuego/Codigo/Shaders/daga.frag", 0.075f,c){
 	this->es = es;
-	nivel = numGemas;
+	this->nivel = numGemas;
+
 	cout << "DAGA GENERADA EN : ";
 	for (int i = 0; i < 3; i++) {
 		this->pos[i] = posi[i];
@@ -53,12 +55,15 @@ Daga::Daga(GLfloat posi[],Escena * es, int numGemas, GLFWwindow* window, Camara 
 	gen = mt19937(rd());
 	
 	ultimaGen = clock();
+
+	tiempecito = clock();
+	sha = LoadShaders("../DevilDaggers/videojuego/Codigo/Shaders/calavera.vert", "../DevilDaggers/videojuego/Codigo/Shaders/calavera.frag");
 }
 
 Daga::Daga(GLfloat posi[], Escena * es, int numGemas, GLFWwindow* window, Camara * c, GLuint sha)
-	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/daga"+to_string(numGemas)+".png", 0.075f, c, sha) {
+	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/daga" + to_string(numGemas) + ".png", 0.075f, c, sha) {
 	this->es = es;
-	nivel = numGemas;
+	this->nivel = numGemas;
 	cout << "DAGA GENERADA EN : ";
 	for (int i = 0; i < 3; i++) {
 
@@ -84,43 +89,45 @@ Daga::Daga(GLfloat posi[], Escena * es, int numGemas, GLFWwindow* window, Camara
 	// Initialize Mersenne Twister pseudo-random number generator
 	gen = mt19937(rd());
 
-	ultimaGen = clock();
+	tiempecito = clock();
+
+	sha = LoadShaders("../DevilDaggers/videojuego/Codigo/Shaders/calavera.vert", "../DevilDaggers/videojuego/Codigo/Shaders/calavera.frag");
 }
 
 void Daga::GenerarCalaveras(int n) {
 	for (int i = 0; i < n; i++) {
 		float x = distribution(gen);
 		float y = distribution(gen);
-		es->add(make_shared<CalaveraBase>(CalaveraBase(pos[0] + x * tam, pos[1] + y * tam, pos[2],es,window,cam)));
+		es->add(make_shared<CalaveraBase>(CalaveraBase(pos[0] + x * tam, pos[1] + y * tam, pos[2],es,window,cam,sha)));
 	}
 	float x = distribution(gen);
 	float y = distribution(gen);
-	es->add(make_shared<CalaveraBaseIII>(CalaveraBaseIII(pos[0] + x * tam, pos[1] + y * tam, pos[2], es, window, cam)));
+	es->add(make_shared<CalaveraBaseIII>(CalaveraBaseIII(pos[0] + x * tam, pos[1] + y * tam, pos[2], es, window, cam,sha)));
 }
 
 void Daga::GenerarCalaverasII(int n) {
 	for (int i = 0; i < n; i++) {
 		float x = distribution(gen);
 		float y = distribution(gen);
-		es->add(make_shared<CalaveraBase>(CalaveraBase(pos[0] + x * tam, pos[1] + y * tam, pos[2], es, window, cam)));
+		es->add(make_shared<CalaveraBase>(CalaveraBase(pos[0] + x * tam, pos[1] + y * tam, pos[2], es, window, cam, sha)));
 	}
 	float x = distribution(gen);
 	float y = distribution(gen);
-	es->add(make_shared<CalaveraBaseII>(CalaveraBaseII(pos[0] + x * tam, pos[1] + y * tam, pos[2], es, window, cam)));
+	es->add(make_shared<CalaveraBaseII>(CalaveraBaseII(pos[0] + x * tam, pos[1] + y * tam, pos[2], es, window, cam, sha)));
 }
 
 void Daga::GenerarCalaverasIII(int n) {
 	for (int i = 0; i < n; i++) {
 		float x = distribution(gen);
 		float y = distribution(gen);
-		es->add(make_shared<CalaveraBase>(CalaveraBase(pos[0] + x * tam, pos[1] + y * tam, pos[2], es, window, cam)));
+		es->add(make_shared<CalaveraBase>(CalaveraBase(pos[0] + x * tam, pos[1] + y * tam, pos[2], es, window, cam, sha)));
 	}
 	float x = distribution(gen);
 	float y = distribution(gen);
-	es->add(make_shared<CalaveraBaseII>(CalaveraBaseII(pos[0] + x * tam, pos[1] + y * tam, pos[2], es, window, cam)));
+	es->add(make_shared<CalaveraBaseII>(CalaveraBaseII(pos[0] + x * tam, pos[1] + y * tam, pos[2], es, window, cam, sha)));
 	x = distribution(gen);
 	y = distribution(gen);
-	es->add(make_shared<CalaveraBaseIII>(CalaveraBaseIII(pos[0] + x * tam, pos[1] + y * tam, pos[2], es, window, cam)));
+	es->add(make_shared<CalaveraBaseIII>(CalaveraBaseIII(pos[0] + x * tam, pos[1] + y * tam, pos[2], es, window, cam, sha)));
 
 }
 
@@ -160,16 +167,28 @@ void Daga::mover() {
 		nuevaY = pos[1] + (tam * sin(orientacion + i*div));
 		gemas[i]->setPos(nuevaX, nuevaY, gemas.at(i)->pos[2]);
 	}
+
+	vector<shared_ptr<Bala>> * b = es->getBalas();
+	int i = 0;
+	while (i < b->size()) {
+		if (distancia(pos[0], pos[1], b->at(i)->pos[0], b->at(i)->pos[1]) <= 3 * tam * tam) {
+			b->erase(b->begin() + i);
+		}
+		else {
+			i++;
+		}
+	}
+
 	//cout << int(clock() - tiempecito) / CLOCKS_PER_SEC << endl;
 	if ((int(clock() - tiempecito) / CLOCKS_PER_SEC) % 10 == 0 && generadas != int(clock() - tiempecito) / CLOCKS_PER_SEC) {
 		if (nivel == 1) {
-			GenerarCalaveras(4);
+			GenerarCalaveras(8);
 		}
 		else if (nivel == 2) {
-			GenerarCalaverasII(4);
+			GenerarCalaverasII(8);
 		}
 		else if (nivel == 3) {
-			GenerarCalaverasIII(4);
+			GenerarCalaverasIII(8);
 		}
 		//cout << "GENERANDOOOO" << endl;
 		generadas = int(clock() - tiempecito) / CLOCKS_PER_SEC;

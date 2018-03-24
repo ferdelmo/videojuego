@@ -17,7 +17,7 @@ class Camara;
 class Bala : public Renderizable {
 	public:
 		//Propiedades de la bala
-		float velocidad = 7.5;
+		float velocidad = 10;
 
 		int danyo = 5;
 		clock_t inicio;
@@ -26,9 +26,9 @@ class Bala : public Renderizable {
 
 		bool muerto = false;
 
-		Bala(GLfloat inicio[], float o, GLFWwindow* window, Camara * c);
+		Bala(GLfloat inicio[], float o, GLFWwindow* window, Camara * c, int nivel);
 
-		Bala(GLfloat inicio[], float o, GLFWwindow* window, Camara * c, GLuint sha);
+		Bala(GLfloat inicio[], float o, GLFWwindow* window, Camara * c, GLuint sha, int nivel);
 
 		Bala operator=(const Bala& b);
 

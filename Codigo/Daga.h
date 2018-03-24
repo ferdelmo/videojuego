@@ -48,6 +48,8 @@ class Daga : public Renderizable {
 
 	bool lanzar = true;
 	
+	GLuint sha;
+
 	//cuando tenga 0 muere la torre
 	vector<shared_ptr<Gema>> gemas;
 

@@ -45,6 +45,30 @@ CalaveraBase::CalaveraBase(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwin
 	dir[1] = distribution(gen);
 }
 
+CalaveraBase::CalaveraBase(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow* window, Camara * c, GLuint sha)
+	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/skull.png", 0.05f, c, sha) {
+	pos[0] = x; pos[1] = y; pos[2] = z;
+	this->es = es;
+	GLfloat texCoords[8] = {
+		0.0f, 0.0f,
+		1.0f, 0.0f,
+		0.0f, 1.0f,
+		1.0f, 1.0f
+
+	};
+	for (int i = 0; i < 8; i++) {
+		this->texCoords[i] = texCoords[i];
+	}
+	//numeros aleatorios
+	distribution = uniform_real_distribution<float>(-1, 1);
+	random_device rd;
+	// Initialize Mersenne Twister pseudo-random number generator
+	gen = mt19937(rd());
+
+	dir[0] = distribution(gen);
+	dir[1] = distribution(gen);
+}
+
 void CalaveraBase::seguir() {
 	shared_ptr<Personaje> a= es->getPer();
 	GLfloat posP[] = { 0,0,0 };
@@ -73,7 +97,6 @@ bool CalaveraBase::vivo() {
 	vector<shared_ptr<Bala>> * b = es->getBalas();
 	int i = 0;
 	while (i < b->size()) {
-		//cout << distancia(pos[0], pos[1], b[i].pos[0], b[i].pos[1]) << endl;
 		if (distancia(pos[0], pos[1], b->at(i)->pos[0], b->at(i)->pos[1]) <= 3 * tam * tam) {
 			vida -= b->at(i)->danyo;
 			b->erase(b->begin() + i);
@@ -86,7 +109,6 @@ bool CalaveraBase::vivo() {
 }
 CalaveraBase CalaveraBase::operator=(const CalaveraBase& b) {
 	if (this != &b) { // self-assignment check expected
-		//cout << "SE LLAMA A CALAVERA" << endl;
 		this->velocidad = b.velocidad;
 		this->velRot = b.velRot;
 		this->vida = b.vida;

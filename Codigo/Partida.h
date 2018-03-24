@@ -20,12 +20,16 @@ class Partida {
 		GLfloat daga3sec = 244;
 		Escena * es;
 		bool fin = false;
-		const GLfloat tam = 4;
+		const GLfloat tam = 2;
 		const GLfloat numPosis = 4;
 		GLfloat posiposibles[4][3] = { 
 			{tam,tam,0}, {-tam,tam,0} , {tam,-tam,0}, {-tam,-tam,0} 
 		};
 		
+		bool daga1p = true;
+		bool daga2p = true;
+		bool daga3p = true;
+
 		GLuint shader;
 		clock_t daga1, daga2, daga3;
 

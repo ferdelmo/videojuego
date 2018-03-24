@@ -37,6 +37,8 @@ class CalaveraBase : public Renderizable{
 	public:
 		CalaveraBase(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow* window, Camara * c);
 
+		CalaveraBase(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow* window, Camara * c, GLuint sha);
+
 		void seguir();
 
 		GLfloat distancia(GLfloat x, GLfloat y, GLfloat xp, GLfloat yp);

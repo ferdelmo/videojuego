@@ -28,8 +28,7 @@ class Personaje : public Renderizable{
 
 		//para disparar
 		clock_t ultimaBala;
-		float cadencia=50;
-		float margenBala = 50;
+		float cadencia=15;
 		//para generar numeros aleatorios
 		mt19937 gen;
 		uniform_real_distribution<float> distribution;
@@ -66,8 +65,6 @@ class Personaje : public Renderizable{
 		bool getPulsado();
 
 		void controlesInFrame();
-		
-		bool sigueVivo();
 
 		GLfloat distancia(GLfloat x, GLfloat y, GLfloat xp, GLfloat yp);
 

@@ -21,8 +21,7 @@ class Camara;
 class Gema : public Renderizable {
 public:
 	// propiedades del personaje
-
-	const GLfloat velocidad = 4.2f;
+	const GLfloat velocidad = 7.5;
 	GLfloat velRot = pi / 10;
 	clock_t tiempecito = 0;
 	

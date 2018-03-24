@@ -37,6 +37,8 @@ class CalaveraBaseII : public Renderizable {
 	public:
 		CalaveraBaseII(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow* window, Camara * c);
 
+		CalaveraBaseII(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow* window, Camara * c, GLuint sha);
+
 		void seguir();
 
 		bool vivo();
