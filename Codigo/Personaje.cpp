@@ -22,7 +22,7 @@ using namespace std;
 
 //CONSTRUCTOR POR DEFECTO
 Personaje::Personaje(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow * window, Camara * c) 
-	: Renderizable(window,"../DevilDaggers/videojuego/Codigo/CARETO.jpg","../DevilDaggers/videojuego/Codigo/Shaders/nuevo.vert","../DevilDaggers/videojuego/Codigo/Shaders/nuevo.frag", 0.1f,c) {
+	: Renderizable(window,"../DevilDaggers/videojuego/Codigo/CARETO.png","../DevilDaggers/videojuego/Codigo/Shaders/nuevo.vert","../DevilDaggers/videojuego/Codigo/Shaders/nuevo.frag", 0.1f,c) {
 	this->es = es;
 	//prepara las balas
 	ultimaBala = clock();
