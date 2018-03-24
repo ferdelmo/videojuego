@@ -14,6 +14,7 @@
 #include "Daga.h"
 #include "Fondo.h"
 #include "Camara.h"
+#include "Partida.h"
 
 using namespace std;
 
@@ -64,13 +65,12 @@ int main() {
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
 	//glfwSetKeyCallback(window, Personaje::controles)
 	//glfwSetMouseButtonCallback(window, Personaje::mouse);
-	GLfloat posicionIni[3] = { 0.9f,0.9f,0 };
-	Daga d(posicionIni,&es,2,window, &cam);
 	es.add(make_shared<Personaje>(per));
-	es.add(make_shared<Daga>(d));
 	clock_t inicio;
 	Fondo fondo(window, "../DevilDaggers/videojuego/Codigo/suelo.png", 4,20, &cam);
 	es.setFondo(make_shared<Fondo>(fondo));
+	Partida par(&es);
+	par.start();
 	while (!glfwWindowShouldClose(window))
 	{
 		//chrono c++11
@@ -82,7 +82,7 @@ int main() {
 		/*glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
 		//glViewport(-es.getPer()->pos[0]*ancho, -es.getPer()->pos[1]*alto, ancho, alto);
-	
+		par.actualizar();
 		fondo.renderizar();
 		es.renderizar();
 		/*glDisable(GL_BLEND);
@@ -94,7 +94,7 @@ int main() {
 		int ms = (1000.0f /60.0f) - (clock() - inicio) / (CLOCKS_PER_SEC / 1000);
 		this_thread::sleep_for(chrono::milliseconds(ms));
 	}
-
+	par.stop();
 	glfwTerminate();
 	return 0;
 }

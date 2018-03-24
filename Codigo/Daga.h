@@ -30,7 +30,6 @@ class Daga : public Renderizable {
 
 	GLfloat velocidad = 1, velRot = 0.005f;
 
-	GLfloat vida = 20/8;
 	bool muerto = false;
 	clock_t tiempecito = 0;
 	int generadas = -1;
@@ -54,6 +53,8 @@ class Daga : public Renderizable {
 
 	public:
 		Daga(GLfloat posi[],Escena * es, int numGemas, GLFWwindow* window, Camara * c);
+
+		Daga(GLfloat posi[], Escena * es, int numGemas, GLFWwindow* window, Camara * c, GLuint sha);
 
 		bool sigueVivo();
 

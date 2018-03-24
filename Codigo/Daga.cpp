@@ -19,15 +19,21 @@
 #include "Escena.h"
 #include "Gema.h"
 #include <SOIL.h>
+#include <string>
 
 using namespace std;
 
 Daga::Daga(GLfloat posi[],Escena * es, int numGemas, GLFWwindow* window, Camara * c)
-	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/daga.png", "../DevilDaggers/videojuego/Codigo/Shaders/daga.vert", "../DevilDaggers/videojuego/Codigo/Shaders/daga.frag", 0.075f,c){
+	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/daga" + to_string(numGemas) +".png", "../DevilDaggers/videojuego/Codigo/Shaders/daga.vert", "../DevilDaggers/videojuego/Codigo/Shaders/daga.frag", 0.075f,c){
 	this->es = es;
+	cout << "DAGA GENERADA EN : ";
 	for (int i = 0; i < 3; i++) {
+
 		this->pos[i] = posi[i];
+		cout << pos[i] << ", ";
 	}
+	cout << window << " " << cam << " " << es << endl;
+	cout << endl;
 	gemas = vector<shared_ptr<Gema>>();
 	//añadir las gemas necesarias
 	GLfloat div = 2 * pi / numGemas; //para colocarlas alrededor de la torre
@@ -38,13 +44,44 @@ Daga::Daga(GLfloat posi[],Escena * es, int numGemas, GLFWwindow* window, Camara 
 		gemas.push_back(sg);
 		es->add(sg1);
 	}
-
+	
 	//numeros aleatorios
 	distribution = uniform_real_distribution<float>(-1, 1);
 	random_device rd;
 	// Initialize Mersenne Twister pseudo-random number generator
 	gen = mt19937(rd());
 	
+	ultimaGen = clock();
+}
+
+Daga::Daga(GLfloat posi[], Escena * es, int numGemas, GLFWwindow* window, Camara * c, GLuint sha)
+	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/daga.png", 0.075f, c, sha) {
+	this->es = es;
+	cout << "DAGA GENERADA EN : ";
+	for (int i = 0; i < 3; i++) {
+
+		this->pos[i] = posi[i];
+		cout << pos[i] << ", ";
+	}
+	cout << window << " " << cam << " " << es << endl;
+	cout << endl;
+	gemas = vector<shared_ptr<Gema>>();
+	//añadir las gemas necesarias
+	GLfloat div = 2 * pi / numGemas; //para colocarlas alrededor de la torre
+	for (int i = 0; i < numGemas; i++) {
+		GLfloat posIni[3] = { pos[0] + tam * cos(i*div), pos[1] + tam * sin(i*div), pos[2] };
+		shared_ptr<Gema> sg = make_shared<Gema>(Gema(posIni[0], posIni[1], posIni[2], es, window, c));
+		shared_ptr<Gema> sg1(sg);
+		gemas.push_back(sg);
+		es->add(sg1);
+	}
+
+	//numeros aleatorios
+	distribution = uniform_real_distribution<float>(-1, 1);
+	random_device rd;
+	// Initialize Mersenne Twister pseudo-random number generator
+	gen = mt19937(rd());
+
 	ultimaGen = clock();
 }
 
@@ -91,10 +128,9 @@ void Daga::mover() {
 	orientacion += velRot;
 	GLfloat div = 2 * pi / gemas.size(); //para colocarlas alrededor de la torre
 	for (int i = 0; i < gemas.size(); i++) {
-		nuevaX = pos[0] + (tam * cos(i*div+orientacion));
-		nuevaY = pos[1] + (tam * sin(i*div+orientacion));
-
-		gemas.at(i)->setPos(nuevaX, nuevaY, gemas.at(i)->pos[2]);
+		nuevaX = pos[0] + (tam * cos(orientacion+i*div));
+		nuevaY = pos[1] + (tam * sin(orientacion + i*div));
+		gemas[i]->setPos(nuevaX, nuevaY, gemas.at(i)->pos[2]);
 	}
 	//cout << int(clock() - tiempecito) / CLOCKS_PER_SEC << endl;
 	if ((int(clock() - tiempecito) / CLOCKS_PER_SEC) %10 == 0 && generadas != int(clock() - tiempecito) / CLOCKS_PER_SEC) {

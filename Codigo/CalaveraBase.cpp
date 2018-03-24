@@ -77,8 +77,6 @@ bool CalaveraBase::vivo() {
 		if (distancia(pos[0], pos[1], b->at(i)->pos[0], b->at(i)->pos[1]) <= 3 * tam * tam) {
 			vida -= b->at(i)->danyo;
 			b->erase(b->begin() + i);
-			cout << vida << endl;
-			//cout << "ELIMINADO " << b->size() << endl;
 		}
 		else {
 			i++;
