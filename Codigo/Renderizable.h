@@ -86,7 +86,7 @@ class Renderizable {
 
 		Renderizable operator=(const Renderizable& b);
 		//Renderiza
-		bool renderizar(GLuint VAO);
+		bool renderizar();
 		//mover
 		virtual void mover();
 

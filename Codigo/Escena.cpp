@@ -18,7 +18,6 @@ Escena::Escena() {
 	calaveras = vector<shared_ptr<CalaveraBase>>();
 	calaverasII = vector<shared_ptr<CalaveraBaseII>>();
 	calaverasIII = vector<shared_ptr<CalaveraBaseIII>>();
-	glGenVertexArrays(1, &VAO);
 }
 
 void Escena::add(shared_ptr<Bala> b) {
@@ -93,64 +92,37 @@ void Escena::moverObjetos() {
 	clock_t tieempo = clock();
 	int i = 0;
 	while (i<balas.size()) {
-		bool seguir = balas[i]->renderizar(VAO);
-		if (!seguir) {
 			balas[i]->mover();
-		}
-		else {
 			i++;
-		}
 	}
 	i = 0;
 	while (i<calaveras.size()) {
 		//cout << "renderiza calavera " << i << endl;
-		bool seguir = calaveras[i]->renderizar(VAO);
-		if (!seguir) {
 			calaveras[i]->mover();
-		}
-		else {
 			i++;
-		}
 	}
 	i = 0;
 	while (i<calaverasII.size()) {
-		bool seguir = calaverasII[i]->renderizar(VAO);
-		if (!seguir) {
 			calaverasII[i]->mover();
-		}
-		else {
 			i++;
-		}
 	}
 	i = 0;
 	while (i<calaverasIII.size()) {
-		bool seguir = calaverasIII[i]->renderizar(VAO);
-		if (!seguir) {
+		
 			calaverasIII[i]->mover();
-		}
-		else {
+		
 			i++;
-		}
 	}
 	i = 0;
 	while (i<dagas.size()) {
-		bool seguir = dagas[i]->renderizar(VAO);
-		if (!seguir) {
+		
 			dagas[i]->mover();
-		}
-		else {
 			i++;
-		}
 	}
 	i = 0;
 	while (i<gemas.size()) {
-		bool seguir = gemas[i]->renderizar(VAO);
-		if (!seguir) {
 			gemas[i]->mover();
-		}
-		else {
 			i++;
-		}
 	}
 	//if (per->vivo) {
 	per->mover();
@@ -159,11 +131,11 @@ void Escena::moverObjetos() {
 }
 
 void Escena::renderizar() {
-	fon->renderizar(VAO);
+	fon->renderizar();
 	int i = 0;
 	clock_t tieempo = clock();
 	while (i<balas.size()) {
-		bool seguir = balas[i]->renderizar(VAO);
+		bool seguir = balas[i]->renderizar();
 		if (!seguir) {
 			balas.erase(balas.begin() + i);
 		}
@@ -174,7 +146,7 @@ void Escena::renderizar() {
 	i = 0;
 	while (i<calaveras.size()) {
 		//cout << "renderiza calavera " << i << endl;
-		bool seguir = calaveras[i]->renderizar(VAO);
+		bool seguir = calaveras[i]->renderizar();
 		if (!seguir) {
 			calaveras.erase(calaveras.begin() + i);
 		}
@@ -184,7 +156,7 @@ void Escena::renderizar() {
 	}
 	i = 0;
 	while (i<calaverasII.size()) {
-		bool seguir = calaverasII[i]->renderizar(VAO);
+		bool seguir = calaverasII[i]->renderizar();
 		if (!seguir) {
 			calaverasII.erase(calaverasII.begin() + i);
 		}
@@ -194,7 +166,7 @@ void Escena::renderizar() {
 	}
 	i = 0;
 	while (i<calaverasIII.size()) {
-		bool seguir = calaverasIII[i]->renderizar(VAO);
+		bool seguir = calaverasIII[i]->renderizar();
 		if (!seguir) {
 			calaverasIII.erase(calaverasIII.begin() + i);
 		}
@@ -204,7 +176,7 @@ void Escena::renderizar() {
 	}
 	i = 0;
 	while (i<dagas.size()) {
-		bool seguir = dagas[i]->renderizar(VAO);
+		bool seguir = dagas[i]->renderizar();
 		if (!seguir) {
 			dagas.erase(dagas.begin() + i);
 		}
@@ -214,7 +186,7 @@ void Escena::renderizar() {
 	}
 	i = 0;
 	while (i<gemas.size()) {
-		bool seguir = gemas[i]->renderizar(VAO);
+		bool seguir = gemas[i]->renderizar();
 		if (!seguir) {
 			gemas.erase(gemas.begin() + i);
 		}
@@ -223,7 +195,7 @@ void Escena::renderizar() {
 		}
 	}
 	//if (per->vivo) {
-		bool perso = per->renderizar(VAO);
+		bool perso = per->renderizar();
 	//}
 	cout << "MOVER= " << clock() - tieempo << endl;
 	tieempo = clock();

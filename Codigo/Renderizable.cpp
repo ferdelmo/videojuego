@@ -288,7 +288,7 @@ Renderizable Renderizable::operator=(const Renderizable& b) {
 	return *this;
 }
 
-bool Renderizable::renderizar(GLuint VAO) {
+bool Renderizable::renderizar() {
 	//mover();
 	//calcula los puntos del triangulo segun la orientacion
 	for (int i = 0; i < 4; i++) {
