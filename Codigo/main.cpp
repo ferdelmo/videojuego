@@ -18,6 +18,7 @@
 
 #include "MenuPrincipal.h"
 #include "Puntuaciones.h"
+#include "Opciones.h"
 #include "Creditos.h"
 
 using namespace std;
@@ -81,7 +82,8 @@ int main() {
 
 	// Pantallas
 	MenuPrincipal menu = MenuPrincipal(window);
-	Puntuaciones puntuaciones = Puntuaciones(window);
+	Puntuaciones puntuaciones = Puntuaciones(window, cam);
+	Opciones opciones = Opciones(window);
 	Creditos creditos = Creditos(window);
 
 	int mode = 1;
@@ -122,7 +124,11 @@ int main() {
 			this_thread::sleep_for(chrono::milliseconds(ms));
 		}
 		else if (mode == 3) {
-
+			mode = opciones.renderizar();
+			//pinta lo que haya en los buffers
+			glfwSwapBuffers(window);
+			//lee los eventos
+			glfwPollEvents();
 		}
 		else if (mode == 4) {
 			mode = puntuaciones.renderizar();

@@ -4,22 +4,19 @@
 #include <glm/glm.hpp>
 #include <SOIL.h>
 
-#include "Puntuaciones.h"
+#include "Opciones.h"
 #include "LoadShader.h"
 
 using namespace std;
 
-Puntuaciones::Puntuaciones(GLFWwindow *window, Camara c) {
+Opciones::Opciones(GLFWwindow *window) {
 
 	this->window = window;
-	this->c = c;
 
-	mode = 4;
+	mode = 3;
 
 	oldState = GLFW_RELEASE;
 	pulsado = false;
-
-	LeerFichero();
 
 	//VAO
 	glGenVertexArrays(1, &VAO);
@@ -78,25 +75,9 @@ Puntuaciones::Puntuaciones(GLFWwindow *window, Camara c) {
 
 }
 
-void Puntuaciones::LeerFichero() {
-	fstream f;
-	int i = 0;
+void Opciones::controlesInFrame() {
 
-	f.open("../DevilDaggers/videojuego/Codigo/puntuaciones.txt", ios::in);
-	if (f.is_open()) {
-
-		while (!f.eof()) {
-			f >> topPunt[i];
-			i++;
-		}
-
-		f.close();
-	}
-}
-
-void Puntuaciones::controlesInFrame() {
-
-	mode = 4;
+	mode = 3;
 
 	// Posición del cursor
 	double x, y;
@@ -120,7 +101,7 @@ void Puntuaciones::controlesInFrame() {
 	if (!pulsado) { // Control una pulsación
 		if (state == GLFW_PRESS) {
 			//cout << "x: " << x << " ;; y: " << y << endl;
-			if (x >= 0.5 && x <= 0.96&& y >= -0.89 && y <= -0.74) { // BOTÓN MENÚ PRINCIPAL
+			if (x >= 0.48 && x <= 0.944 && y >= -0.9 && y <= -0.745) { // BOTÓN MENÚ PRINCIPAL
 				pulsado = true;
 				mode = 1;
 			}
@@ -131,7 +112,7 @@ void Puntuaciones::controlesInFrame() {
 
 }
 
-int Puntuaciones::renderizar() {
+int Opciones::renderizar() {
 	controlesInFrame();
 
 	glUseProgram(shaderProgram);
@@ -208,27 +189,6 @@ int Puntuaciones::renderizar() {
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);
-
-	int cont = 0;
-	GLfloat x = -1;
-	GLfloat y = 1;
-
-	for (int i = 0; i < 10; i++) {
-		for (int j = 0; j < topPunt[i].size(); i++) {
-			string img = "../DevilDaggers/videojuego/Codigo/" + topPunt[i].substr(j, 1) + ".png";
-
-			if (cont < 5) {
-				Fondo fondo(x, y, 0, window, img, 0.2, 1, &c);
-
-			}
-			else {
-				//Fondo fondo(x, y, 0, window, img, 0.2, 1, &c);
-			}
-
-		}
-		cont++;
-	}
-
 
 	return mode;
 

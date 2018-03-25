@@ -1,5 +1,5 @@
-#ifndef PUNTUACIONES_H
-#define PUNTUACIONES_
+#ifndef OPCIONES_H
+#define OPCIONES_H
 
 #include <iostream>
 #include <GL/glew.h>
@@ -7,19 +7,11 @@
 #include <glm/glm.hpp>
 #include <SOIL.h>
 
-#include "Fondo.h"
-#include "Camara.h"
-
-#include <string>
-#include <fstream>
-
 using namespace std;
 
-class Puntuaciones {
+class Opciones {
 
 	int mode;
-
-	string topPunt[10];
 
 	int oldState;
 	bool pulsado;
@@ -63,17 +55,14 @@ class Puntuaciones {
 	GLuint texture;
 
 	int texWid, texHei, texChan;
-	unsigned char* texImage = SOIL_load_image("../DevilDaggers/videojuego/Codigo/MejoresPuntuaciones.jpg", &texWid,
+	unsigned char* texImage = SOIL_load_image("../DevilDaggers/videojuego/Codigo/Opciones.jpg", &texWid,
 		&texHei, &texChan, SOIL_LOAD_RGB);
 
 	GLFWwindow *window;
-	Camara c;
 
 public:
 
-	Puntuaciones(GLFWwindow *window, Camara c);
-
-	void LeerFichero();
+	Opciones(GLFWwindow *window);
 
 	void controlesInFrame();
 
