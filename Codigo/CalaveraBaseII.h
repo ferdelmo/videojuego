@@ -46,6 +46,8 @@ class CalaveraBaseII : public Renderizable {
 		void mover();
 
 		CalaveraBaseII operator=(const CalaveraBaseII& b);
+
+		void fisicas();
 };
 
 #endif;

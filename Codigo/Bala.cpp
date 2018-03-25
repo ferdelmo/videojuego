@@ -16,7 +16,7 @@ using namespace std;
 
 //Genera una bala en la posicion inicio con orientacion o
 Bala::Bala(GLfloat inicio[], float o, GLFWwindow* window, Camara * c, int nivel)
-	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/bala"+to_string(nivel)+".png", "../DevilDaggers/videojuego/Codigo/Shaders/bala.vert", "../DevilDaggers/videojuego/Codigo/Shaders/bala.frag", 0.025f, c){
+	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/bala"+to_string(nivel)+".png", "../DevilDaggers/videojuego/Codigo/Shaders/bala.vert", "../DevilDaggers/videojuego/Codigo/Shaders/bala.frag", 0.015f, c){
 	this->window = window;
 	for (int i = 0; i < 3; i++) {
 		pos[i] = inicio[i];
@@ -35,7 +35,7 @@ Bala::Bala(GLfloat inicio[], float o, GLFWwindow* window, Camara * c, int nivel)
 }
 
 Bala::Bala(GLfloat inicio[], float o, GLFWwindow* window, Camara * c, GLuint sha, int nivel)
-	: Renderizable (window, "../DevilDaggers/videojuego/Codigo/bala" + to_string(nivel) + ".png", 0.025f, c, sha) {
+	: Renderizable (window, "../DevilDaggers/videojuego/Codigo/bala" + to_string(nivel) + ".png", 0.015f, c, sha) {
 	this->window = window;
 	for (int i = 0; i < 3; i++) {
 		pos[i] = inicio[i];

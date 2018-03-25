@@ -26,6 +26,8 @@ class Camara;
 
 class Personaje;
 
+class Bala;
+
 class Daga : public Renderizable {
 
 	GLfloat velocidad = 1, velRot = 0.005f;
@@ -67,6 +69,8 @@ class Daga : public Renderizable {
 		void GenerarCalaverasIII(int n);
 
 		void mover();
+
+		void fisicas();
 };
 
 #endif

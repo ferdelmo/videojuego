@@ -6,6 +6,8 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <memory>
+#include <thread>
+#include <mutex> 
 
 
 using namespace std;
@@ -38,6 +40,10 @@ class Escena {
 		shared_ptr<Fondo> fon;
 
 		GLuint VAO;
+
+		bool fin = false;
+
+		mutex dag, cal, calII, calIII;
 	public:
 		Escena();
 
@@ -76,6 +82,10 @@ class Escena {
 		shared_ptr<Personaje> getPer();
 
 		void renderizar();
+
+		void actualizarFisicas();
+
+		void pararFisicas();
 
 };
 

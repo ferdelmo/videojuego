@@ -47,12 +47,12 @@ Renderizable::Renderizable(GLFWwindow * window, string textura, string vertSha, 
 
 	//COLOR
 	// Genera el buffer de colores
-	glGenBuffers(1, &colors_VBO);
+	/*glGenBuffers(1, &colors_VBO);
 	// bindea ese buffer
 	glBindBuffer(GL_ARRAY_BUFFER, colors_VBO);
 	// Lo rellena con la informacion del color
 	glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(1);*/
 	glBindVertexArray(0);
 
 	//TEXTURA BUFFER
@@ -131,12 +131,12 @@ Renderizable::Renderizable(GLFWwindow * window, string textura, string vertSha, 
 
 	//COLOR
 	// Genera el buffer de colores
-	glGenBuffers(1, &colors_VBO);
+	/*glGenBuffers(1, &colors_VBO);
 	// bindea ese buffer
 	glBindBuffer(GL_ARRAY_BUFFER, colors_VBO);
 	// Lo rellena con la informacion del color
 	glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(1);*/
 	glBindVertexArray(0);
 
 	//TEXTURA BUFFER
@@ -192,8 +192,8 @@ Renderizable::Renderizable(GLFWwindow * window, string textura, GLfloat tam, Cam
 		}
 	}
 	//VAO
-	//glGenVertexArrays(1, &VAO);
-	//glBindVertexArray(VAO);
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
 	//VERTICES
 	// genera el buffer para vertices
 	glGenBuffers(1, &points_VBO);
@@ -211,12 +211,12 @@ Renderizable::Renderizable(GLFWwindow * window, string textura, GLfloat tam, Cam
 
 	//COLOR
 	// Genera el buffer de colores
-	glGenBuffers(1, &colors_VBO);
+	/*glGenBuffers(1, &colors_VBO);
 	// bindea ese buffer
 	glBindBuffer(GL_ARRAY_BUFFER, colors_VBO);
 	// Lo rellena con la informacion del color
 	glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(1);*/
 	glBindVertexArray(0);
 
 	//TEXTURA BUFFER
@@ -260,7 +260,7 @@ Renderizable Renderizable::operator=(const Renderizable& b) {
 		this->VAO = b.VAO;
 		this->EBO = b.EBO;
 		this->colors_VBO = b.colors_VBO;
-		this->points_VBO = b.points_VBO;
+		//this->points_VBO = b.points_VBO;
 
 		for (int i = 0; i < 12; i++) {
 			this->colors[i] = b.colors[i];
@@ -316,27 +316,27 @@ bool Renderizable::renderizar(GLuint VAO) {
 
 	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &(cam->MVP[0][0]));
 
-	glBindVertexArray(VAO); // une el VAO, que contiene toda la
+	glBindVertexArray(this->VAO); // une el VAO, que contiene toda la
 							//información de los vértices, al contexto
 							//vertices
 							//argumento 0 posicion
 	glEnableVertexAttribArray(0);
 	//bindea el buffer
-	glBindBuffer(GL_ARRAY_BUFFER, points_VBO);
+	//glBindBuffer(GL_ARRAY_BUFFER, points_VBO);
 	//lo leena con los puntos
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	glVertexAttribPointer(
+	/*glVertexAttribPointer(
 		0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
 		3,                  // size
 		GL_FLOAT,           // type
 		GL_FALSE,           // normalized?
 		0,                  // stride
 		(void*)0            // array buffer offset
-	);
+	);*/
 	// bindea ese buffer
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	// Lo rellena con la informacion de puntos
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 	glVertexAttribPointer(
 		0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
 		3,                  // size
@@ -347,7 +347,7 @@ bool Renderizable::renderizar(GLuint VAO) {
 	);
 	//color
 	//argumento 1 color
-	glEnableVertexAttribArray(1);
+	/*glEnableVertexAttribArray(1);
 	//bindea el buffer
 	glBindBuffer(GL_ARRAY_BUFFER, colors_VBO);
 	// le pasa el color de cada vertice
@@ -359,7 +359,7 @@ bool Renderizable::renderizar(GLuint VAO) {
 		GL_FALSE,                         // normalized?
 		0,                                // stride
 		(void*)0                          // array buffer offset
-	);
+	);*/
 	//texure
 	//argumento 2 textura
 	glEnableVertexAttribArray(2);
@@ -395,6 +395,8 @@ bool Renderizable::renderizar(GLuint VAO) {
 }
 
 void Renderizable::mover() {}
+
+void Renderizable::fisicas() {}
 
 GLfloat Renderizable::distancia(GLfloat x, GLfloat y, GLfloat xp, GLfloat yp) {
 	return (x - xp)*(x - xp) + (y - yp)*(y - yp);

@@ -10,6 +10,7 @@
 #include "Renderizable.h"
 #include <random>
 #include <cmath>
+#include <memory>
 
 using namespace std;
 
@@ -48,6 +49,8 @@ class CalaveraBase : public Renderizable{
 		void mover();
 
 		CalaveraBase operator=(const CalaveraBase& b);
+
+		void fisicas();
 };
 
 #endif;

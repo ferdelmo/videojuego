@@ -70,6 +70,8 @@ class Personaje : public Renderizable{
 
 		void mover();
 
+		void fisicas();
+
 };
 
 #endif

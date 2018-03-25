@@ -147,5 +147,8 @@ CalaveraBaseII CalaveraBaseII::operator=(const CalaveraBaseII& b) {
 
 void CalaveraBaseII::mover() {
 	seguir();
+}
+
+void CalaveraBaseII::fisicas() {
 	sigue = vivo();
 }

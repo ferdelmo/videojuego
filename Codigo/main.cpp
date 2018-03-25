@@ -86,6 +86,8 @@ int main() {
 
 	int mode = 1;
 
+	//thread fisicas(&Escena::actualizarFisicas, &es);
+
 	while (!glfwWindowShouldClose(window))
 	{
 		//BORRA EL FONDO
@@ -109,6 +111,7 @@ int main() {
 			//glViewport(-es.getPer()->pos[0]*ancho, -es.getPer()->pos[1]*alto, ancho, alto);
 			par.actualizar();
 			es.renderizar();
+			es.actualizarFisicas();
 			/*glDisable(GL_BLEND);
 			glDepthMask(GL_TRUE);*/
 			//pinta lo que haya en los buffers
@@ -141,6 +144,7 @@ int main() {
 		}
 
 	}
+	//fisicas.join();
 	par.stop();
 	glfwTerminate();
 	return 0;

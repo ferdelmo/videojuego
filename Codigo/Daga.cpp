@@ -150,11 +150,7 @@ bool Daga::sigueVivo() {
 }
 
 void Daga::mover() {
-	shared_ptr<Personaje> a = es->getPer();
-	GLfloat posPer[] = { 0,0,0 };
-	a->getPosition(posPer);
 	GLfloat posP[] = { 0,0,0 };
-	sigue = sigueVivo();
 	GLfloat nuevaX, nuevaY, nuevaZ;
 	GLfloat dirx = posP[0] - pos[0], diry = posP[1] - pos[1];
 	GLfloat moduloDir = sqrt(dirx*dirx + diry * diry);
@@ -172,17 +168,6 @@ void Daga::mover() {
 		gemas[i]->setPos(nuevaX, nuevaY, gemas.at(i)->pos[2]);
 	}
 
-	vector<shared_ptr<Bala>> * b = es->getBalas();
-	int i = 0;
-	while (i < b->size()) {
-		if (distancia(pos[0], pos[1], b->at(i)->pos[0], b->at(i)->pos[1]) <= 3 * tam * tam) {
-			b->erase(b->begin() + i);
-		}
-		else {
-			i++;
-		}
-	}
-
 	//cout << int(clock() - tiempecito) / CLOCKS_PER_SEC << endl;
 	if ((int(clock() - tiempecito) / CLOCKS_PER_SEC) % 10 == 0 && generadas != int(clock() - tiempecito) / CLOCKS_PER_SEC) {
 		if (nivel == 1) {
@@ -197,7 +182,28 @@ void Daga::mover() {
 		//cout << "GENERANDOOOO" << endl;
 		generadas = int(clock() - tiempecito) / CLOCKS_PER_SEC;
 	}
+}
+
+void Daga::fisicas() {
+	//mira colision con personaje pa matarlo
+	shared_ptr<Personaje> a = es->getPer();
+	GLfloat posPer[] = { 0,0,0 };
+	a->getPosition(posPer);
 	if (distancia(pos[0], pos[1], posPer[0], posPer[1]) <= tam * tam + a->tam * a->tam) {
 		a->morir();
+	}
+	//colisiona las gemas con las balas
+	sigue = sigueVivo();
+
+	//busca colisiones con las balas para eliminarlas
+	vector<shared_ptr<Bala>> * b = es->getBalas();
+	int i = 0;
+	while (i < b->size()) {
+		if (distancia(pos[0], pos[1], b->at(i)->pos[0], b->at(i)->pos[1]) <= 3 * tam * tam) {
+			b->erase(b->begin() + i);
+		}
+		else {
+			i++;
+		}
 	}
 }

@@ -159,5 +159,8 @@ CalaveraBaseIII CalaveraBaseIII::operator=(const CalaveraBaseIII& b) {
 
 void CalaveraBaseIII::mover() {
 	seguir();
+}
+
+void CalaveraBaseIII::fisicas() {
 	sigue = vivo();
 }

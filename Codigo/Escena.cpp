@@ -91,6 +91,7 @@ shared_ptr<Personaje> Escena::getPer() {
 }
 
 void Escena::renderizar() {
+
 	fon->renderizar(VAO);
 	int i = 0;
 	while (i<balas.size()) {
@@ -104,6 +105,7 @@ void Escena::renderizar() {
 	}
 	i = 0;
 	while (i<calaveras.size()) {
+		//cout << "renderiza calavera " << i << endl;
 		bool seguir = calaveras[i]->renderizar(VAO);
 		if (!seguir) {
 			calaveras.erase(calaveras.begin() + i);
@@ -155,4 +157,28 @@ void Escena::renderizar() {
 	if (per->vivo) {
 		bool perso = per->renderizar(VAO);
 	}
+}
+
+void Escena::actualizarFisicas() {
+	//while (!fin) {
+		for (int i = 0; i < dagas.size(); i++) {
+
+			//cout << "fisicas daga " << i << endl;
+			dagas[i]->fisicas();
+		}
+		for (int i = 0; i < calaverasIII.size(); i++) {
+			calaverasIII[i]->fisicas();
+		}
+		for (int i = 0; i < calaverasII.size(); i++) {
+			calaverasII[i]->fisicas();
+		}
+		for (int i = 0; i < calaveras.size(); i++) {
+			//cout << "fisicas calavera " << i << endl;
+			calaveras[i]->fisicas();
+		}
+	//}
+}
+
+void Escena::pararFisicas() {
+	fin = true;
 }

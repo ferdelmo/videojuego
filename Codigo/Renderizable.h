@@ -89,6 +89,10 @@ class Renderizable {
 		bool renderizar(GLuint VAO);
 		//mover
 		virtual void mover();
+
+		//mover
+		virtual void fisicas();
+
 		//calcula la distancia^2 entre {x,y} y {xp,yp}
 		GLfloat distancia(GLfloat x, GLfloat y, GLfloat xp, GLfloat yp);
 };

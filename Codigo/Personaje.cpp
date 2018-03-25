@@ -173,6 +173,9 @@ void Personaje::mover() {
 	);
 	cam->actualizarMVP();
 	controlesInFrame();
+}
+
+void Personaje::fisicas() {
 	if ((pos[0] > es->getLimites() || pos[0] < -es->getLimites()) || (pos[1] > es->getLimites() || pos[1] < -es->getLimites())) {
 		morir();
 	}

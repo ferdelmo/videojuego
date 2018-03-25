@@ -126,5 +126,10 @@ CalaveraBase CalaveraBase::operator=(const CalaveraBase& b) {
 
 void CalaveraBase::mover() {
 	seguir();
+}
+
+
+void CalaveraBase::fisicas() {
+	//colision con balas
 	sigue = vivo();
 }
