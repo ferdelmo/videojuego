@@ -10,7 +10,7 @@
 #include <thread>
 #include <Windows.h>
 #include <mmsystem.h>
-#include <freeglut.h>
+#include <GL/freeglut.h>
 
 #include "Personaje.h"
 #include "Escena.h"
