@@ -7,7 +7,6 @@
 #include <glm/glm.hpp>
 #include <memory>
 #include <thread>
-#include <mutex> 
 
 
 using namespace std;
@@ -43,9 +42,10 @@ class Escena {
 		int mFisica = 0, mMover = 0, mRender = 0, iFisica = 0, iMover = 0, iRender = 0;
 		bool fin = false;
 
-		mutex dag, cal, calII, calIII;
 
 	public:
+		int calavsMatadas = 0;
+
 		Escena();
 
 		void add(shared_ptr<Bala> b);

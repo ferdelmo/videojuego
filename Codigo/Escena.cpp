@@ -155,6 +155,7 @@ void Escena::renderizar() {
 		//cout << "renderiza calavera " << i << endl;
 		bool seguir = calaveras[i]->renderizar();
 		if (!seguir) {
+			calavsMatadas++;
 			calaveras.erase(calaveras.begin() + i);
 		}
 		else {
@@ -165,6 +166,7 @@ void Escena::renderizar() {
 	while (i<calaverasII.size()) {
 		bool seguir = calaverasII[i]->renderizar();
 		if (!seguir) {
+			calavsMatadas++;
 			calaverasII.erase(calaverasII.begin() + i);
 		}
 		else {
@@ -175,6 +177,7 @@ void Escena::renderizar() {
 	while (i<calaverasIII.size()) {
 		bool seguir = calaverasIII[i]->renderizar();
 		if (!seguir) {
+			calavsMatadas++;
 			calaverasIII.erase(calaverasIII.begin() + i);
 		}
 		else {

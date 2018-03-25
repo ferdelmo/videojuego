@@ -43,13 +43,13 @@ Bala::Bala(GLfloat inicio[], float o, GLFWwindow* window, Camara * c, GLuint sha
 	orientacion = o;
 	this->inicio = clock();
 	if (nivel <= 1) {
-		danyo = 5*5;
+		danyo = 5;
 	}
 	else if (nivel == 2) {
-		danyo = 10*10;
+		danyo = 10;
 	}
 	else {
-		danyo = 20*20;
+		danyo = 20;
 	}
 }
 
