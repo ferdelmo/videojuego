@@ -39,6 +39,8 @@ class Escena {
 		shared_ptr<Personaje> per;
 		shared_ptr<Fondo> fon;
 
+		clock_t tFisica = 0, tMover = 0, tRender = 0;
+		int mFisica = 0, mMover = 0, mRender = 0, iFisica = 0, iMover = 0, iRender = 0;
 		bool fin = false;
 
 		mutex dag, cal, calII, calIII;

@@ -22,7 +22,7 @@ class Gema : public Renderizable {
 public:
 	// propiedades del personaje
 	const GLfloat velocidad = 7.5;
-	GLfloat velRot = pi / 10;
+	GLfloat velRot = pi / 30;
 	clock_t tiempecito = 0;
 	
 	//para generar numeros aleatorios

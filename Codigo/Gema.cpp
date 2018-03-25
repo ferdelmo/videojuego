@@ -48,6 +48,7 @@ bool Gema::colisionBala() {
 
 void Gema::seguirPersonaje() {
 	shared_ptr<Personaje> a = es->getPer();
+	orientacion += velRot;
 	if (!a->getPulsado()) {
 		GLfloat posP[] = { 0,0,0 };
 		a->getPosition(posP);

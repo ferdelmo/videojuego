@@ -126,7 +126,14 @@ void Escena::moverObjetos() {
 	}
 	//if (per->vivo) {
 	per->mover();
-	cout << "RENDERIZAR= " << clock() - tieempo << endl;
+	bool fin = false;
+	iMover++;
+	mMover += (clock() - tieempo);
+	mMover = mMover / iMover;
+	if ((clock() - tieempo) > tMover) {
+		tMover = clock() - tieempo;
+		cout << "MOVER: max = " << tMover << " media = " << mMover << endl;
+	}
 	tieempo = clock();
 }
 
@@ -197,7 +204,14 @@ void Escena::renderizar() {
 	//if (per->vivo) {
 		bool perso = per->renderizar();
 	//}
-	cout << "MOVER= " << clock() - tieempo << endl;
+		bool fin = false;
+		iRender++;
+		mRender += (clock() - tieempo);
+		mRender = mRender / iRender;
+		if ((clock() - tieempo) > tRender) {
+			tRender = clock() - tieempo;
+			cout << "RENDERIZAR: max = " << tRender << " media = " << mRender << endl;
+		}
 	tieempo = clock();
 }
 
@@ -220,7 +234,15 @@ void Escena::actualizarFisicas() {
 			calaveras[i]->fisicas();
 		}
 	//}
-		cout << "FISICAS= " << clock() - tieempo<< endl;
+		per->fisicas();
+		bool fin = false;
+		iFisica++;
+		mFisica += (clock() - tieempo);
+		mFisica = mFisica / iFisica;
+		if ((clock() - tieempo) > tFisica) {
+			tFisica = clock() - tieempo;
+			cout << "FISICAS: max = " << tFisica << " media = " << mFisica << endl;
+		}
 		tieempo = clock();
 }
 

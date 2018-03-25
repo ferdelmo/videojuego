@@ -70,7 +70,7 @@ CalaveraBaseIII::CalaveraBaseIII(GLfloat x, GLfloat y, GLfloat z, Escena * es, G
 		this->texCoords[i] = texCoords[i];
 	}
 	//numeros aleatorios
-	distribution = uniform_real_distribution<float>(-1, 1);
+	distribution = uniform_real_distribution<float>(-es->getLimites(), es->getLimites());
 	random_device rd;
 	// Initialize Mersenne Twister pseudo-random number generator
 	gen = mt19937(rd());
@@ -93,10 +93,10 @@ void CalaveraBaseIII::seguir() {
 	shared_ptr<Personaje> a = es->getPer();
 	GLfloat posP[] = { 0,0,0 };
 	a->getPosition(posP);
-	distribution = uniform_real_distribution<float>(-es->getLimites(), es->getLimites()); // se puede usar otras distribuciones
-	random_device rd;
+	//distribution = uniform_real_distribution<float>(-es->getLimites(), es->getLimites()); // se puede usar otras distribuciones
+	//random_device rd;
 	// Initialize Mersenne Twister pseudo-random number generator
-	gen = mt19937(rd());
+	//gen = mt19937(rd());
 	if (llegar) {
 		llegar = false;
 		dir[0] = distribution(gen);
