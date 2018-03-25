@@ -79,5 +79,6 @@ void Bala::morir() {
 
 void Bala::mover() {
 	avanzar();
-	sigue = muerto || ((clock() - inicio) / CLOCKS_PER_SEC) < tiempoBala;
+	bool sale = (pos[0]>limite || pos[0]<-limite || pos[1]>limite || pos[1]<-limite);
+	sigue = !sale && !muerto && ((clock() - inicio) / CLOCKS_PER_SEC) < tiempoBala;
 }

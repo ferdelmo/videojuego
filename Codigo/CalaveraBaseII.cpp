@@ -69,11 +69,6 @@ CalaveraBaseII::CalaveraBaseII(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLF
 	for (int i = 0; i < 8; i++) {
 		this->texCoords[i] = texCoords[i];
 	}
-	//numeros aleatorios
-	distribution = uniform_real_distribution<float>(-1, 1);
-	random_device rd;
-	// Initialize Mersenne Twister pseudo-random number generator
-	gen = mt19937(rd());
 
 	dir[0] = distribution(gen);
 	dir[1] = distribution(gen);

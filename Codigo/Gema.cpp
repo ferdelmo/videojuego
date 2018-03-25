@@ -17,7 +17,7 @@ using namespace std;
 
 //CONSTRUCTOR EN UNA POSICION ESPECIFICA
 Gema::Gema(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow* window, Camara * c) 
-	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/Gema.png", "../DevilDaggers/videojuego/Codigo/Shaders/gema.vert", "../DevilDaggers/videojuego/Codigo/Shaders/gema.frag",0.025f, c) {
+	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/Gema.png", "../DevilDaggers/videojuego/Codigo/Shaders/gema.vert", "../DevilDaggers/videojuego/Codigo/Shaders/gema.frag",0.035f, c) {
 	pos[0] = x; pos[1] = y; pos[2] = z;
 	this->es = es;
 	//numeros aleatorios

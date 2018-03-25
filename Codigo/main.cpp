@@ -89,7 +89,7 @@ int main() {
 	Opciones opciones = Opciones(window);
 	Creditos creditos = Creditos(window);
 	
-	int mode = 6;
+	int mode = 2;
 	//PlaySound(TEXT("../DevilDaggers/videojuego/Codigo/Musica/quack.wav"), NULL, SND_ASYNC);
 	Fondo f(window, "../DevilDaggers/videojuego/Codigo/muerte.png", 1, 1, &cam);
 	Muerte muerte(window, &cam, &f);

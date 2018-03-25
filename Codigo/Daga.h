@@ -30,7 +30,7 @@ class Bala;
 
 class Daga : public Renderizable {
 
-	GLfloat velocidad = 1, velRot = 0.005f;
+	GLfloat velocidad = 0.75f, velRot = 0.005f;
 
 	bool muerto = false;
 	clock_t tiempecito = 0;
@@ -46,7 +46,7 @@ class Daga : public Renderizable {
 	uniform_real_distribution<float> distribution;
 
 	clock_t ultimaGen;
-	GLfloat tiempoGen = 5;
+	int tiempoGen = 15;
 
 	bool lanzar = true;
 	

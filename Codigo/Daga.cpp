@@ -169,7 +169,7 @@ void Daga::mover() {
 	}
 
 	//cout << int(clock() - tiempecito) / CLOCKS_PER_SEC << endl;
-	if ((int(clock() - tiempecito) / CLOCKS_PER_SEC) % 10 == 0 && generadas != int(clock() - tiempecito) / CLOCKS_PER_SEC) {
+	if ((int(clock() - tiempecito) / CLOCKS_PER_SEC) % tiempoGen == 0 && generadas != int(clock() - tiempecito) / CLOCKS_PER_SEC) {
 		if (nivel == 1) {
 			GenerarCalaveras(8);
 		}

@@ -124,8 +124,9 @@ void Escena::moverObjetos() {
 			gemas[i]->mover();
 			i++;
 	}
-	//if (per->vivo) {
-	per->mover();
+	if (per->vivo) {
+		per->mover();
+	}
 	cout << "RENDERIZAR= " << clock() - tieempo << endl;
 	tieempo = clock();
 }
