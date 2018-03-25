@@ -22,6 +22,7 @@
 #include "Puntuaciones.h"
 #include "Opciones.h"
 #include "Creditos.h"
+#include "Muerte.h"
 
 using namespace std;
 
@@ -88,8 +89,10 @@ int main() {
 	Opciones opciones = Opciones(window);
 	Creditos creditos = Creditos(window);
 	
-	int mode = 1;
+	int mode = 6;
 	//PlaySound(TEXT("../DevilDaggers/videojuego/Codigo/Musica/quack.wav"), NULL, SND_ASYNC);
+	Fondo f(window, "../DevilDaggers/videojuego/Codigo/muerte.png", 1, 1, &cam);
+	Muerte muerte(window, &cam, &f);
 	while (!glfwWindowShouldClose(window))
 	{
 		if(double(clock() - tiempecito) / CLOCKS_PER_SEC >= 11){
@@ -115,10 +118,11 @@ int main() {
 			/*glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
 			//glViewport(-es.getPer()->pos[0]*ancho, -es.getPer()->pos[1]*alto, ancho, alto);
+			
 			par.actualizar();
-			es.renderizar();
 			es.actualizarFisicas();
 			es.moverObjetos();
+			es.renderizar();
 			/*glDisable(GL_BLEND);
 			glDepthMask(GL_TRUE);*/
 			//pinta lo que haya en los buffers
@@ -146,6 +150,14 @@ int main() {
 		}
 		else if (mode == 5) {
 			mode = creditos.renderizar();
+			//pinta lo que haya en los buffers
+			glfwSwapBuffers(window);
+			//lee los eventos
+			glfwPollEvents();
+		}
+		else if (mode == 6) {
+			muerte.renderizar();
+			//f.renderizar();
 			//pinta lo que haya en los buffers
 			glfwSwapBuffers(window);
 			//lee los eventos
