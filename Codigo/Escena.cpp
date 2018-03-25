@@ -19,7 +19,6 @@ Escena::Escena() {
 	calaverasII = vector<shared_ptr<CalaveraBaseII>>();
 	calaverasIII = vector<shared_ptr<CalaveraBaseIII>>();
 	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
 }
 
 void Escena::add(shared_ptr<Bala> b) {
@@ -90,10 +89,79 @@ shared_ptr<Personaje> Escena::getPer() {
 	return per;
 }
 
-void Escena::renderizar() {
+void Escena::moverObjetos() {
+	clock_t tieempo = clock();
+	int i = 0;
+	while (i<balas.size()) {
+		bool seguir = balas[i]->renderizar(VAO);
+		if (!seguir) {
+			balas[i]->mover();
+		}
+		else {
+			i++;
+		}
+	}
+	i = 0;
+	while (i<calaveras.size()) {
+		//cout << "renderiza calavera " << i << endl;
+		bool seguir = calaveras[i]->renderizar(VAO);
+		if (!seguir) {
+			calaveras[i]->mover();
+		}
+		else {
+			i++;
+		}
+	}
+	i = 0;
+	while (i<calaverasII.size()) {
+		bool seguir = calaverasII[i]->renderizar(VAO);
+		if (!seguir) {
+			calaverasII[i]->mover();
+		}
+		else {
+			i++;
+		}
+	}
+	i = 0;
+	while (i<calaverasIII.size()) {
+		bool seguir = calaverasIII[i]->renderizar(VAO);
+		if (!seguir) {
+			calaverasIII[i]->mover();
+		}
+		else {
+			i++;
+		}
+	}
+	i = 0;
+	while (i<dagas.size()) {
+		bool seguir = dagas[i]->renderizar(VAO);
+		if (!seguir) {
+			dagas[i]->mover();
+		}
+		else {
+			i++;
+		}
+	}
+	i = 0;
+	while (i<gemas.size()) {
+		bool seguir = gemas[i]->renderizar(VAO);
+		if (!seguir) {
+			gemas[i]->mover();
+		}
+		else {
+			i++;
+		}
+	}
+	//if (per->vivo) {
+	per->mover();
+	cout << "RENDERIZAR= " << clock() - tieempo << endl;
+	tieempo = clock();
+}
 
+void Escena::renderizar() {
 	fon->renderizar(VAO);
 	int i = 0;
+	clock_t tieempo = clock();
 	while (i<balas.size()) {
 		bool seguir = balas[i]->renderizar(VAO);
 		if (!seguir) {
@@ -154,13 +222,16 @@ void Escena::renderizar() {
 			i++;
 		}
 	}
-	if (per->vivo) {
+	//if (per->vivo) {
 		bool perso = per->renderizar(VAO);
-	}
+	//}
+	cout << "MOVER= " << clock() - tieempo << endl;
+	tieempo = clock();
 }
 
 void Escena::actualizarFisicas() {
 	//while (!fin) {
+	clock_t tieempo = clock();
 		for (int i = 0; i < dagas.size(); i++) {
 
 			//cout << "fisicas daga " << i << endl;
@@ -177,6 +248,8 @@ void Escena::actualizarFisicas() {
 			calaveras[i]->fisicas();
 		}
 	//}
+		cout << "FISICAS= " << clock() - tieempo<< endl;
+		tieempo = clock();
 }
 
 void Escena::pararFisicas() {

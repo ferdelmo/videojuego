@@ -289,7 +289,7 @@ Renderizable Renderizable::operator=(const Renderizable& b) {
 }
 
 bool Renderizable::renderizar(GLuint VAO) {
-	mover();
+	//mover();
 	//calcula los puntos del triangulo segun la orientacion
 	for (int i = 0; i < 4; i++) {
 		GLfloat auxx = 1;
@@ -349,10 +349,10 @@ bool Renderizable::renderizar(GLuint VAO) {
 	//argumento 1 color
 	/*glEnableVertexAttribArray(1);
 	//bindea el buffer
-	glBindBuffer(GL_ARRAY_BUFFER, colors_VBO);
+	//glBindBuffer(GL_ARRAY_BUFFER, colors_VBO);
 	// le pasa el color de cada vertice
-	glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
-	glVertexAttribPointer(
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
+	/*glVertexAttribPointer(
 		1,                                // attribute. No particular reason for 1, but must match the layout in the shader.
 		3,                                // size
 		GL_FLOAT,                         // type

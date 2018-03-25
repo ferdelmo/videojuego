@@ -44,6 +44,7 @@ class Escena {
 		bool fin = false;
 
 		mutex dag, cal, calII, calIII;
+
 	public:
 		Escena();
 
@@ -64,6 +65,8 @@ class Escena {
 		void add(shared_ptr<Gema> g);
 
 		void setFondo(shared_ptr<Fondo> f);
+
+		void moverObjetos();
 
 		GLfloat getLimites();
 

@@ -91,7 +91,7 @@ void Personaje::escopetazo() {
 }
 //dispara una bala
 void Personaje::lanzarBala() {
-	GLfloat punto1[3] = { pos[0],pos[1] + tam,pos[2] };
+	GLfloat punto1[3] = { pos[0] - tam/2 , pos[1] + tam,pos[2] };
 	GLfloat punto1a[3] = { 0,0,0 };
 	rotatePoint(pos, punto1, orientacion, punto1a);
 	es->add(make_shared<Bala>(Bala(punto1a, orientacion + pi / 2,window,cam, shaderProgramBala, log10(numGemas) + 1)));

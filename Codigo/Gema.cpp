@@ -32,7 +32,7 @@ bool Gema::colisionBala() {
 	int i = 0;
 	while (i < b->size()) {
 		//cout << distancia(pos[0], pos[1], b[i].pos[0], b[i].pos[1]) << endl;
-		if (distancia(pos[0], pos[1], b->at(i)->pos[0], b->at(i)->pos[1]) <= 3 * tam * tam) {
+		if (distancia(pos[0], pos[1], b->at(i)->pos[0], b->at(i)->pos[1]) <=  tam * tam + b->at(i)->tam * b->at(i)->tam) {
 			vida -= b->at(i)->danyo;
 			b->erase(b->begin() + i);
 		}

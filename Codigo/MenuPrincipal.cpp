@@ -3,6 +3,9 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <SOIL.h>
+#include <fstream>
+#include <sstream>
+#include <ctime>
 
 #include "MenuPrincipal.h"
 #include "LoadShader.h"

@@ -8,6 +8,8 @@
 #include <sstream>
 #include <ctime>
 #include <thread>
+#include <Windows.h>
+#include <mmsystem.h>
 
 #include "Personaje.h"
 #include "Escena.h"
@@ -25,12 +27,12 @@ using namespace std;
 
 int main() {
 	glfwInit();
-
+	clock_t tiempecito = 0;
 	/*const GLFWvidmode *res = glfwGetVideoMode(glfwGetPrimaryMonitor());
 	GLFWwindow* window = glfwCreateWindow(res->width, res->height, "GAME", nullptr,
 	nullptr);*/
 
-	GLFWwindow* window = glfwCreateWindow(1920, 1080, "GAME", nullptr,
+	GLFWwindow* window = glfwCreateWindow(1920, 1080, "Devil Daggers", nullptr,
 		nullptr);
 	if (window == nullptr)
 	{
@@ -85,13 +87,15 @@ int main() {
 	Puntuaciones puntuaciones = Puntuaciones(window, cam);
 	Opciones opciones = Opciones(window);
 	Creditos creditos = Creditos(window);
-
+	
 	int mode = 1;
-
-	//thread fisicas(&Escena::actualizarFisicas, &es);
-
+	//PlaySound(TEXT("../DevilDaggers/videojuego/Codigo/Musica/quack.wav"), NULL, SND_ASYNC);
 	while (!glfwWindowShouldClose(window))
 	{
+		if(double(clock() - tiempecito) / CLOCKS_PER_SEC >= 11){
+			tiempecito = clock();
+			//PlaySound(TEXT("../DevilDaggers/videojuego/Codigo/Musica/quack.wav"), NULL, SND_ASYNC);
+		}
 		//BORRA EL FONDO
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		if (mode == 1) {
@@ -114,6 +118,7 @@ int main() {
 			par.actualizar();
 			es.renderizar();
 			es.actualizarFisicas();
+			es.moverObjetos();
 			/*glDisable(GL_BLEND);
 			glDepthMask(GL_TRUE);*/
 			//pinta lo que haya en los buffers
@@ -121,7 +126,9 @@ int main() {
 			//lee los eventos
 			glfwPollEvents();
 			int ms = (1000.0f / 60.0f) - (clock() - inicio) / (CLOCKS_PER_SEC / 1000);
-			this_thread::sleep_for(chrono::milliseconds(ms));
+			if (ms > 0) {
+				this_thread::sleep_for(chrono::milliseconds(ms));
+			}
 		}
 		else if (mode == 3) {
 			mode = opciones.renderizar();
@@ -148,7 +155,6 @@ int main() {
 			glfwDestroyWindow(window);
 			//cout << mode << endl;
 		}
-
 	}
 	//fisicas.join();
 	par.stop();
