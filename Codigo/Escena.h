@@ -39,8 +39,6 @@ class Escena {
 		shared_ptr<Personaje> per;
 		shared_ptr<Fondo> fon;
 
-		GLuint VAO;
-
 		bool fin = false;
 
 		mutex dag, cal, calII, calIII;
