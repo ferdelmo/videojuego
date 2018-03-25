@@ -25,6 +25,17 @@ Gema::Gema(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow* window, Cam
 	random_device rd;
 	// Initialize Mersenne Twister pseudo-random number generator
 	gen = mt19937(rd());
+
+	int nivelPer = log10(es->getPer()->numGemas);
+	if (nivelPer + 1 <= 1) {
+		vida = 25;
+	}
+	else if (nivelPer + 1 == 2) {
+		vida = 50;
+	}
+	else {
+		vida = 100;
+	}
 }
 
 bool Gema::colisionBala() {

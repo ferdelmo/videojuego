@@ -34,7 +34,7 @@ void displayText(float x, float y, int r, int g, int b, string str) {
 	glLoadIdentity();
 	glRasterPos2i(x, y); glDisable(GL_LIGHTING);
 	glColor3f(r,g,b);
-	glRasterPos3f(x, y, 1);
+	glRasterPos3f(x, y, 2.9f);
 
 	glDisable(GL_TEXTURE_2D);
 	for (int i = 0; i < str.size(); i++) {
