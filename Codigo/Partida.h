@@ -21,9 +21,10 @@ class Partida {
 		Escena * es;
 		bool fin = false;
 		const GLfloat tam = 2;
-		const GLfloat numPosis = 4;
-		GLfloat posiposibles[4][3] = { 
-			{tam,tam,0}, {-tam,tam,0} , {tam,-tam,0}, {-tam,-tam,0} 
+		const GLfloat numPosis = 8;
+		GLfloat posiposibles[8][3] = { 
+			{tam,tam,0}, {-tam,tam,0} , {tam,-tam,0}, {-tam,-tam,0},
+			{0,tam,0},{ -tam,0,0 } ,{ 0,-tam,0 },{ -tam,0,0 }
 		};
 		
 		bool daga1p = true;

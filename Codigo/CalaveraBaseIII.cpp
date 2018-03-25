@@ -36,7 +36,7 @@ CalaveraBaseIII::CalaveraBaseIII(GLfloat x, GLfloat y, GLfloat z, Escena * es, G
 		this->texCoords[i] = texCoords[i];
 	}
 	//numeros aleatorios
-	distribution = uniform_real_distribution<float>(-1, 1);
+	distribution = uniform_real_distribution<float>(-es->getLimites(), es->getLimites()); // se puede usar otras distribuciones
 	random_device rd;
 	// Initialize Mersenne Twister pseudo-random number generator
 	gen = mt19937(rd());
@@ -103,7 +103,6 @@ void CalaveraBaseIII::seguir() {
 		dir[1] = distribution(gen);
 	}
 	GLfloat dirx = dir[0] - pos[0], diry = dir[1] - pos[1];
-	GLfloat antigua = orientacion;
 	orientacion = atan2(diry, dirx);
 	float alpha = distribution(gen);
 	//orientacion += alpha * pi / 6;

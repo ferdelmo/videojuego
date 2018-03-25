@@ -218,32 +218,32 @@ void Escena::renderizar() {
 void Escena::actualizarFisicas() {
 	//while (!fin) {
 	clock_t tieempo = clock();
-		for (int i = 0; i < dagas.size(); i++) {
-
+	per->fisicas();
+	for (int i = 0; i < dagas.size(); i++) {
 			//cout << "fisicas daga " << i << endl;
 			dagas[i]->fisicas();
-		}
-		for (int i = 0; i < calaverasIII.size(); i++) {
-			calaverasIII[i]->fisicas();
-		}
-		for (int i = 0; i < calaverasII.size(); i++) {
-			calaverasII[i]->fisicas();
-		}
-		for (int i = 0; i < calaveras.size(); i++) {
-			//cout << "fisicas calavera " << i << endl;
-			calaveras[i]->fisicas();
-		}
+	}
+	for (int i = 0; i < calaverasIII.size(); i++) {
+		calaverasIII[i]->fisicas();
+	}
+	for (int i = 0; i < calaverasII.size(); i++) {
+		calaverasII[i]->fisicas();
+	}
+	for (int i = 0; i < calaveras.size(); i++) {
+		//cout << "fisicas calavera " << i << endl;
+		calaveras[i]->fisicas();
+	}
 	//}
-		per->fisicas();
-		bool fin = false;
-		iFisica++;
-		mFisica += (clock() - tieempo);
-		mFisica = mFisica / iFisica;
-		if ((clock() - tieempo) > tFisica) {
-			tFisica = clock() - tieempo;
-			cout << "FISICAS: max = " << tFisica << " media = " << mFisica << endl;
-		}
-		tieempo = clock();
+	per->fisicas();
+	bool fin = false;
+	iFisica++;
+	mFisica += (clock() - tieempo);
+	mFisica = mFisica / iFisica;
+	if ((clock() - tieempo) > tFisica) {
+		tFisica = clock() - tieempo;
+		cout << "FISICAS: max = " << tFisica << " media = " << mFisica << endl;
+	}
+	tieempo = clock();
 }
 
 void Escena::pararFisicas() {

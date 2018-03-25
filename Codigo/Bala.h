@@ -26,6 +26,8 @@ class Bala : public Renderizable {
 
 		bool muerto = false;
 
+		GLfloat limite = 2;
+
 		Bala(GLfloat inicio[], float o, GLFWwindow* window, Camara * c, int nivel);
 
 		Bala(GLfloat inicio[], float o, GLFWwindow* window, Camara * c, GLuint sha, int nivel);

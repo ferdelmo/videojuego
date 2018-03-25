@@ -43,7 +43,7 @@ void Partida::generarDaga1() {
 			daga1p = false;
 			daga1sec = 10;
 		}
-		else if (daga1sec > 4) {
+		else if (daga1sec > 5) {
 			daga1sec = daga1sec-0.25;
 		}
 		cout << "Genera cada: " << daga1sec << endl;;
@@ -59,7 +59,7 @@ void Partida::generarDaga2() {
 			daga2p = false;
 			daga2sec = 10;
 		}
-		else if (daga2sec > 5) {
+		else if (daga2sec > 6.5f) {
 			daga2sec = daga2sec - 0.25;
 		}
 		cout << "Genera cada: " << daga2sec << endl;
@@ -75,7 +75,7 @@ void Partida::generarDaga3() {
 			daga3p = false;
 			daga3sec = 10;
 		}
-		else if (daga3sec > 5) {
+		else if (daga3sec > 6.5f) {
 			daga3sec = daga3sec - 0.25;
 		}
 		cout << "Genera cada: " << daga3sec << endl;;
