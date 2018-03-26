@@ -33,12 +33,16 @@ void displayText(float x, float y, int r, int g, int b, string str) {
 
 	glLoadIdentity();
 	glRasterPos2i(x, y); glDisable(GL_LIGHTING);
-	glColor3f(r,g,b);
-	glRasterPos3f(x, y, 2.9f);
+	glColor3f(r, g, b);
+	/*float posXcorrected = 0;
+	for (int i = 0; i < str.size() / 2; i++) {
+	posXcorrected += glutBitmapWidth(GLUT_BITMAP_HELVETICA_18, str[i]);
+	}*/
+	glRasterPos3f(x, y, 0);
 
 	glDisable(GL_TEXTURE_2D);
 	for (int i = 0; i < str.size(); i++) {
-		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, str[i]);
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, str[i]);
 	}
 	glEnable(GL_TEXTURE_2D);
 }
@@ -113,7 +117,7 @@ int main(int argc, char **argv) {
 
 	// Pantallas
 	MenuPrincipal menu = MenuPrincipal(window);
-	Puntuaciones puntuaciones = Puntuaciones(window, cam);
+	Puntuaciones puntuaciones = Puntuaciones(window, &cam);
 	Creditos creditos = Creditos(window);
 	
 	int mode = 1;
@@ -158,32 +162,40 @@ int main(int argc, char **argv) {
 			//chrono c++11
 			inicio = clock();
 			//BORRA EL FONDO
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			//renderiza escena
-			//glDepthMask(GL_FALSE);
-			/*glEnable(GL_BLEND);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
-			//glViewport(-es.getPer()->pos[0]*ancho, -es.getPer()->pos[1]*alto, ancho, alto);
+			if (per->vivo) {
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+				//renderiza escena
+				//glDepthMask(GL_FALSE);
+				/*glEnable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
+				//glViewport(-es.getPer()->pos[0]*ancho, -es.getPer()->pos[1]*alto, ancho, alto);
 
-			
-			par->actualizar();
-			es.actualizarFisicas();
-			es.moverObjetos();
-			es.renderizar();
-			string tiempo = to_string((clock() - puntuacion) / (CLOCKS_PER_SEC / 1000)/1000.0f);
-			tiempo = tiempo.substr(0, tiempo.size() - 3);
-			displayText(per->pos[0]-0.20f, per->pos[0] +0.8f, 1, 1, 1, "Tiempo: " + tiempo);
+				
 
-			displayText(per->pos[0] - 0.60f, per->pos[0] + 0.8f, 1, 0, 0, "Asesinadas: " + to_string(es.calavsMatadas));
+				par->actualizar();
+				es.actualizarFisicas();
+				es.moverObjetos();
+				es.renderizar();
 
-			displayText(per->pos[0] + 0.20f, per->pos[0] + 0.8f, 1, 1, 1, "Gemas: " + to_string(es.getPer()->numGemas));
-			//pinta lo que haya en los buffers
-			glfwSwapBuffers(window);
-			//lee los eventos
-			glfwPollEvents();
-			int ms = (1000.0f / 60.0f) - (clock() - inicio) / (CLOCKS_PER_SEC / 1000);
-			if (ms > 0) {
-				this_thread::sleep_for(chrono::milliseconds(ms));
+				string tiempo = to_string((clock() - puntuacion) / (CLOCKS_PER_SEC / 1000) / 1000.0f);
+				tiempo = tiempo.substr(0, tiempo.size() - 3);
+				displayText(per->pos[0] - 0.20f, per->pos[0] + 0.8f, 1, 1, 1, "Tiempo: " + tiempo);
+
+				displayText(per->pos[0] - 0.60f, per->pos[0] + 0.8f, 1, 0, 0, "Asesinadas: " + to_string(es.calavsMatadas));
+
+				displayText(per->pos[0] + 0.20f, per->pos[0] + 0.8f, 1, 1, 1, "Gemas: " + to_string(es.getPer()->numGemas));
+				//pinta lo que haya en los buffers
+				glfwSwapBuffers(window);
+				//lee los eventos
+				glfwPollEvents();
+				int ms = (1000.0f / 60.0f) - (clock() - inicio) / (CLOCKS_PER_SEC / 1000);
+				if (ms > 0) {
+					this_thread::sleep_for(chrono::milliseconds(ms));
+				}
+			}
+			else {
+				es.renderizar();
+				muerte.renderizar();
 			}
 		}
 		else if (mode == 3) {
@@ -206,22 +218,6 @@ int main(int argc, char **argv) {
 		else if (mode == 5) {
 			mode = creditos.renderizar();
 			//pinta lo que haya en los buffers
-			glfwSwapBuffers(window);
-			//lee los eventos
-			glfwPollEvents();
-		}
-		else if (mode == 6) {
-			muerte.renderizar();
-			//f.renderizar();
-			//pinta lo que haya en los buffers
-			glfwSwapBuffers(window);
-			//lee los eventos
-			glfwPollEvents();
-		}
-		else if (mode == 7) {
-			displayText(0, 0, 255,0,0, "POLLLLLASSS");
-			//glutPostRedisplay();
-
 			glfwSwapBuffers(window);
 			//lee los eventos
 			glfwPollEvents();

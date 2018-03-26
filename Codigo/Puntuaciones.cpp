@@ -3,13 +3,15 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <SOIL.h>
+#include <GL/freeglut.h>
 
 #include "Puntuaciones.h"
 #include "LoadShader.h"
 
 using namespace std;
 
-Puntuaciones::Puntuaciones(GLFWwindow *window, Camara c) {
+
+Puntuaciones::Puntuaciones(GLFWwindow *window, Camara * c) {
 
 	this->window = window;
 	this->c = c;
@@ -82,7 +84,7 @@ void Puntuaciones::LeerFichero() {
 	fstream f;
 	int i = 0;
 
-	f.open("../DevilDaggers/videojuego/Codigo/puntuaciones.txt", ios::in);
+	f.open(fich, ios::in);
 	if (f.is_open()) {
 
 		while (!f.eof()) {
@@ -91,6 +93,11 @@ void Puntuaciones::LeerFichero() {
 		}
 
 		f.close();
+	}
+	else {
+		ofstream mifich(fich);
+		mifich << 0 << '\n';
+		mifich.close();
 	}
 }
 
@@ -214,19 +221,18 @@ int Puntuaciones::renderizar() {
 	GLfloat y = 1;
 
 	for (int i = 0; i < 10; i++) {
-		for (int j = 0; j < topPunt[i].size(); i++) {
-			string img = "../DevilDaggers/videojuego/Codigo/" + topPunt[i].substr(j, 1) + ".png";
-
-			if (cont < 5) {
-				Fondo fondo(x, y, 0, window, img, 0.2, 1, &c);
-
-			}
-			else {
-				//Fondo fondo(x, y, 0, window, img, 0.2, 1, &c);
-			}
-
+		if (i == 0) {
+			displayText(-0.1, 0.5 - i * 0.10, 1, 0, 0, "1ST " + topPunt[i]);
 		}
-		cont++;
+		else if (i == 1) {
+			displayText(-0.1, 0.5 - i * 0.10, 1, 0, 0, "2ND " + topPunt[i]);
+		}
+		else if (i == 2) {
+			displayText(-0.1, 0.5 - i * 0.10, 1, 0, 0, "3RD " + topPunt[i]);
+		}
+		else {
+			displayText(-0.1, 0.5 - i * 0.10, 1, 0, 0, topPunt[i]);
+		}
 	}
 
 

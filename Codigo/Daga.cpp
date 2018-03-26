@@ -108,7 +108,6 @@ void Daga::GenerarCalaveras(int n) {
 	float x = distribution(gen);
 	float y = distribution(gen);
 	es->add(make_shared<CalaveraBaseIII>(CalaveraBaseIII(pos[0] + x * tam, pos[1] + y * tam, pos[2], es, window, cam,sha3)));
-	es->add(make_shared<CalaveraBaseII>(CalaveraBaseII(pos[0] + x * tam, pos[1] + y * tam, pos[2], es, window, cam, sha2)));
 }
 
 void Daga::GenerarCalaverasII(int n) {
