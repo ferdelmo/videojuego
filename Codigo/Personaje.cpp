@@ -17,6 +17,7 @@
 #include "Escena.h"
 #include "CalaveraBase.h"
 #include "Camara.h"
+#include "Opciones.h"
 
 using namespace std;
 
@@ -32,6 +33,12 @@ Personaje::Personaje(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow * 
 	// Initialize Mersenne Twister pseudo-random number generator
 	gen = mt19937(rd());
 	shaderProgramBala = LoadShaders("../DevilDaggers/videojuego/Codigo/Shaders/gema.vert", "../DevilDaggers/videojuego/Codigo/Shaders/gema.frag");
+
+	Opciones o;
+	up = o.up;
+	down = o.down;
+	right = o.right;
+	left = o.left;
 
 	numGemas = 1;
 }
@@ -107,19 +114,19 @@ bool Personaje::getPulsado() {
 
 void Personaje::controlesInFrame() {
 	escopetaGema = false;
-	int state = glfwGetKey(window, GLFW_KEY_W);
+	int state = glfwGetKey(window, up);
 	if (state == GLFW_PRESS) {
 		pos[1] += velocidad * 0.005;
 	}
-	state = glfwGetKey(window, GLFW_KEY_A);
+	state = glfwGetKey(window, left);
 	if (state == GLFW_PRESS) {
 		pos[0] -= velocidad * 0.005;
 	}
-	state = glfwGetKey(window, GLFW_KEY_S);
+	state = glfwGetKey(window, down);
 	if (state == GLFW_PRESS) {
 		pos[1] -= velocidad * 0.005;
 	}
-	state = glfwGetKey(window, GLFW_KEY_D);
+	state = glfwGetKey(window, right);
 	if (state == GLFW_PRESS) {
 		pos[0] += velocidad * 0.005;
 	}

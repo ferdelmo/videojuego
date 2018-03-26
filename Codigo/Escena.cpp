@@ -152,7 +152,7 @@ void Escena::renderizar() {
 		}
 	}
 	i = 0;
-	/*while (i<calaveras.size()) {
+	while (i<calaveras.size()) {
 		//cout << "renderiza calavera " << i << endl;
 		bool seguir = calaveras[i]->renderizar();
 		if (!seguir) {
@@ -204,7 +204,7 @@ void Escena::renderizar() {
 		else {
 			i++;
 		}
-	}*/
+	}
 	for (int i = 0; i < calaverasII.size(); i++) {
 		calaverasII[0]->renderizar();
 		break;
@@ -260,4 +260,19 @@ void Escena::actualizarFisicas() {
 
 void Escena::pararFisicas() {
 	fin = true;
+}
+
+void Escena::reset() {
+	calaveras.clear();
+	calaverasII.clear();
+	calaverasIII.clear();
+	dagas.clear();
+	balas.clear();
+	gemas.clear();
+	per.reset();
+	fon.reset();
+	tFisica = 0; tMover = 0; tRender = 0;
+	mFisica = 0; mMover = 0; mRender = 0; iFisica = 0; iMover = 0; iRender = 0;
+	fin = false;
+	calavsMatadas = 0;
 }

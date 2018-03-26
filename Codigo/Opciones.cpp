@@ -6,190 +6,229 @@
 
 #include "Opciones.h"
 #include "LoadShader.h"
+#include <fstream>
+#include <string>
+#include <sstream>
 
 using namespace std;
 
-Opciones::Opciones(GLFWwindow *window) {
 
-	this->window = window;
 
+Opciones::Opciones() {
 	mode = 3;
-
-	oldState = GLFW_RELEASE;
-	pulsado = false;
-
-	//VAO
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
-	//VERTICES
-	// genera el buffer para vertices
-	glGenBuffers(1, &points_VBO);
-	// bindea el buffer
-	glBindBuffer(GL_ARRAY_BUFFER, points_VBO);
-	// Llena el buffer con la informacion de los puntos
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	// EBO
-	glGenBuffers(1, &EBO);
-	// bindea ese buffer
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	// Lo rellena con la informacion de indices
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(0);
-
-	//COLOR
-	// Genera el buffer de colores
-	glGenBuffers(1, &colors_VBO);
-	// bindea ese buffer
-	glBindBuffer(GL_ARRAY_BUFFER, colors_VBO);
-	// Lo rellena con la informacion del color
-	glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(1);
-	glBindVertexArray(0);
-
-	//TEXTURA BUFFER
-	glGenBuffers(1, &texCoords_VBO);
-	// bindea ese buffer
-	glBindBuffer(GL_ARRAY_BUFFER, texCoords_VBO);
-	// Lo rellena con la informacion de las coordenadas
-	glBufferData(GL_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);
-
-	//TEXTURA PROPIA
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-		GL_LINEAR_MIPMAP_LINEAR);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texWid, texHei, 0, GL_RGB,
-		GL_UNSIGNED_BYTE, texImage);
-
-	glGenerateMipmap(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	SOIL_free_image_data(texImage);
-
-	shaderProgram = LoadShaders("../DevilDaggers/videojuego/Codigo/Shaders/puntuaciones.vert", "../DevilDaggers/videojuego/Codigo/Shaders/puntuaciones.frag");
-
+	ifstream myfile;
+	myfile.open(fich);
+	if (myfile.is_open()) {
+		myfile >> px >> py >> resolucion;
+		myfile >> Fullscreen;
+		myfile >> up >> down >> right >> left;
+		myfile.close();
+	}
+	else {
+		//generamos el opciones por defecto
+		ofstream myfile;
+		myfile.open(fich);
+		px = resoluciones[resolucion][0]; py = resoluciones[resolucion][1];
+		myfile << px << " " << py << " " << resolucion << '\n';
+		myfile << Fullscreen << '\n';
+		myfile << up << " " << down << " " << right << " " << left << '\n';
+		myfile.close();
+	}
 }
 
-void Opciones::controlesInFrame() {
+void Opciones::setFlechas(Fondo * izq, Fondo * der) {
+	this->izq = izq;
+	this->der = der;
+	GLfloat texCoords[8] = {
+		0.0f, 1.0f,
+		1.0f, 1.0f,
+		0.0f, 0.0f,
+		1.0f, 0.0f,
 
-	mode = 3;
-
-	// Posición del cursor
-	double x, y;
-	glfwGetCursorPos(window, &x, &y);
-
-	int px, py;
-	glfwGetWindowSize(window, &px, &py);
-
-	//calula la posicion relativa de la raton en la pantalla
-	x = (x / px - 0.5f) * 2;
-	y = (abs(y - py) / py - 0.5f) * 2;
-
-	glfwSetInputMode(window, GLFW_STICKY_MOUSE_BUTTONS, 1);
-
-	int state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
-
-	if (state == GLFW_RELEASE && oldState == GLFW_PRESS) {
-		pulsado = false;
+	};
+	for (int i = 0; i < 8; i++) {
+		this->izq->texCoords[i] = texCoords[i];
 	}
+	GLfloat texCoords2[8] = {
+		1.0f, 0.0f,
+		0.0f, 0.0f,
+		1.0f, 1.0f,
+		0.0f, 1.0f,
 
-	if (!pulsado) { // Control una pulsación
-		if (state == GLFW_PRESS) {
-			//cout << "x: " << x << " ;; y: " << y << endl;
-			if (x >= 0.48 && x <= 0.944 && y >= -0.9 && y <= -0.745) { // BOTÓN MENÚ PRINCIPAL
-				pulsado = true;
-				mode = 1;
+	};
+	for (int i = 0; i < 8; i++) {
+		this->der->texCoords[i] = texCoords2[i];
+	}
+}
+
+void Opciones::setBotones(Fondo * atras, Fondo * guardar) {
+	this->atras = atras;
+	this->guardar = guardar;
+	GLfloat texCoords[8] = {
+		1.0f, 1.0f,
+		0.0f, 1.0f,
+		1.0f, 0.0f,
+		0.0f, 0.0f,
+
+	};
+	for (int i = 0; i < 8; i++) {
+		this->atras->texCoords[i] = texCoords[i];
+	}
+	GLfloat texCoords2[8] = {
+		1.0f, 1.0f,
+		0.0f, 1.0f,
+		1.0f, 0.0f,
+		0.0f, 0.0f,
+
+	};
+	for (int i = 0; i < 8; i++) {
+		this->guardar->texCoords[i] = texCoords2[i];
+	}
+}
+
+void Opciones::setWindow(GLFWwindow * window) {
+	this->window = window;
+}
+
+void Opciones::controles() {
+	mode = 3;
+	if (!cambiando) {
+		double x, y;
+		glfwGetCursorPos(window, &x, &y);
+		x = (x / (px*1.0f) - 0.5f) * 2;
+		y = (abs(y - py) / (py*1.0f) - 0.5f) * 2;
+
+		if (x > -0.25 && x < 0.3 && y>0.2 && y < 0.3 && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+			cout << "PULSADO TECLA DE ARRIBA" << endl;
+			cout << "_______________________" << endl;
+			cambiando = true;
+			aCambiar = 0;
+		}
+		else if (x > -0.25 && x < 0.3 && y>0.1 && y < 0.2 && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+			cout << "PULSADO TECLA DE ABAJO" << endl;
+			cout << "_______________________" << endl;
+			cambiando = true;
+			aCambiar = 1;
+		}
+		else if (x > -0.25 && x < 0.3 && y>0.0 && y < 0.1 && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+			cout << "PULSADO TECLA DE IZQUIERDA" << endl;
+			cout << "_______________________" << endl;
+			cambiando = true;
+			aCambiar = 2;
+		}
+		else if (x > -0.25 && x < 0.3 && y>-0.1 && y < 0.0 && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+			cout << "PULSADO TECLA DE DERECHA" << endl;
+			cout << "_______________________" << endl;
+			cambiando = true;
+			aCambiar = 3;
+		}
+		else if (x > -0.2 && x < -0.05 && y>0.3 && y < 0.5 && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+			cout << "PULSADO FLECHA IZQ" << endl;
+			cout << "_______________________" << endl;
+			if (resolucion > 0 && !pulsado) {
+				resolucion--;
 			}
+			pulsado = true;
+		}
+		else if (x > 0.05 && x < 0.2 && y>0.3 && y < 0.5 && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+			cout << "PULSADO FLECHA DER" << endl;
+			cout << "_______________________" << endl;
+			if (resolucion < 4 && !pulsado) {
+				resolucion++;
+			}
+			pulsado = true;
+		}
+		else if (x > -0.2 && x < -0.05 && y>0.3 && y < 0.5 && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+			cout << "PULSADO FLECHA IZQ" << endl;
+			cout << "_______________________" << endl;
+			if (resolucion > 0 && !pulsado) {
+				resolucion--;
+			}
+			pulsado = true;
+		}
+		else if (x > 0.05 && x < 0.2 && y>0.3 && y < 0.5 && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+			cout << "PULSADO FLECHA DER" << endl;
+			cout << "_______________________" << endl;
+			if (resolucion < 4 && !pulsado) {
+				resolucion++;
+			}
+			pulsado = true;
+		}
+		else if (x > -0.4 && x < -0.1 && y>-1 && y < -0.5 && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+			cout << "GUARDAR" << endl;
+			cout << "_______________________" << endl;
+			mode = 1;
+			//EScribe los datitos
+			px = resoluciones[resolucion][0]; py = resoluciones[resolucion][1];
+			ofstream myfile(fich);
+			myfile << px << " " << py << " " << resolucion << '\n';
+			myfile << Fullscreen << '\n';
+			myfile << up << " " << down << " " << right << " " << left << '\n';
+			myfile.close();
+		}
+		else if (x > 0.1 && x < 0.4 && y>-1 && y < -0.5 && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+			cout << "ATRAS" << endl;
+			cout << "_______________________" << endl;
+			mode = 1;
+			cargar();
+		}
+		if (!glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+			pulsado = false;
 		}
 	}
-
-	oldState = state;
-
+	else {
+		cambiando = !cogerTecla();
+	}
 }
 
 int Opciones::renderizar() {
-	controlesInFrame();
-
-	glUseProgram(shaderProgram);
-
-	glBindVertexArray(VAO); // une el VAO, que contiene toda la
-							//información de los vértices, al contexto
-							//vertices
-							//argumento 0 posicion
-	glEnableVertexAttribArray(0);
-	//bindea el buffer
-	glBindBuffer(GL_ARRAY_BUFFER, points_VBO);
-	//lo leena con los puntos
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	glVertexAttribPointer(
-		0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-		3,                  // size
-		GL_FLOAT,           // type
-		GL_FALSE,           // normalized?
-		0,                  // stride
-		(void*)0            // array buffer offset
-	);
-	// bindea ese buffer
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	// Lo rellena con la informacion de puntos
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-	glVertexAttribPointer(
-		0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-		3,                  // size
-		GL_FLOAT,           // type
-		GL_FALSE,           // normalized?
-		0,                  // stride
-		(void*)0            // array buffer offset
-	);
-	//color
-	//argumento 1 color
-	glEnableVertexAttribArray(1);
-	//bindea el buffer
-	glBindBuffer(GL_ARRAY_BUFFER, colors_VBO);
-	// le pasa el color de cada vertice
-	glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
-	glVertexAttribPointer(
-		1,                                // attribute. No particular reason for 1, but must match the layout in the shader.
-		3,                                // size
-		GL_FLOAT,                         // type
-		GL_FALSE,                         // normalized?
-		0,                                // stride
-		(void*)0                          // array buffer offset
-	);
-	//texure
-	//argumento 2 textura
-	glEnableVertexAttribArray(2);
-	//bindea el buffer
-	glBindBuffer(GL_ARRAY_BUFFER, texCoords_VBO);
-	// le pasa el color de cada vertice
-	glBufferData(GL_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);
-	glVertexAttribPointer(
-		2,                                // attribute. No particular reason for 1, but must match the layout in the shader.
-		2,                                // size
-		GL_FLOAT,                         // type
-		GL_FALSE,                         // normalized?
-		0,                                // stride
-		(void*)0                          // array buffer offset
-	);
-	/*glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat),
-	NULL); // en este caso el ID es 2 (0 y 1
-	// corresponden a las posiciones y colores)
-	glEnableVertexAttribArray(2);*/
-	//Dibuja los trinagulos (3 vertices)
-	glBindTexture(GL_TEXTURE_2D, texture);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);  // Starting from vertex 0; 3 vertices total -> 1 triangle
-	glBindVertexArray(0); // deshace la unión del VAO
-
-						  //desactiva estos argumentos una vez usados
-	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
-	glDisableVertexAttribArray(2);
+	controles();
+	if (!cambiando) {
+		displayText(-0.05f, 0.8f, 1, 1, 1, "OPCIONES");
+		displayText(-0.05f, 0.45f, 1, 1, 1, to_string(resoluciones[resolucion][0]) + "x" + to_string(resoluciones[resolucion][1]));
+		izq->renderizar();
+		der->renderizar();
+		atras->renderizar();
+		guardar->renderizar();
+		stringstream ssa;
+		string sa;
+		char a = up;
+		ssa << a;
+		ssa >> sa;
+		displayText(-0.2f, 0.2f, 1, 1, 1, "TECLA MOVERSE ARRIBA (click para cambiar): " + sa);
+		stringstream ssb;
+		string sb;
+		char b = down;
+		ssb << b;
+		ssb >> sb;
+		displayText(-0.2f, 0.1f, 1, 1, 1, "TECLA MOVERSE ABAJO (click para cambiar): " + sb);
+		stringstream ssc;
+		string sc;
+		char c = left;
+		ssc << c;
+		ssc >> sc;
+		displayText(-0.2f, 0.0f, 1, 1, 1, "TECLA MOVERSE IZQUIERDA (click para cambiar): " + sc);
+		stringstream ssd;
+		string sd;
+		char d = right;
+		ssd << d;
+		ssd >> sd;
+		displayText(-0.2f, -0.1f, 1, 1, 1, "TECLA MOVERSE DERECHA (click para cambiar): " + sd);
+	}
+	else {
+		displayText(-0.01f, 0.0f, 1, 1, 1, "PULSE LA NUEVA TECLA");
+	}
 
 	return mode;
+}
 
+void Opciones::cargar() {
+	ifstream myfile;
+	myfile.open(fich);
+	if (myfile.is_open()) {
+		myfile >> px >> py >> resolucion;
+		myfile >> Fullscreen;
+		myfile >> up >> down >> right >> left;
+		myfile.close();
+	}
 }
