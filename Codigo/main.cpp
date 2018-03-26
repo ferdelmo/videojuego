@@ -11,6 +11,7 @@
 #include <Windows.h>
 #include <mmsystem.h>
 #include <GL/freeglut.h>
+#include <fstream>
 
 #include "Personaje.h"
 #include "Escena.h"
@@ -42,7 +43,7 @@ void displayText(float x, float y, int r, int g, int b, string str) {
 
 	glDisable(GL_TEXTURE_2D);
 	for (int i = 0; i < str.size(); i++) {
-		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, str[i]);
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, str[i]);
 	}
 	glEnable(GL_TEXTURE_2D);
 }
@@ -99,7 +100,8 @@ int main(int argc, char **argv) {
 
 	Fondo FI(-0.4, 0.75, 0, window, "../DevilDaggers/videojuego/Codigo/flecha.png", 0.1, 1, &cam), FD(0.4, 0.75, 0, window, "../DevilDaggers/videojuego/Codigo/flecha.png", 0.1, 1, &cam);
 	opciones.setFlechas(&FI, &FD);
-	opciones.setBotones(&Fondo(0.6, -1, 0, window, "../DevilDaggers/videojuego/Codigo/atras.png", 0.4, 1, &cam), &Fondo(-0.6, -1, 0, window, "../DevilDaggers/videojuego/Codigo/guardar.png", 0.4, 1, &cam));
+	Fondo atras(0.6, -1, 0, window, "../DevilDaggers/videojuego/Codigo/atras.png", 0.4, 1, &cam), guardar(-0.6, -1, 0, window, "../DevilDaggers/videojuego/Codigo/guardar.png", 0.4, 1, &cam);
+	opciones.setBotones(&atras,&guardar);
 	opciones.setWindow(window);
 
 	//instancia el personage
@@ -122,11 +124,19 @@ int main(int argc, char **argv) {
 	
 	int mode = 1;
 	//PlaySound(TEXT("../DevilDaggers/videojuego/Codigo/Musica/quack.wav"), NULL, SND_ASYNC);
-	Fondo f(window, "../DevilDaggers/videojuego/Codigo/muerte.png", 1, 1, &cam);
-	Muerte muerte(window, &cam, &f);
+	Fondo f(0,0,0.0f,window, "../DevilDaggers/videojuego/Codigo/muerte01.png", 2, 1, &cam);
+	GLfloat texCoords[8] = {
+		0.0f, 0.0f,
+		0.0f, 1.0f,
+		1.0f, 1.0f,
+		1.0f, 0.0f,
 
-	clock_t puntuacion = clock();
+	};
+	glfwSetInputMode(window, GLFW_STICKY_MOUSE_BUTTONS, 0);
+	clock_t puntuacion = clock(), finPunt = clock();;
 	int antigua = opciones.resolucion;
+	bool gameover = true;
+	float topPunt[10] = { 0,0,0,0,0,0,0,0,0,0 };
 	while (!glfwWindowShouldClose(window))
 	{
 		if(double(clock() - tiempecito) / CLOCKS_PER_SEC >= 11){
@@ -156,13 +166,18 @@ int main(int argc, char **argv) {
 				par = &partid;
 				par->start();
 				puntuacion = clock();
+				for (int i = 0; i < 10; i++) {
+					topPunt[i] = 0;
+				}
+				gameover = true;
 			}
 		}
 		else if (mode == 2) {
 			//chrono c++11
 			inicio = clock();
+			string tiempo;
 			//BORRA EL FONDO
-			if (per->vivo) {
+			if (es.getPer()->vivo) {
 				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 				//renderiza escena
 				//glDepthMask(GL_FALSE);
@@ -177,25 +192,149 @@ int main(int argc, char **argv) {
 				es.moverObjetos();
 				es.renderizar();
 
-				string tiempo = to_string((clock() - puntuacion) / (CLOCKS_PER_SEC / 1000) / 1000.0f);
+				tiempo = to_string((clock() - puntuacion) / (CLOCKS_PER_SEC / 1000) / 1000.0f);
 				tiempo = tiempo.substr(0, tiempo.size() - 3);
-				displayText(per->pos[0] - 0.20f, per->pos[0] + 0.8f, 1, 1, 1, "Tiempo: " + tiempo);
+				displayText(0 - 0.10f, 0 + 0.8f, 1, 1, 1, "Tiempo: " + tiempo);
 
-				displayText(per->pos[0] - 0.60f, per->pos[0] + 0.8f, 1, 0, 0, "Asesinadas: " + to_string(es.calavsMatadas));
+				displayText(0 - 0.50f,0 + 0.8f, 1, 0, 0, "Asesinadas: " + to_string(es.calavsMatadas));
 
-				displayText(per->pos[0] + 0.20f, per->pos[0] + 0.8f, 1, 1, 1, "Gemas: " + to_string(es.getPer()->numGemas));
+				displayText(0 + 0.35f, 0 + 0.8f, 1, 1, 1, "Gemas: " + to_string(es.getPer()->numGemas));
 				//pinta lo que haya en los buffers
 				glfwSwapBuffers(window);
 				//lee los eventos
 				glfwPollEvents();
+				finPunt = clock();
 				int ms = (1000.0f / 60.0f) - (clock() - inicio) / (CLOCKS_PER_SEC / 1000);
 				if (ms > 0) {
 					this_thread::sleep_for(chrono::milliseconds(ms));
 				}
 			}
 			else {
+				
+				if (gameover) {
+					fstream f;
+					int i = 0;
+					f.open(puntuaciones.fich, ios::in);
+					if (f.is_open()) {
+
+						while (!f.eof()) {
+							f >> topPunt[i];
+							i++;
+						}
+
+						f.close();
+					}
+					gameover = false;
+				}
+				cam.View = glm::lookAt(
+					glm::vec3(0, 0, 3), // Camera is at (4,3,3), in World Space
+					glm::vec3(0, 0, 0), // and looks at the origin
+					glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+				);
+
+				cam.actualizarMVP();
 				es.renderizar();
-				muerte.renderizar();
+				f.renderizar();
+				float PUNTOS = (finPunt - puntuacion) / (CLOCKS_PER_SEC / 1000) / 1000.0f;
+				tiempo = to_string(PUNTOS);
+				tiempo = tiempo.substr(0, tiempo.size() - 3);
+				//cout << tiempo << endl;
+				displayText(-0.1f,-0.0f, 1, 0, 0,tiempo);	
+				for (int i = 0; i < 10; i++) {
+					if (PUNTOS > topPunt[i]) {
+						displayText(-0.25f, -0.1f, 1, 1, 1, "NUEVO RECORD, PUESTO: " + to_string(i+1));
+						i = 10;
+					}
+				}
+
+				double x, y;
+				glfwGetCursorPos(window, &x, &y);
+				//calula la posicion relativa de la raton en la pantalla
+				x = (x / opciones.px - 0.5f) * 2;
+				y = (abs(y - opciones.py) / opciones.py - 0.5f) * 2;
+				if (x > -0.4 && x < -0.1 && y>-1 && y < -0.6 && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+					cout << "PULSADO Intentar de nuevo" << endl;
+					cout << "_______________________" << endl;
+					es.reset();
+					Personaje per = Personaje(0, 0, 0, &es, window, &cam);
+					//evita perder teclas entre frames
+					glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
+					//glfwSetKeyCallback(window, Personaje::controles)
+					//glfwSetMouseButtonCallback(window, Personaje::mouse);
+					es.add(make_shared<Personaje>(per));
+					Fondo fondo(window, "../DevilDaggers/videojuego/Codigo/suelo.png", 2, 10, &cam);
+					es.setFondo(make_shared<Fondo>(fondo));
+					Partida partid(&es);
+					par = &partid;
+					par->start();
+					puntuacion = clock();
+					ofstream f(puntuaciones.fich);
+					int k = -1;
+					for (int j = 0; j < 10; j++) {
+						if (PUNTOS > topPunt[j]) {
+							k = j;
+							j = 10;
+						}
+					}
+					for (int j = 9; j > k; j--) {
+						topPunt[j] = topPunt[j - 1];
+					}
+					topPunt[k] = PUNTOS;
+					int i = 0;
+					if (f.is_open()) {
+
+						while (i<10) {
+							f << to_string(topPunt[i]) << '\n';
+							i++;
+						}
+
+						f.close();
+					}
+					for (int i = 0; i < 10; i++) {
+						topPunt[i] = 0;
+					}
+					gameover = true;
+					puntuaciones.LeerFichero();
+				}
+				else if (x > 0.1 && x < 0.4 && y>-1 && y < -0.6 && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+					cout << "PULSADO Menu" << endl;
+					cout << "_______________________" << endl;
+					mode = 1;
+					ofstream f(puntuaciones.fich);
+					int k = -1;
+					for (int j = 0; j < 10; j++) {
+						if (PUNTOS > topPunt[j]) {
+							k = j;
+							j = 10;
+						}
+					}
+					for (int j = 9; j > k ; j--) {
+						topPunt[j] = topPunt[j - 1];
+					}
+					topPunt[k] = PUNTOS;
+					int i = 0;
+					if (f.is_open()) {
+
+						while (i<10) {
+							f << to_string(topPunt[i]) << '\n';
+							i++;
+						}
+
+						f.close();
+					}
+					for (int i = 0; i < 10; i++) {
+						topPunt[i] = 0;
+					}
+					gameover = true;
+					puntuaciones.LeerFichero();
+				}
+				//displayText(0.1, -0.5, 1, 0, 0, "Asesinadas: " + to_string(es.calavsMatadas));
+
+				//displayText(0.1, -0.5, 1, 1, 1, "Gemas: " + to_string(es.getPer()->numGemas));
+				//pinta lo que haya en los buffers
+				glfwSwapBuffers(window);
+				//lee los eventos
+				glfwPollEvents();
 			}
 		}
 		else if (mode == 3) {

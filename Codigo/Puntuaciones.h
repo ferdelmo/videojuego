@@ -69,9 +69,9 @@ class Puntuaciones {
 	GLFWwindow *window;
 	Camara * c;
 
-	const string fich = "puntuaciones.txt";
 
 public:
+	const string fich = "puntuaciones.txt";
 
 	void displayText(float x, float y, int r, int g, int b, string str) {
 		glUseProgram(0);
