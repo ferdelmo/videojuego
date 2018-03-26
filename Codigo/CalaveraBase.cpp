@@ -70,7 +70,7 @@ CalaveraBase::CalaveraBase(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwin
 }
 
 void CalaveraBase::seguir() {
-	shared_ptr<Personaje> a= es->getPer();
+	/*shared_ptr<Personaje> a= es->getPer();
 	GLfloat posP[] = { 0,0,0 };
 	a->getPosition(posP);
 	GLfloat dirx = posP[0] - pos[0], diry = posP[1] - pos[1];
@@ -88,21 +88,20 @@ void CalaveraBase::seguir() {
 	pos[1] += (0.005 * velocidad)*sin(orientacion);
 	if (distancia(pos[0], pos[1], posP[0], posP[1]) <= tam * tam + a->tam * a->tam) {
 		a->morir();
-	}
-	/*shared_ptr<Personaje> a = es->getPer();
+	}*/
+	shared_ptr<Personaje> a = es->getPer();
 	GLfloat posP[] = { 0,0,0 };
 	a->getPosition(posP);
 	//distribution = uniform_real_distribution<float>(-es->getLimites(), es->getLimites()); // se puede usar otras distribuciones
 	//random_device rd;
 	// Initialize Mersenne Twister pseudo-random number generator
 	//gen = mt19937(rd());
-	if (clock() - tiempecito) {
-
-	}
-	if (llegar) {
+	if (double(clock() - tiempecito) / CLOCKS_PER_SEC >= tiempoSeguir || llegar) {
+		dir[0] = posP[0];
+		dir[1] = posP[1];
+		tiempecito = clock();
+		tiempoSeguir = abs(distribution(gen))*2.0;
 		llegar = false;
-		dir[0] = distribution(gen);
-		dir[1] = distribution(gen);
 	}
 	GLfloat dirx = dir[0] - pos[0], diry = dir[1] - pos[1];
 	orientacion = atan2(diry, dirx);
@@ -118,7 +117,7 @@ void CalaveraBase::seguir() {
 	}
 	if (distancia(pos[0], pos[1], posP[0], posP[1]) <= tam * tam + a->tam * a->tam) {
 		a->morir();
-	}*/
+	}
 }
 GLfloat CalaveraBase::distancia(GLfloat x, GLfloat y, GLfloat xp, GLfloat yp) {
 	return (x - xp)*(x - xp) + (y - yp)*(y - yp);

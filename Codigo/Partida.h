@@ -13,6 +13,7 @@ using namespace std;
 
 class Escena;
 
+
 class Partida {
 	private:
 		GLfloat daga1sec = 3.8;
@@ -32,6 +33,7 @@ class Partida {
 		bool daga3p = true;
 
 		GLuint shader;
+		GLuint sha;
 		clock_t daga1, daga2, daga3;
 
 		//para generar numeros aleatorios

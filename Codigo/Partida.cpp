@@ -36,7 +36,7 @@ void Partida::actualizar() {
 }
 
 void Partida::generarDaga1() {
-	if (es->getPer()->vivo) {
+	if (es->getPer()->vivo || es->getPer()->modoDios) {
 		if ((clock() - daga1) / (CLOCKS_PER_SEC / 1000) >= (daga1sec * 1000)) {
 			int p = distribution(gen);
 			es->add(make_shared<Daga>(Daga(posiposibles[p], es, 1, es->getPer()->window, es->getPer()->cam, shader)));
@@ -51,11 +51,10 @@ void Partida::generarDaga1() {
 			daga1 = clock();
 		}
 	}
-	
 }
 
 void Partida::generarDaga2() {
-	if (es->getPer()->vivo) {
+	if (es->getPer()->vivo || es->getPer()->modoDios) {
 		if ((clock() - daga2) / (CLOCKS_PER_SEC / 1000) >= (daga2sec * 1000)) {
 			int p = distribution(gen);
 			es->add(make_shared<Daga>(Daga(posiposibles[p], es, 2, es->getPer()->window, es->getPer()->cam, shader)));
@@ -73,7 +72,7 @@ void Partida::generarDaga2() {
 }
 
 void Partida::generarDaga3() {
-	if (es->getPer()->vivo) {
+	if (es->getPer()->vivo || es->getPer()->modoDios) {
 		if ((clock() - daga3) / (CLOCKS_PER_SEC / 1000) >= (daga3sec * 1000)) {
 			int p = distribution(gen);
 			es->add(make_shared<Daga>(Daga(posiposibles[p], es, 3, es->getPer()->window, es->getPer()->cam, shader)));

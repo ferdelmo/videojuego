@@ -90,7 +90,7 @@ shared_ptr<Personaje> Escena::getPer() {
 
 void Escena::moverObjetos() {
 	clock_t tieempo = clock();
-	if (per->vivo) {
+	if (per->vivo || per->modoDios) {
 		int i = 0;
 		while (i<calaveras.size()) {
 			//cout << "renderiza calavera " << i << endl;
@@ -152,7 +152,7 @@ void Escena::renderizar() {
 		}
 	}
 	i = 0;
-	while (i<calaveras.size()) {
+	/*while (i<calaveras.size()) {
 		//cout << "renderiza calavera " << i << endl;
 		bool seguir = calaveras[i]->renderizar();
 		if (!seguir) {
@@ -204,8 +204,12 @@ void Escena::renderizar() {
 		else {
 			i++;
 		}
+	}*/
+	for (int i = 0; i < calaverasII.size(); i++) {
+		calaverasII[0]->renderizar();
+		break;
 	}
-	if (per->vivo) {
+	if (per->vivo || per->modoDios) {
 		bool perso = per->renderizar();
 	}
 	bool fin = false;
@@ -222,7 +226,7 @@ void Escena::renderizar() {
 void Escena::actualizarFisicas() {
 	//while (!fin) {
 	clock_t tieempo = clock();
-	if (per->vivo) {
+	if (per->vivo || per->modoDios) {
 		per->fisicas();
 		for (int i = 0; i < dagas.size(); i++) {
 			//cout << "fisicas daga " << i << endl;
@@ -245,6 +249,7 @@ void Escena::actualizarFisicas() {
 		mFisica += (clock() - tieempo);
 		mFisica = mFisica / iFisica;
 	}
+	
 	
 	if ((clock() - tieempo) > tFisica) {
 		tFisica = clock() - tieempo;

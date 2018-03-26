@@ -35,6 +35,7 @@ class Personaje : public Renderizable{
 
 		bool escopeta = true;
 		bool vivo = true;
+		bool modoDios = true;
 		bool escopetaGema = false;
 		bool disparando = false;
 

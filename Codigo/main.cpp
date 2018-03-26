@@ -46,6 +46,7 @@ void displayText(float x, float y, int r, int g, int b, string str) {
 int main(int argc, char **argv) {
 	glfwInit();
 	clock_t tiempecito = 0;
+	
 	/*const GLFWvidmode *res = glfwGetVideoMode(glfwGetPrimaryMonitor());
 	GLFWwindow* window = glfwCreateWindow(res->width, res->height, "GAME", nullptr,
 	nullptr);*/

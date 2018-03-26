@@ -21,15 +21,16 @@ class Camara;
 
 class CalaveraBase : public Renderizable{
 	public:
-		GLfloat velocidad =3;
+		GLfloat velocidad = 3;
 		GLfloat velRot = pi / 10;
 		bool llegar = false;
 		clock_t tiempecito = clock();
 		int vida = 20;
 		bool muerto = false;
-
-		//direccion para seguir al personaje
+				//direccion para seguir al personaje
 		GLfloat dir[3] = { 0,0,0 };
+
+		double tiempoSeguir = abs(distribution(gen))*2.0;
 
 		//para generar numeros aleatorios
 		mt19937 gen;
