@@ -49,7 +49,8 @@ Daga::Daga(GLfloat posi[],Escena * es, int numGemas, GLFWwindow* window, Camara 
 	}
 	
 	//numeros aleatorios
-	distribution = uniform_real_distribution<float>(-1, 1);
+	
+	distribution = uniform_real_distribution<float>(-0.5, 0.5);
 	random_device rd;
 	// Initialize Mersenne Twister pseudo-random number generator
 	gen = mt19937(rd());
@@ -86,7 +87,7 @@ Daga::Daga(GLfloat posi[], Escena * es, int numGemas, GLFWwindow* window, Camara
 	}
 
 	//numeros aleatorios
-	distribution = uniform_real_distribution<float>(-1, 1);
+	distribution = uniform_real_distribution<float>(-0.5f, 0.5f);
 	random_device rd;
 	// Initialize Mersenne Twister pseudo-random number generator
 	gen = mt19937(rd());
@@ -150,13 +151,32 @@ bool Daga::sigueVivo() {
 }
 
 void Daga::mover() {
-	GLfloat posP[] = { 0,0,0 };
+	
+	if(!generadaPos){
+		generadaPos = true;
+		posFinal[0] = distribution(gen);
+		posFinal[1] = distribution(gen);
+		if (pos[0] < 0 && posFinal[0] > 0) {
+			posFinal[0] = -posFinal[0];
+		}
+		else if (pos[0] > 0 && posFinal[0] < 0) {
+			posFinal[0] = -posFinal[0];
+		}
+		if (pos[1] < 0 && posFinal[1] > 0) {
+			posFinal[1] = -posFinal[1];
+		}
+		else if (pos[1] > 0 && posFinal[1] < 0) {
+			posFinal[1] = -posFinal[1];
+		}
+		//
+	}
+	
 	GLfloat nuevaX, nuevaY, nuevaZ;
-	GLfloat dirx = posP[0] - pos[0], diry = posP[1] - pos[1];
+	GLfloat dirx = posFinal[0] - pos[0], diry = posFinal[1] - pos[1];
 	GLfloat moduloDir = sqrt(dirx*dirx + diry * diry);
 	GLfloat dirxNorm = dirx / moduloDir;
 	GLfloat diryNorm = diry / moduloDir;
-	if (distancia(pos[0], pos[1], 0, 0) > tam/2.5) { 
+	if (distancia(pos[0], pos[1], posFinal[0], posFinal[1]) > tam/2.5) { 
 		pos[0] += (0.005f * velocidad)*dirxNorm;
 		pos[1] += (0.005f * velocidad)*diryNorm;
 	}

@@ -89,6 +89,36 @@ void CalaveraBase::seguir() {
 	if (distancia(pos[0], pos[1], posP[0], posP[1]) <= tam * tam + a->tam * a->tam) {
 		a->morir();
 	}
+	/*shared_ptr<Personaje> a = es->getPer();
+	GLfloat posP[] = { 0,0,0 };
+	a->getPosition(posP);
+	//distribution = uniform_real_distribution<float>(-es->getLimites(), es->getLimites()); // se puede usar otras distribuciones
+	//random_device rd;
+	// Initialize Mersenne Twister pseudo-random number generator
+	//gen = mt19937(rd());
+	if (clock() - tiempecito) {
+
+	}
+	if (llegar) {
+		llegar = false;
+		dir[0] = distribution(gen);
+		dir[1] = distribution(gen);
+	}
+	GLfloat dirx = dir[0] - pos[0], diry = dir[1] - pos[1];
+	orientacion = atan2(diry, dirx);
+	float alpha = distribution(gen);
+	//orientacion += alpha * pi / 6;
+	GLfloat moduloDir = sqrt(dirx*dirx + diry * diry);
+	GLfloat dirxNorm = dirx / moduloDir;
+	GLfloat diryNorm = diry / moduloDir;
+	pos[0] += (0.005f * velocidad)*dirxNorm;
+	pos[1] += (0.005f * velocidad)*diryNorm;
+	if (abs(pos[0] - dir[0]) <= tam && abs(pos[1] - dir[1]) <= tam) {
+		llegar = true;
+	}
+	if (distancia(pos[0], pos[1], posP[0], posP[1]) <= tam * tam + a->tam * a->tam) {
+		a->morir();
+	}*/
 }
 GLfloat CalaveraBase::distancia(GLfloat x, GLfloat y, GLfloat xp, GLfloat yp) {
 	return (x - xp)*(x - xp) + (y - yp)*(y - yp);

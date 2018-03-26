@@ -10,6 +10,7 @@
 #include "Renderizable.h"
 #include <random>
 #include <cmath>
+#include <ctime>
 #include <memory>
 
 using namespace std;
@@ -22,7 +23,8 @@ class CalaveraBase : public Renderizable{
 	public:
 		GLfloat velocidad =3;
 		GLfloat velRot = pi / 10;
-
+		bool llegar = false;
+		clock_t tiempecito = clock();
 		int vida = 20;
 		bool muerto = false;
 

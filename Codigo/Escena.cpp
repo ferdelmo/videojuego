@@ -90,42 +90,43 @@ shared_ptr<Personaje> Escena::getPer() {
 
 void Escena::moverObjetos() {
 	clock_t tieempo = clock();
-	int i = 0;
-	while (i<balas.size()) {
-			balas[i]->mover();
-			i++;
-	}
-	i = 0;
-	while (i<calaveras.size()) {
-		//cout << "renderiza calavera " << i << endl;
+	if (per->vivo) {
+		int i = 0;
+		while (i<calaveras.size()) {
+			//cout << "renderiza calavera " << i << endl;
 			calaveras[i]->mover();
 			i++;
-	}
-	i = 0;
-	while (i<calaverasII.size()) {
+		}
+		i = 0;
+		while (i<calaverasII.size()) {
 			calaverasII[i]->mover();
 			i++;
-	}
-	i = 0;
-	while (i<calaverasIII.size()) {
-		
+		}
+		i = 0;
+		while (i<calaverasIII.size()) {
+
 			calaverasIII[i]->mover();
-		
+
 			i++;
-	}
-	i = 0;
-	while (i<dagas.size()) {
-		
+		}
+		i = 0;
+		while (i<dagas.size()) {
+
 			dagas[i]->mover();
 			i++;
-	}
-	i = 0;
-	while (i<gemas.size()) {
+		}
+		i = 0;
+		while (i<gemas.size()) {
 			gemas[i]->mover();
 			i++;
+		}
+		per->mover();
 	}
-	//if (per->vivo) {
-	per->mover();
+	int i = 0;
+	while (i<balas.size()) {
+		balas[i]->mover();
+		i++;
+	}
 	bool fin = false;
 	iMover++;
 	mMover += (clock() - tieempo);
@@ -204,44 +205,47 @@ void Escena::renderizar() {
 			i++;
 		}
 	}
-	//if (per->vivo) {
+	if (per->vivo) {
 		bool perso = per->renderizar();
-	//}
-		bool fin = false;
-		iRender++;
-		mRender += (clock() - tieempo);
-		mRender = mRender / iRender;
-		if ((clock() - tieempo) > tRender) {
-			tRender = clock() - tieempo;
-			cout << "RENDERIZAR: max = " << tRender << " media = " << mRender << endl;
-		}
+	}
+	bool fin = false;
+	iRender++;
+	mRender += (clock() - tieempo);
+	mRender = mRender / iRender;
+	if ((clock() - tieempo) > tRender) {
+		tRender = clock() - tieempo;
+		cout << "RENDERIZAR: max = " << tRender << " media = " << mRender << endl;
+	}
 	tieempo = clock();
 }
 
 void Escena::actualizarFisicas() {
 	//while (!fin) {
 	clock_t tieempo = clock();
-	per->fisicas();
-	for (int i = 0; i < dagas.size(); i++) {
+	if (per->vivo) {
+		per->fisicas();
+		for (int i = 0; i < dagas.size(); i++) {
 			//cout << "fisicas daga " << i << endl;
 			dagas[i]->fisicas();
+		}
+		for (int i = 0; i < calaverasIII.size(); i++) {
+			calaverasIII[i]->fisicas();
+		}
+		for (int i = 0; i < calaverasII.size(); i++) {
+			calaverasII[i]->fisicas();
+		}
+		for (int i = 0; i < calaveras.size(); i++) {
+			//cout << "fisicas calavera " << i << endl;
+			calaveras[i]->fisicas();
+		}
+		//}
+		per->fisicas();
+		bool fin = false;
+		iFisica++;
+		mFisica += (clock() - tieempo);
+		mFisica = mFisica / iFisica;
 	}
-	for (int i = 0; i < calaverasIII.size(); i++) {
-		calaverasIII[i]->fisicas();
-	}
-	for (int i = 0; i < calaverasII.size(); i++) {
-		calaverasII[i]->fisicas();
-	}
-	for (int i = 0; i < calaveras.size(); i++) {
-		//cout << "fisicas calavera " << i << endl;
-		calaveras[i]->fisicas();
-	}
-	//}
-	per->fisicas();
-	bool fin = false;
-	iFisica++;
-	mFisica += (clock() - tieempo);
-	mFisica = mFisica / iFisica;
+	
 	if ((clock() - tieempo) > tFisica) {
 		tFisica = clock() - tieempo;
 		cout << "FISICAS: max = " << tFisica << " media = " << mFisica << endl;

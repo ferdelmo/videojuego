@@ -31,10 +31,11 @@ class Bala;
 class Daga : public Renderizable {
 
 	GLfloat velocidad = 0.75f, velRot = 0.005f;
-
+	bool generadaPos = false;
 	bool muerto = false;
 	clock_t tiempecito = 0;
 	int generadas = -1;
+	GLfloat posFinal[3] = { 0,0,0 };
 	//direccion para seguir al personaje
 	GLfloat dir[3] = { 0,0,0 };
 	int nivel = 0;
