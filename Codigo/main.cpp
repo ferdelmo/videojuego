@@ -132,11 +132,12 @@ int main(int argc, char **argv) {
 		1.0f, 0.0f,
 
 	};
-	glfwSetInputMode(window, GLFW_STICKY_MOUSE_BUTTONS, 0);
+	//glfwSetInputMode(window, GLFW_STICKY_MOUSE_BUTTONS, 0);
 	clock_t puntuacion = clock(), finPunt = clock();;
 	int antigua = opciones.resolucion;
 	bool gameover = true;
 	float topPunt[10] = { 0,0,0,0,0,0,0,0,0,0 };
+	bool pulsado = false;
 	while (!glfwWindowShouldClose(window))
 	{
 		if(double(clock() - tiempecito) / CLOCKS_PER_SEC >= 11){
@@ -170,6 +171,7 @@ int main(int argc, char **argv) {
 					topPunt[i] = 0;
 				}
 				gameover = true;
+				pulsado = false;
 			}
 		}
 		else if (mode == 2) {
@@ -200,6 +202,14 @@ int main(int argc, char **argv) {
 
 				displayText(0 + 0.35f, 0 + 0.8f, 1, 1, 1, "Gemas: " + to_string(es.getPer()->numGemas));
 				//pinta lo que haya en los buffers
+
+				if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS && pulsado) {
+					mode = 1;
+					pulsado = false;
+				}
+				else {
+					pulsado = true;
+				}
 				glfwSwapBuffers(window);
 				//lee los eventos
 				glfwPollEvents();
@@ -210,7 +220,6 @@ int main(int argc, char **argv) {
 				}
 			}
 			else {
-				
 				if (gameover) {
 					fstream f;
 					int i = 0;
@@ -225,6 +234,7 @@ int main(int argc, char **argv) {
 						f.close();
 					}
 					gameover = false;
+					pulsado = false;
 				}
 				cam.View = glm::lookAt(
 					glm::vec3(0, 0, 3), // Camera is at (4,3,3), in World Space
@@ -252,7 +262,7 @@ int main(int argc, char **argv) {
 				//calula la posicion relativa de la raton en la pantalla
 				x = (x / opciones.px - 0.5f) * 2;
 				y = (abs(y - opciones.py) / opciones.py - 0.5f) * 2;
-				if (x > -0.4 && x < -0.1 && y>-1 && y < -0.6 && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+				if (x > -0.4 && x < -0.1 && y>-1 && y < -0.6 && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && pulsado) {
 					cout << "PULSADO Intentar de nuevo" << endl;
 					cout << "_______________________" << endl;
 					es.reset();
@@ -294,9 +304,10 @@ int main(int argc, char **argv) {
 						topPunt[i] = 0;
 					}
 					gameover = true;
+					pulsado = false;
 					puntuaciones.LeerFichero();
 				}
-				else if (x > 0.1 && x < 0.4 && y>-1 && y < -0.6 && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+				else if (x > 0.1 && x < 0.4 && y>-1 && y < -0.6 && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && pulsado) {
 					cout << "PULSADO Menu" << endl;
 					cout << "_______________________" << endl;
 					mode = 1;
@@ -326,7 +337,11 @@ int main(int argc, char **argv) {
 						topPunt[i] = 0;
 					}
 					gameover = true;
+					pulsado = false;
 					puntuaciones.LeerFichero();
+				}
+				else if(!glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS){
+					pulsado = true;
 				}
 				//displayText(0.1, -0.5, 1, 0, 0, "Asesinadas: " + to_string(es.calavsMatadas));
 

@@ -87,7 +87,7 @@ void Puntuaciones::LeerFichero() {
 	f.open(fich, ios::in);
 	if (f.is_open()) {
 
-		while (!f.eof()) {
+		while (!f.eof() && i<10) {
 			f >> topPunt[i];
 			i++;
 		}

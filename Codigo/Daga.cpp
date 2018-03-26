@@ -26,7 +26,7 @@
 using namespace std;
 
 Daga::Daga(GLfloat posi[],Escena * es, int numGemas, GLFWwindow* window, Camara * c)
-	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/daga"+to_string(numGemas)+".png", "../DevilDaggers/videojuego/Codigo/Shaders/daga.vert", "../DevilDaggers/videojuego/Codigo/Shaders/daga.frag", 0.075f,c){
+	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/daga"+to_string(numGemas)+".png", "../DevilDaggers/videojuego/Codigo/Shaders/daga.vert", "../DevilDaggers/videojuego/Codigo/Shaders/daga.frag", 0.085f,c){
 	this->es = es;
 	this->nivel = numGemas;
 
@@ -64,7 +64,7 @@ Daga::Daga(GLfloat posi[],Escena * es, int numGemas, GLFWwindow* window, Camara 
 }
 
 Daga::Daga(GLfloat posi[], Escena * es, int numGemas, GLFWwindow* window, Camara * c, GLuint sha)
-	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/daga" + to_string(numGemas) + ".png", 0.075f, c, sha) {
+	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/daga" + to_string(numGemas) + ".png", 0.085f, c, sha) {
 	this->es = es;
 	this->nivel = numGemas;
 	cout << "DAGA GENERADA EN : ";
