@@ -8,7 +8,10 @@
 
 #include <random>
 #include <cmath>
+#include <thread>
 #include <ctime>
+#include <Windows.h>
+#include <mmsystem.h>
 #include <vector>
 #include <stdlib.h>
 
@@ -21,57 +24,58 @@ class Escena;
 
 class Camara;
 
-class Personaje : public Renderizable{
-	public:
-		const GLfloat velocidad = 3.75;
-		GLuint numGemas = 0;
+class Personaje : public Renderizable {
+public:
+	const GLfloat velocidad = 3.75;
+	GLuint numGemas = 0;
 
-		//para disparar
-		clock_t ultimaBala;
-		float cadencia=25;
-		//para generar numeros aleatorios
-		mt19937 gen;
-		uniform_real_distribution<float> distribution;
+	//para disparar
+	clock_t ultimaBala;
+	float cadencia = 25;
+	//para generar numeros aleatorios
+	mt19937 gen;
+	uniform_real_distribution<float> distribution;
 
-		bool escopeta = true;
-		bool vivo = true;
-		bool modoDios = true;
-		bool escopetaGema = false;
-		bool disparando = false;
+	bool escopeta = true;
+	bool vivo = true;
+	bool escopetaGema = false;
+	bool disparando = false;
+	bool modoDios = false;
 
-		GLuint shaderProgramBala; 
+	GLuint shaderProgramBala;
 
-		Escena * es;
+	Escena * es;
 
-	public:
-		//CONSTRUCTOR EN UNA POSICION ESPECIFICA
-		Personaje(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow * window, Camara * c);
+	int up, down, left, right;
+public:
+	//CONSTRUCTOR EN UNA POSICION ESPECIFICA
+	Personaje(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow * window, Camara * c);
 
-		void getPosition(GLfloat posi[]);
-		
-		void addGema();
-		//FUNCION AUXILIAR CONTROLES POR INTERRUPCION TECLAS
-		void controlesP(GLFWwindow* window, int key, int scancode, int action, int mods);
-		//FUNCION AUXILIAR CONTROLES POR INTERRUPCION raton
-		void mouseP(GLFWwindow* window, int button, int action, int mods);
-		void morir();
-		//dispara un escopetazo
-		void escopetazo();
+	void getPosition(GLfloat posi[]);
 
-		//dispara una bala
-		void lanzarBala();
+	void addGema();
+	//FUNCION AUXILIAR CONTROLES POR INTERRUPCION TECLAS
+	void controlesP(GLFWwindow* window, int key, int scancode, int action, int mods);
+	//FUNCION AUXILIAR CONTROLES POR INTERRUPCION raton
+	void mouseP(GLFWwindow* window, int button, int action, int mods);
+	void morir();
+	//dispara un escopetazo
+	void escopetazo();
 
-		void setWindow(GLFWwindow* window);
-		
-		bool getPulsado();
+	//dispara una bala
+	void lanzarBala();
 
-		void controlesInFrame();
+	void setWindow(GLFWwindow* window);
 
-		GLfloat distancia(GLfloat x, GLfloat y, GLfloat xp, GLfloat yp);
+	bool getPulsado();
 
-		void mover();
+	void controlesInFrame();
 
-		void fisicas();
+	GLfloat distancia(GLfloat x, GLfloat y, GLfloat xp, GLfloat yp);
+
+	void mover();
+
+	void fisicas();
 
 };
 

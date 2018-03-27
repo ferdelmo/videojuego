@@ -12,6 +12,9 @@
 #include <string>
 #include <stdlib.h>
 
+#include <Windows.h>
+#include <mmsystem.h>
+
 #include "CalaveraBase.h"
 #include "CalaveraBaseII.h"
 #include "CalaveraBaseIII.h"
@@ -26,7 +29,7 @@
 using namespace std;
 
 Daga::Daga(GLfloat posi[],Escena * es, int numGemas, GLFWwindow* window, Camara * c)
-	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/daga"+to_string(numGemas)+".png", "../DevilDaggers/videojuego/Codigo/Shaders/daga.vert", "../DevilDaggers/videojuego/Codigo/Shaders/daga.frag", 0.075f,c){
+	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/daga"+to_string(numGemas)+".png", "../DevilDaggers/videojuego/Codigo/Shaders/daga.vert", "../DevilDaggers/videojuego/Codigo/Shaders/daga.frag", 0.085f,c){
 	this->es = es;
 	this->nivel = numGemas;
 
@@ -64,7 +67,7 @@ Daga::Daga(GLfloat posi[],Escena * es, int numGemas, GLFWwindow* window, Camara 
 }
 
 Daga::Daga(GLfloat posi[], Escena * es, int numGemas, GLFWwindow* window, Camara * c, GLuint sha)
-	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/daga" + to_string(numGemas) + ".png", 0.075f, c, sha) {
+	: Renderizable(window, "../DevilDaggers/videojuego/Codigo/daga" + to_string(numGemas) + ".png", 0.085f, c, sha) {
 	this->es = es;
 	this->nivel = numGemas;
 	cout << "DAGA GENERADA EN : ";
@@ -108,7 +111,6 @@ void Daga::GenerarCalaveras(int n) {
 	float x = distribution(gen);
 	float y = distribution(gen);
 	es->add(make_shared<CalaveraBaseIII>(CalaveraBaseIII(pos[0] + x * tam, pos[1] + y * tam, pos[2], es, window, cam,sha3)));
-	es->add(make_shared<CalaveraBaseII>(CalaveraBaseII(pos[0] + x * tam, pos[1] + y * tam, pos[2], es, window, cam, sha2)));
 }
 
 void Daga::GenerarCalaverasII(int n) {
@@ -147,6 +149,9 @@ bool Daga::sigueVivo() {
 		else {
 			i++;
 		}
+	}
+	if (gemas.size() <= 0) {
+		mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/calaveraI.mp3", NULL, 0, NULL);
 	}
 	return gemas.size() > 0;
 }
@@ -210,7 +215,7 @@ void Daga::fisicas() {
 	shared_ptr<Personaje> a = es->getPer();
 	GLfloat posPer[] = { 0,0,0 };
 	a->getPosition(posPer);
-	if (distancia(pos[0], pos[1], posPer[0], posPer[1]) <= tam * tam + a->tam * a->tam) {
+	if (distancia(pos[0], pos[1], posPer[0], posPer[1]) <= tam * tam + a->tam * a->tam && !a->modoDios) {
 		a->morir();
 	}
 	//colisiona las gemas con las balas

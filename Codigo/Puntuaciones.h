@@ -67,11 +67,32 @@ class Puntuaciones {
 		&texHei, &texChan, SOIL_LOAD_RGB);
 
 	GLFWwindow *window;
-	Camara c;
+	Camara * c;
+
 
 public:
+	const string fich = "puntuaciones.txt";
 
-	Puntuaciones(GLFWwindow *window, Camara c);
+	void displayText(float x, float y, int r, int g, int b, string str) {
+		glUseProgram(0);
+
+		glLoadIdentity();
+		glRasterPos2i(x, y); glDisable(GL_LIGHTING);
+		glColor3f(r, g, b);
+		/*float posXcorrected = 0;
+		for (int i = 0; i < str.size() / 2; i++) {
+		posXcorrected += glutBitmapWidth(GLUT_BITMAP_HELVETICA_18, str[i]);
+		}*/
+		glRasterPos3f(x, y, 0);
+
+		glDisable(GL_TEXTURE_2D);
+		for (int i = 0; i < str.size(); i++) {
+			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, str[i]);
+		}
+		glEnable(GL_TEXTURE_2D);
+	}
+
+	Puntuaciones(GLFWwindow *window, Camara * c);
 
 	void LeerFichero();
 

@@ -17,6 +17,7 @@
 #include "Escena.h"
 #include "CalaveraBase.h"
 #include "Camara.h"
+#include "Opciones.h"
 
 using namespace std;
 
@@ -33,6 +34,12 @@ Personaje::Personaje(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow * 
 	gen = mt19937(rd());
 	shaderProgramBala = LoadShaders("../DevilDaggers/videojuego/Codigo/Shaders/gema.vert", "../DevilDaggers/videojuego/Codigo/Shaders/gema.frag");
 
+	Opciones o;
+	up = o.up;
+	down = o.down;
+	right = o.right;
+	left = o.left;
+
 	numGemas = 1;
 }
 
@@ -43,6 +50,7 @@ void Personaje::getPosition(GLfloat posi[]) {
 }
 
 void Personaje::addGema() {
+	mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/gema.wav", NULL, 0, NULL);
 	this->numGemas++;
 }
 //FUNCION AUXILIAR CONTROLES POR INTERRUPCION TECLAS
@@ -72,11 +80,14 @@ void Personaje::mouseP(GLFWwindow* window, int button, int action, int mods) {
 }
 
 void Personaje::morir() {
+	cout << "muerto" << endl;
 	vivo = false;
+	mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/muerte.wav", NULL, 0, NULL);
 }
 //dispara un escopetazo
 void Personaje::escopetazo() {
 	int n = 3;
+	//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/disparo.wav", NULL, 0, NULL);
 	//cout << "ESCOPETAZO " << endl;
 	vector<shared_ptr<Bala>> bs = vector<shared_ptr<Bala>>(n);
 	for (int i = 0; i < n; i++) {
@@ -89,6 +100,7 @@ void Personaje::escopetazo() {
 	}
 	es->add(bs);
 }
+
 //dispara una bala
 void Personaje::lanzarBala() {
 	GLfloat punto1[3] = { pos[0] - tam/2 , pos[1] + tam,pos[2] };
@@ -107,19 +119,19 @@ bool Personaje::getPulsado() {
 
 void Personaje::controlesInFrame() {
 	escopetaGema = false;
-	int state = glfwGetKey(window, GLFW_KEY_W);
+	int state = glfwGetKey(window, up);
 	if (state == GLFW_PRESS) {
 		pos[1] += velocidad * 0.005;
 	}
-	state = glfwGetKey(window, GLFW_KEY_A);
+	state = glfwGetKey(window, left);
 	if (state == GLFW_PRESS) {
 		pos[0] -= velocidad * 0.005;
 	}
-	state = glfwGetKey(window, GLFW_KEY_S);
+	state = glfwGetKey(window, down);
 	if (state == GLFW_PRESS) {
 		pos[1] -= velocidad * 0.005;
 	}
-	state = glfwGetKey(window, GLFW_KEY_D);
+	state = glfwGetKey(window, right);
 	if (state == GLFW_PRESS) {
 		pos[0] += velocidad * 0.005;
 	}
@@ -177,6 +189,8 @@ void Personaje::mover() {
 
 void Personaje::fisicas() {
 	if ((pos[0] > es->getLimites() || pos[0] < -es->getLimites()) || (pos[1] > es->getLimites() || pos[1] < -es->getLimites())) {
-		morir();
+		if (!modoDios) {
+			morir();
+		}
 	}
 }

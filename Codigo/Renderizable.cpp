@@ -47,12 +47,12 @@ Renderizable::Renderizable(GLFWwindow * window, string textura, string vertSha, 
 
 	//COLOR
 	// Genera el buffer de colores
-	/*glGenBuffers(1, &colors_VBO);
+	glGenBuffers(1, &colors_VBO);
 	// bindea ese buffer
 	glBindBuffer(GL_ARRAY_BUFFER, colors_VBO);
 	// Lo rellena con la informacion del color
 	glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(1);*/
+	glEnableVertexAttribArray(1);
 	glBindVertexArray(0);
 
 	//TEXTURA BUFFER
@@ -131,12 +131,12 @@ Renderizable::Renderizable(GLFWwindow * window, string textura, string vertSha, 
 
 	//COLOR
 	// Genera el buffer de colores
-	/*glGenBuffers(1, &colors_VBO);
+	glGenBuffers(1, &colors_VBO);
 	// bindea ese buffer
 	glBindBuffer(GL_ARRAY_BUFFER, colors_VBO);
 	// Lo rellena con la informacion del color
 	glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(1);*/
+	glEnableVertexAttribArray(1);
 	glBindVertexArray(0);
 
 	//TEXTURA BUFFER
@@ -211,12 +211,12 @@ Renderizable::Renderizable(GLFWwindow * window, string textura, GLfloat tam, Cam
 
 	//COLOR
 	// Genera el buffer de colores
-	/*glGenBuffers(1, &colors_VBO);
+	glGenBuffers(1, &colors_VBO);
 	// bindea ese buffer
 	glBindBuffer(GL_ARRAY_BUFFER, colors_VBO);
 	// Lo rellena con la informacion del color
 	glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(1);*/
+	glEnableVertexAttribArray(1);
 	glBindVertexArray(0);
 
 	//TEXTURA BUFFER

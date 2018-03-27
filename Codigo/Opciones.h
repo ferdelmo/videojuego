@@ -6,65 +6,94 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <SOIL.h>
+#include <GL/freeglut.h>
+#include "Fondo.h"
+
 
 using namespace std;
 
 class Opciones {
-
+public:
 	int mode;
 
-	int oldState;
-	bool pulsado;
+	const string fich = "opciones.txt";
 
-	//Para renderizar
-	GLuint shaderProgram;
-	GLuint VAO;
-	GLuint EBO;
-	GLuint points_VBO;
-	GLuint colors_VBO;
-
-	// textura
-	GLfloat colors[12] = {
-		1.0f, 0.0f, 0.0f,
-		0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 0.0f
+	int resolucion = 1;
+	const int resoluciones[5][2] = {
+		{ 800,600 },{ 1024,768 },{ 1366,768 },{ 1920,1080 },{ 2560,1440 }
 	};
 
-	GLfloat texCoords[8] = {
-		0.0f, 0.0f,
-		1.0f, 0.0f,
-		0.0f, 1.0f,
-		1.0f, 1.0f
-	};
+	bool Fullscreen = false;
+	int up = GLFW_KEY_W, down = GLFW_KEY_S, right = GLFW_KEY_D, left = GLFW_KEY_A;
 
-	GLfloat vertices[12] = {
-		-1.0f, 1.0f, 0.0f, // Arriba izqda
-		1.0f, 1.0f, 0.0f, // Arriba dcha
-		-1.0f, -1.0f, 0.0f, // Abajo izda
-		1.0f, -1.0f, 0.0f // Abajo dcha
-	};
+	int px = 1920, py = 1080;
 
-	GLuint indices[6] = {
-		0, 2, 3, // Triángulo #1
-		1, 0, 3 // Triángulo #2
+	Fondo * izq, *der;
 
-	};
+	Fondo * atras, *guardar;
 
-	GLuint texCoords_VBO;
-	GLuint texture;
+	bool cambiando = false;
 
-	int texWid, texHei, texChan;
-	unsigned char* texImage = SOIL_load_image("../DevilDaggers/videojuego/Codigo/Opciones.jpg", &texWid,
-		&texHei, &texChan, SOIL_LOAD_RGB);
+	int aCambiar = 0; // 0,1,2,3 -> arriba, abajko, izq,der
+	GLFWwindow * window;
 
-	GLFWwindow *window;
+	bool pulsado = true;
 
 public:
+	void displayText(float x, float y, int r, int g, int b, string str) {
+		glUseProgram(0);
 
-	Opciones(GLFWwindow *window);
+		glLoadIdentity();
+		glRasterPos2i(x, y); glDisable(GL_LIGHTING);
+		glColor3f(r, g, b);
+		/*float posXcorrected = 0;
+		for (int i = 0; i < str.size() / 2; i++) {
+		posXcorrected += glutBitmapWidth(GLUT_BITMAP_HELVETICA_18, str[i]);
+		}*/
+		glRasterPos3f(x, y, 0);
 
-	void controlesInFrame();
+		glDisable(GL_TEXTURE_2D);
+		for (int i = 0; i < str.size(); i++) {
+			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, str[i]);
+		}
+		glEnable(GL_TEXTURE_2D);
+	}
+
+	bool cogerTecla()
+	{
+		for (int i = 32; i < 256; i++) {
+			int state = glfwGetKey(window, i);
+			if (state == GLFW_PRESS) {
+				if (aCambiar == 0) {
+					up = i;
+				}
+				else if (aCambiar == 1) {
+					down = i;
+				}
+				else if (aCambiar == 2) {
+					left = i;
+				}
+				else if (aCambiar == 3) {
+					right = i;
+				}
+				i = 256;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	Opciones();
+
+	void setFlechas(Fondo * izq, Fondo * der);
+
+	void setBotones(Fondo * atras, Fondo * guardar);
+
+	void setWindow(GLFWwindow * window);
+
+	void controles();
+
+	void cargar();
 
 	int renderizar();
 

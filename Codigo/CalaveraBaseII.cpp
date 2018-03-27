@@ -98,7 +98,7 @@ void CalaveraBaseII::seguir() {
 	GLfloat diryNorm = diry / moduloDir;
 	pos[0] += (0.005f * velocidad)*dirxNorm;
 	pos[1] += (0.005f * velocidad)*diryNorm;
-	if (distancia(pos[0], pos[1], posP[0], posP[1]) <= tam * tam + a->tam * a->tam) {
+	if (distancia(pos[0], pos[1], posP[0], posP[1]) <= tam * tam + a->tam * a->tam && !a->modoDios) {
 		a->morir();
 	}
 }
@@ -116,6 +116,7 @@ bool CalaveraBaseII::vivo() {
 		}
 	}
 	if (vida <= 0) {
+		mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/calaveraI.mp3", NULL, 0, NULL);
 		shared_ptr<Gema> sg = make_shared<Gema>(Gema(pos[0], pos[1], pos[2], es, window,cam));
 		sg->vida = 0;
 		sg->tiempecito = clock();

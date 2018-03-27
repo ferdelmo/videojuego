@@ -6,6 +6,10 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <memory>
+
+#include <Windows.h>
+#include <mmsystem.h>
+#include <thread>
 #include <thread>
 
 
@@ -28,69 +32,70 @@ class Gema;
 class Fondo;
 
 class Escena {
-	private:
-		vector<shared_ptr<Bala>> balas;
-		vector<shared_ptr<CalaveraBase>> calaveras;
-		vector<shared_ptr<CalaveraBaseII>> calaverasII;
-		vector<shared_ptr<CalaveraBaseIII>> calaverasIII;
-		vector<shared_ptr<Daga>> dagas;
-		vector<shared_ptr<Gema>> gemas;
-		shared_ptr<Personaje> per;
-		shared_ptr<Fondo> fon;
+private:
+	vector<shared_ptr<Bala>> balas;
+	vector<shared_ptr<CalaveraBase>> calaveras;
+	vector<shared_ptr<CalaveraBaseII>> calaverasII;
+	vector<shared_ptr<CalaveraBaseIII>> calaverasIII;
+	vector<shared_ptr<Daga>> dagas;
+	vector<shared_ptr<Gema>> gemas;
+	shared_ptr<Personaje> per;
+	shared_ptr<Fondo> fon;
 
-		clock_t tFisica = 0, tMover = 0, tRender = 0;
-		int mFisica = 0, mMover = 0, mRender = 0, iFisica = 0, iMover = 0, iRender = 0;
-		bool fin = false;
+	clock_t tFisica = 0, tMover = 0, tRender = 0;
+	int mFisica = 0, mMover = 0, mRender = 0, iFisica = 0, iMover = 0, iRender = 0;
+	bool fin = false;
 
 
-	public:
-		int calavsMatadas = 0;
+public:
+	int calavsMatadas = 0;
 
-		Escena();
+	Escena();
 
-		void add(shared_ptr<Bala> b);
+	void add(shared_ptr<Bala> b);
 
-		void add(vector<shared_ptr<Bala>> bs);
+	void add(vector<shared_ptr<Bala>> bs);
 
-		void add(shared_ptr<CalaveraBase> cb);
+	void add(shared_ptr<CalaveraBase> cb);
 
-		void add(shared_ptr<CalaveraBaseII> cb);
+	void add(shared_ptr<CalaveraBaseII> cb);
 
-		void add(shared_ptr<CalaveraBaseIII> cb);
+	void add(shared_ptr<CalaveraBaseIII> cb);
 
-		void add(shared_ptr<Daga> d);
+	void add(shared_ptr<Daga> d);
 
-		void add(shared_ptr<Personaje> p);
+	void add(shared_ptr<Personaje> p);
 
-		void add(shared_ptr<Gema> g);
+	void add(shared_ptr<Gema> g);
 
-		void setFondo(shared_ptr<Fondo> f);
+	void setFondo(shared_ptr<Fondo> f);
 
-		void moverObjetos();
+	void moverObjetos();
 
-		GLfloat getLimites();
+	GLfloat getLimites();
 
-		vector<shared_ptr<Bala>> * getBalas();
+	vector<shared_ptr<Bala>> * getBalas();
 
-		vector<shared_ptr<CalaveraBase>> * getCalaveras();
+	vector<shared_ptr<CalaveraBase>> * getCalaveras();
 
-		vector<shared_ptr<CalaveraBaseII>> * getCalaverasII();
+	vector<shared_ptr<CalaveraBaseII>> * getCalaverasII();
 
-		vector<shared_ptr<CalaveraBaseIII>> * getCalaverasIII();
+	vector<shared_ptr<CalaveraBaseIII>> * getCalaverasIII();
 
-		vector<shared_ptr<Daga>> * getDagas();
+	vector<shared_ptr<Daga>> * getDagas();
 
-		vector<shared_ptr<Gema>> * getGemas();
+	vector<shared_ptr<Gema>> * getGemas();
 
-		shared_ptr<Personaje> getPer();
+	shared_ptr<Personaje> getPer();
 
-		void renderizar();
+	void renderizar();
 
-		void actualizarFisicas();
+	void actualizarFisicas();
 
-		void pararFisicas();
+	void pararFisicas();
+
+	void reset();
 
 };
 
 #endif // !ESCENA_H_
-

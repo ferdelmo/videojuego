@@ -6,6 +6,8 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <SOIL.h>
+#include <Windows.h>
+#include <mmsystem.h>
 
 #include "Renderizable.h"
 #include <random>

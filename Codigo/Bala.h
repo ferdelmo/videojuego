@@ -6,6 +6,9 @@
 #include <glm/glm.hpp>
 #include <SOIL.h>
 
+#include <Windows.h>
+#include <mmsystem.h>
+
 #include "Renderizable.h"
 
 #include <ctime>
@@ -39,6 +42,8 @@ class Bala : public Renderizable {
 		void morir();
 
 		void mover();
+
+		//void sonido(Bala& b);
 };
 
 

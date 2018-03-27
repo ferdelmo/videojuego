@@ -8,6 +8,7 @@
 #include <cmath>
 #include <ctime>
 #include <string>
+#include <thread>
 
 #include "LoadShader.h"
 #include "Camara.h"
