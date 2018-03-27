@@ -173,7 +173,6 @@ int main(int argc, char **argv) {
 	//Fondo f(window, "../DevilDaggers/videojuego/Codigo/muerte.png", 1, 1, &cam);
 	Fondo f(0, 0, 0.0f, window, "../DevilDaggers/videojuego/Codigo/muerte01.png", 2, 1, &cam);
 	Muerte muerte(window, &cam, &f);
-	
 	GLfloat texCoords[8] = {
 		0.0f, 0.0f,
 		0.0f, 1.0f,

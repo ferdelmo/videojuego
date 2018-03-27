@@ -40,13 +40,14 @@ public:
 	bool vivo = true;
 	bool escopetaGema = false;
 	bool disparando = false;
-	bool modoDios = false;
 
 	GLuint shaderProgramBala;
 
 	Escena * es;
+	bool modoDios = false;
 
 	int up, down, left, right;
+
 public:
 	//CONSTRUCTOR EN UNA POSICION ESPECIFICA
 	Personaje(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow * window, Camara * c);
