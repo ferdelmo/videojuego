@@ -22,11 +22,13 @@
 #include "Camara.h"
 #include "Partida.h"
 
+
 #include "MenuPrincipal.h"
 #include "Puntuaciones.h"
 #include "Opciones.h"
 #include "Creditos.h"
 #include "Muerte.h"
+#include "3D\Render3D.h"
 
 using namespace std;
 
@@ -133,7 +135,7 @@ int main(int argc, char **argv) {
 
 	cam.FoV = 60;
 	cam.View = glm::lookAt(
-		glm::vec3(0, 0, 3), // Camera is at (4,3,3), in World Space
+		glm::vec3(4, 3, 8), // Camera is at (4,3,3), in World Space
 		glm::vec3(0, 0, 0), // and looks at the origin
 		glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
 	);
@@ -169,7 +171,7 @@ int main(int argc, char **argv) {
 	Puntuaciones puntuaciones = Puntuaciones(window, &cam);
 	Creditos creditos = Creditos(window);
 	
-	int mode = 1;
+	int mode = 6;
 	//Fondo f(window, "../DevilDaggers/videojuego/Codigo/muerte.png", 1, 1, &cam);
 	Fondo f(0, 0, 0.0f, window, "../DevilDaggers/videojuego/Codigo/muerte01.png", 2, 1, &cam);
 	Muerte muerte(window, &cam, &f);
@@ -183,15 +185,23 @@ int main(int argc, char **argv) {
 	bool estabaMuerto = false;
 	//glfwSetInputMode(window, GLFW_STICKY_MOUSE_BUTTONS, 0);
 	clock_t puntuacion = clock(), finPunt = clock();
-	playSong(indice);
+	//playSong(indice);
 	clock_t tiempecito = clock();
 	int antigua = opciones.resolucion;
 	bool gameover = true;
 	float topPunt[10] = { 0,0,0,0,0,0,0,0,0,0 };
 	bool pulsado = false;
+
+
+	Obj3D plano;
+	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/plano.obj", plano.vertices, plano.uvs, plano.normals);
+	vector<Render3D> r3d;
+	r3d.push_back(Render3D(window, "../DevilDaggers/videojuego/Codigo/Shaders/3D.vert", "../DevilDaggers/videojuego/Codigo/Shaders/3D.frag", &cam, plano, { 0.11,0.11,0.11 },6));
+
+
 	while (!glfwWindowShouldClose(window))
 	{
-		if (estabaMuerto && es.getPer()->vivo) {
+		/*if (estabaMuerto && es.getPer()->vivo) {
 			mciSendString("pause ../DevilDaggers/videojuego/Codigo/Musica/gameOver.wav", NULL, 0, NULL);
 			estabaMuerto = false;
 			tiempecito = clock();
@@ -209,7 +219,7 @@ int main(int argc, char **argv) {
 			indice = rand() % 6 + 1;
 			playSong(indice);
 			//PlaySound(TEXT("../DevilDaggers/videojuego/Codigo/Musica/quack.wav"), NULL, SND_ASYNC);
-		}
+		}*/
 		//BORRA EL FONDO
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		if (mode == 1) {
@@ -437,6 +447,17 @@ int main(int argc, char **argv) {
 		}
 		else if (mode == 5) {
 			mode = creditos.renderizar();
+			//pinta lo que haya en los buffers
+			glfwSwapBuffers(window);
+			//lee los eventos
+			glfwPollEvents();
+		}
+		else if (mode == 6) {
+			mode = 6;
+			//cout << "RENDERIZANDO" << endl;
+			for (int i = 0; i < r3d.size(); i++) {
+				r3d[i].renderizar();
+			}
 			//pinta lo que haya en los buffers
 			glfwSwapBuffers(window);
 			//lee los eventos
