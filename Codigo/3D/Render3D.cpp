@@ -73,10 +73,14 @@ bool Render3D::renderizar() {
 	glUseProgram(shaderProgram);
 	glm::mat4 escalado =
 		glm::scale(glm::mat4(1.0f), glm::vec3(tam,tam,tam));
-	glm::mat4 traslacion = glm::translate(glm::mat4(1.0f),pos);
-	glm::mat4 rotacion = glm::rotate(glm::mat4(1.0f),
-		0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-	Model = traslacion * rotacion * escalado;
+	//glm::mat4 traslacion = glm::translate(glm::mat4(1.0f),pos);
+	
+	glm::mat4 rotation = glm::lookAt(
+		pos, // Camera is at (4,3,3), in World Space
+		pos + direccion, // and looks at the origin
+		glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+	);
+	Model = glm::inverse(rotation) * escalado;
 
 	glUniformMatrix4fv(ProjID, 1, GL_FALSE, &(cam->Projection[0][0]));
 	glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &Model[0][0]);

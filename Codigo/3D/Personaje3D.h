@@ -50,7 +50,6 @@ public:
 	Camara camaras[2];
 	int camaraActual = 0;
 
-	glm::vec3 direccion = { 0,0,0 };
 	double angHoriz=0, angVert=0;
 	double lastXpos=0, lastYpos=0;
 

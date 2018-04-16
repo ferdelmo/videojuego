@@ -58,7 +58,7 @@ Personaje3D::Personaje3D(glm::vec3 pos, Escena3D * es, GLFWwindow * window, Cama
 		100.0f             // Plano de corte lejano. Tan pequeño como se pueda.
 	);
 	camaras[0] = a;
-	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/cubo.obj", bala.vertices, bala.uvs, bala.normals);
+	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/ico.obj", bala.vertices, bala.uvs, bala.normals);
 }
 
 void Personaje3D::getPosition(GLfloat posi[]) {
@@ -190,7 +190,7 @@ void Personaje3D::controlesInFrame() {
 	a.FoV = 60;
 	a.View = glm::lookAt(
 		pos, // Camera is at (4,3,3), in World Space
-		pos + dirAux, // and looks at the origin
+		pos + direccion, // and looks at the origin
 		glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
 	);
 	a.Projection = glm::perspective(
