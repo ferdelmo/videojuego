@@ -28,8 +28,10 @@
 #include "Opciones.h"
 #include "Creditos.h"
 #include "Muerte.h"
+
 #include "3D\Render3D.h"
 #include "3D\Personaje3D.h"
+#include "3D\Escena3D.h"
 
 using namespace std;
 
@@ -199,9 +201,13 @@ int main(int argc, char **argv) {
 	vector<Render3D> r3d;
 	r3d.push_back(Render3D(window, "../DevilDaggers/videojuego/Codigo/Shaders/3D.vert", "../DevilDaggers/videojuego/Codigo/Shaders/3D.frag", &cam, plano, { 0.11,0.11,0.11 },6));
 	Obj3D cubo;
+	Escena3D es3D;
 	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/cubo.obj", cubo.vertices, cubo.uvs, cubo.normals);
-	Personaje3D per3D({0, 1, 0}, &es, window, &cam, cubo);
+	Personaje3D per3D({0, 1, 0}, &es3D, window, &cam, cubo);
+	es3D.add(make_shared<Personaje3D>(per3D));
 	//r3d.push_back(per3D);
+
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -459,11 +465,11 @@ int main(int argc, char **argv) {
 		else if (mode == 6) {
 			mode = 6;
 			//cout << "RENDERIZANDO" << endl;
-			per3D.renderizar();
-			per3D.mover();
 			for (int i = 0; i < r3d.size(); i++) {
 				r3d[i].renderizar();
 			}
+			es3D.renderizar();
+			es3D.moverObjetos();
 			//pinta lo que haya en los buffers
 			glfwSwapBuffers(window);
 			//lee los eventos

@@ -19,12 +19,13 @@
 
 using namespace std;
 
-class Escena;
+class Escena3D;
 
 class Personaje3D : public Render3D {
 public:
 	Obj3D plano;
 	const GLfloat velocidad = 2;
+	GLfloat sensibilidad = 20;
 	GLuint numGemas = 0;
 
 	//para disparar
@@ -41,7 +42,7 @@ public:
 
 	GLuint shaderProgramBala;
 
-	Escena * es;
+	Escena3D * es;
 	bool modoDios = false;
 
 	int up, down, left, right;
@@ -49,10 +50,14 @@ public:
 	Camara camaras[2];
 	int camaraActual = 0;
 
-	GLfloat lastXpos=0, lastYpos=0;
+	glm::vec3 direccion = { 0,0,0 };
+	double angHoriz=0, angVert=0;
+	double lastXpos=0, lastYpos=0;
+
+	Obj3D bala;
 public:
 	//CONSTRUCTOR EN UNA POSICION ESPECIFICA
-	Personaje3D(glm::vec3 pos, Escena * es, GLFWwindow * window, Camara * c, Obj3D obj);
+	Personaje3D(glm::vec3 pos, Escena3D * es, GLFWwindow * window, Camara * c, Obj3D obj);
 
 	void getPosition(GLfloat posi[]);
 

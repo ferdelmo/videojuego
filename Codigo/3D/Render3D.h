@@ -32,7 +32,7 @@ class Render3D {
 		const GLfloat pi = atan(1) * 4;
 		GLfloat tam = 0.1f;
 		glm::vec3 pos = { 0,0,0 };
-		GLfloat orientacion = pi / 2;
+		glm::vec3 direccion = { 0,0,0 };
 		//Para renderizar
 		GLuint shaderProgram;
 		GLuint VAO;

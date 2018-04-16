@@ -75,13 +75,14 @@ bool Render3D::renderizar() {
 		glm::scale(glm::mat4(1.0f), glm::vec3(tam,tam,tam));
 	glm::mat4 traslacion = glm::translate(glm::mat4(1.0f),pos);
 	glm::mat4 rotacion = glm::rotate(glm::mat4(1.0f),
-		orientacion, glm::vec3(0.0f, 1.0f, 0.0f));
+		0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 	Model = traslacion * rotacion * escalado;
+
 	glUniformMatrix4fv(ProjID, 1, GL_FALSE, &(cam->Projection[0][0]));
 	glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &Model[0][0]);
 	glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &cam->View[0][0]);
 
-	glm::vec3 lightPos = pos;
+	glm::vec3 lightPos = { 0,4,0 };
 	glUniform3f(LightID, lightPos.x, lightPos.y, lightPos.z);
 
 	glBindVertexArray(VAO); // une el VAO, que contiene toda la
