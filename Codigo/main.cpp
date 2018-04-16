@@ -29,6 +29,7 @@
 #include "Creditos.h"
 #include "Muerte.h"
 #include "3D\Render3D.h"
+#include "3D\Personaje3D.h"
 
 using namespace std;
 
@@ -197,7 +198,10 @@ int main(int argc, char **argv) {
 	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/plano.obj", plano.vertices, plano.uvs, plano.normals);
 	vector<Render3D> r3d;
 	r3d.push_back(Render3D(window, "../DevilDaggers/videojuego/Codigo/Shaders/3D.vert", "../DevilDaggers/videojuego/Codigo/Shaders/3D.frag", &cam, plano, { 0.11,0.11,0.11 },6));
-
+	Obj3D cubo;
+	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/cubo.obj", cubo.vertices, cubo.uvs, cubo.normals);
+	Personaje3D per3D({0, 1, 0}, &es, window, &cam, cubo);
+	//r3d.push_back(per3D);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -455,6 +459,8 @@ int main(int argc, char **argv) {
 		else if (mode == 6) {
 			mode = 6;
 			//cout << "RENDERIZANDO" << endl;
+			per3D.renderizar();
+			per3D.mover();
 			for (int i = 0; i < r3d.size(); i++) {
 				r3d[i].renderizar();
 			}

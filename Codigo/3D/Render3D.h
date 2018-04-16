@@ -29,9 +29,9 @@ class Render3D {
 	public:
 		// propiedades del personaje
 
-		const double pi = atan(1) * 4;
+		const GLfloat pi = atan(1) * 4;
 		GLfloat tam = 0.1f;
-		GLfloat pos[3] = { 0,0,0 };
+		glm::vec3 pos = { 0,0,0 };
 		GLfloat orientacion = pi / 2;
 		//Para renderizar
 		GLuint shaderProgram;
@@ -47,9 +47,11 @@ class Render3D {
 		vector< glm::vec2 > uvs;
 		vector< glm::vec3 > normals;
 
+		glm::mat4 Model = glm::mat4(1.0f);
+
 		GLFWwindow* window;
 
-		GLuint MatrixID;
+		GLuint ProjID;
 		GLuint ModelMatrixID;
 		GLuint ViewMatrixID;
 		GLuint LightID;

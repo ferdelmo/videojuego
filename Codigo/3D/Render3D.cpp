@@ -50,7 +50,7 @@ Render3D::Render3D(GLFWwindow * window, string vertSha, string fragSha, Camara *
 	glBindVertexArray(0);
 
 	shaderProgram = LoadShaders(vertSha.c_str(), fragSha.c_str());
-	MatrixID = glGetUniformLocation(shaderProgram, "MVP");
+	ProjID = glGetUniformLocation(shaderProgram, "P");
 	ViewMatrixID = glGetUniformLocation(shaderProgram, "V");
 	ModelMatrixID = glGetUniformLocation(shaderProgram, "M");
 	LightID = glGetUniformLocation(shaderProgram, "LightPosition_worldspace");
@@ -58,15 +58,6 @@ Render3D::Render3D(GLFWwindow * window, string vertSha, string fragSha, Camara *
 }
 
 bool Render3D::renderizar() {
-
-	vector<glm::vec3> vertRe(vertices);
-	for (int i = 0; i < vertices.size(); i++) {
-		glm::vec3 aux = vertices[i];
-		aux.x = (aux.x + pos[0])*tam;
-		aux.y = (aux.y + pos[1])*tam;
-		aux.z = (aux.z + pos[2])*tam;
-		vertRe[i] = aux;
-	}
 	/*glDepthMask(GL_FALSE);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
@@ -80,12 +71,17 @@ bool Render3D::renderizar() {
 	glEnable(GL_CULL_FACE);
 
 	glUseProgram(shaderProgram);
-
-	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &(cam->MVP[0][0]));
-	glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &cam->Model[0][0]);
+	glm::mat4 escalado =
+		glm::scale(glm::mat4(1.0f), glm::vec3(tam,tam,tam));
+	glm::mat4 traslacion = glm::translate(glm::mat4(1.0f),pos);
+	glm::mat4 rotacion = glm::rotate(glm::mat4(1.0f),
+		orientacion, glm::vec3(0.0f, 1.0f, 0.0f));
+	Model = traslacion * rotacion * escalado;
+	glUniformMatrix4fv(ProjID, 1, GL_FALSE, &(cam->Projection[0][0]));
+	glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &Model[0][0]);
 	glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &cam->View[0][0]);
 
-	glm::vec3 lightPos = { 4,3,8 };
+	glm::vec3 lightPos = pos;
 	glUniform3f(LightID, lightPos.x, lightPos.y, lightPos.z);
 
 	glBindVertexArray(VAO); // une el VAO, que contiene toda la
@@ -96,7 +92,7 @@ bool Render3D::renderizar() {
 	//bindea el buffer
 	glBindBuffer(GL_ARRAY_BUFFER, points_VBO);
 	//lo leena con los puntos
-	glBufferData(GL_ARRAY_BUFFER, vertRe.size() * sizeof(glm::vec3), &vertRe[0], GL_STATIC_DRAW);
+	//glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
 	glVertexAttribPointer(
 		0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
 		3,                  // size
