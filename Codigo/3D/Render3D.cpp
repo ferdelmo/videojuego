@@ -15,9 +15,8 @@ Render3D::Render3D(GLFWwindow * window, string vertSha, string fragSha, Camara *
 
 	for (int i = 0; i < vertices.size(); i++) {
 		colors.push_back(color);
-
 	}
-	cout << vertices.size() << endl;
+	//cout << vertices.size() << endl;
 	//calcula los puntos del triangulo segun la orientacio}
 	//VAO
 	glGenVertexArrays(1, &VAO);

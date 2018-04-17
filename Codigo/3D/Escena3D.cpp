@@ -1,7 +1,9 @@
 #include "Escena3D.h"
 
 #include "Personaje3D.h"
+#include "CalaveraBase3D.h"
 #include "Bala3D.h"
+#include "Gema3D.h"
 
 using namespace std;
 
@@ -17,8 +19,24 @@ void Escena3D::add(shared_ptr<Bala3D> b) {
 	balas.push_back(b);
 }
 
+void Escena3D::add(shared_ptr<CalaveraBase3D> c) {
+	calaveras.push_back(c);
+}
+
+void Escena3D::add(shared_ptr<Gema3D> g) {
+	gemas.push_back(g);
+}
+
 void Escena3D::add(vector<shared_ptr<Bala3D>> bs) {
 	balas.insert(balas.end(), bs.begin(), bs.end());
+}
+
+vector<shared_ptr<Bala3D>>* Escena3D::getBalas() {
+	return &balas;
+}
+
+vector<shared_ptr<Gema3D>>* Escena3D::getGemas() {
+	return &gemas;
 }
 
 void Escena3D::renderizar() {
@@ -33,6 +51,26 @@ void Escena3D::renderizar() {
 			i++;
 		}
 	}
+	i = 0;
+	while (i < calaveras.size()) {
+		bool seguir = calaveras[i]->renderizar();
+		if (!seguir) {
+			calaveras.erase(calaveras.begin() + i);
+		}
+		else {
+			i++;
+		}
+	}
+	i = 0;
+	while (i < gemas.size()) {
+		bool seguir = gemas[i]->renderizar();
+		if (!seguir) {
+			gemas.erase(gemas.begin() + i);
+		}
+		else {
+			i++;
+		}
+	}
 	//if (per->vivo || per->modoDios) {
 		bool perso = per->renderizar();
 	//}
@@ -41,6 +79,12 @@ void Escena3D::renderizar() {
 void Escena3D::moverObjetos() {
 	for (int i = 0; i < balas.size(); i++) {
 		balas[i]->mover();
+	}
+	for (int i = 0; i < calaveras.size(); i++) {
+		calaveras[i]->mover();
+	}
+	for (int i = 0; i < gemas.size(); i++) {
+		gemas[i]->mover();
 	}
 	per->mover();
 }

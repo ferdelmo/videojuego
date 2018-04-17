@@ -13,16 +13,23 @@
 #include <thread>
 
 
+
 using namespace std;
 
 class Personaje3D;
 
 class Bala3D;
 
+class CalaveraBase3D;
+
+class Gema3D;
+
 class Escena3D {
-	private:
+	public:
 		shared_ptr<Personaje3D> per;
 		vector<shared_ptr<Bala3D>> balas;
+		vector<shared_ptr<CalaveraBase3D>> calaveras;
+		vector<shared_ptr<Gema3D>> gemas;
 	public:
 		int calavsMatadas = 0;
 
@@ -32,7 +39,15 @@ class Escena3D {
 
 		void add(shared_ptr<Bala3D> b);
 
+		void add(shared_ptr<Gema3D> g);
+
+		void add(shared_ptr<CalaveraBase3D> c);
+
 		void add(vector<shared_ptr<Bala3D>> bs);
+
+		vector<shared_ptr<Bala3D>>* getBalas();
+
+		vector<shared_ptr<Gema3D>>* getGemas();
 
 		void renderizar();
 

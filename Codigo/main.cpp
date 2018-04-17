@@ -30,6 +30,7 @@
 #include "Muerte.h"
 
 #include "3D\Render3D.h"
+#include "3D\CalaveraBase3D.h"
 #include "3D\Personaje3D.h"
 #include "3D\Escena3D.h"
 
@@ -205,6 +206,13 @@ int main(int argc, char **argv) {
 	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/cubo.obj", cubo.vertices, cubo.uvs, cubo.normals);
 	Personaje3D per3D({0, 1, 0}, &es3D, window, &cam, cubo);
 	es3D.add(make_shared<Personaje3D>(per3D));
+
+	CalaveraBase3D cal1({ 1, 1, 1 }, { 0, 0, 0 }, &es3D, window, &cam, cubo, 1);
+	es3D.add(make_shared<CalaveraBase3D>(cal1));
+	CalaveraBase3D cal2({ 1, 1, 1 }, { 0,0,0 }, &es3D, window, &cam, cubo, 2);
+	es3D.add(make_shared<CalaveraBase3D>(cal2));
+	CalaveraBase3D cal3({ 1, 1, 1 }, { 0,0,0 }, &es3D, window, &cam, cubo, 3);
+	es3D.add(make_shared<CalaveraBase3D>(cal3));
 	//r3d.push_back(per3D);
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
