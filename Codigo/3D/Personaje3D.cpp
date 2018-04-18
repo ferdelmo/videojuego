@@ -68,7 +68,7 @@ void Personaje3D::getPosition(GLfloat posi[]) {
 }
 
 void Personaje3D::addGema() {
-	mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/gema.wav", NULL, 0, NULL);
+	//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/gema.wav", NULL, 0, NULL);
 	this->numGemas++;
 }
 //FUNCION AUXILIAR CONTROLES POR INTERRUPCION TECLAS

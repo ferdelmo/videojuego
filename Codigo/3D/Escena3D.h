@@ -24,12 +24,15 @@ class CalaveraBase3D;
 
 class Gema3D;
 
+class Daga3D;
+
 class Escena3D {
 	public:
 		shared_ptr<Personaje3D> per;
 		vector<shared_ptr<Bala3D>> balas;
 		vector<shared_ptr<CalaveraBase3D>> calaveras;
 		vector<shared_ptr<Gema3D>> gemas;
+		vector<shared_ptr<Daga3D>> dagas;
 	public:
 		int calavsMatadas = 0;
 
@@ -43,11 +46,15 @@ class Escena3D {
 
 		void add(shared_ptr<CalaveraBase3D> c);
 
+		void add(shared_ptr<Daga3D> D);
+
 		void add(vector<shared_ptr<Bala3D>> bs);
 
 		vector<shared_ptr<Bala3D>>* getBalas();
 
 		vector<shared_ptr<Gema3D>>* getGemas();
+
+		vector<shared_ptr<Daga3D>>* getDagas();
 
 		void renderizar();
 

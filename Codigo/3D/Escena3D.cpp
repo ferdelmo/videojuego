@@ -4,6 +4,7 @@
 #include "CalaveraBase3D.h"
 #include "Bala3D.h"
 #include "Gema3D.h"
+#include "Daga3D.h"
 
 using namespace std;
 
@@ -27,6 +28,10 @@ void Escena3D::add(shared_ptr<Gema3D> g) {
 	gemas.push_back(g);
 }
 
+void Escena3D::add(shared_ptr<Daga3D> d) {
+	dagas.push_back(d);
+
+}
 void Escena3D::add(vector<shared_ptr<Bala3D>> bs) {
 	balas.insert(balas.end(), bs.begin(), bs.end());
 }
@@ -39,6 +44,10 @@ vector<shared_ptr<Gema3D>>* Escena3D::getGemas() {
 	return &gemas;
 }
 
+vector<shared_ptr<Daga3D>>* Escena3D::getDagas() {
+	return &dagas;
+
+}
 void Escena3D::renderizar() {
 	int i = 0;
 	clock_t tieempo = clock();
@@ -71,6 +80,16 @@ void Escena3D::renderizar() {
 			i++;
 		}
 	}
+	i = 0;
+	while (i < dagas.size()) {
+		bool seguir = dagas[i]->renderizar();
+		if (!seguir) {
+			dagas.erase(dagas.begin() + i);
+		}
+		else {
+			i++;
+		}
+	}
 	//if (per->vivo || per->modoDios) {
 		bool perso = per->renderizar();
 	//}
@@ -85,6 +104,9 @@ void Escena3D::moverObjetos() {
 	}
 	for (int i = 0; i < gemas.size(); i++) {
 		gemas[i]->mover();
+	}
+	for (int i = 0; i < dagas.size(); i++) {
+		dagas[i]->mover();
 	}
 	per->mover();
 }

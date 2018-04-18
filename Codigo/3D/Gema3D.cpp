@@ -47,6 +47,7 @@ bool Gema3D::colisionBala() {
 		if (glm::length(pos - b->at(i)->pos) < tam + b->at(i)->tam) {
 			vida -= b->at(i)->danyo;
 			b->erase(b->begin() + i);
+			cout << "colision " << endl;
 		}
 		else {
 			i++;
@@ -60,7 +61,7 @@ bool Gema3D::colisionBala() {
 
 void Gema3D::seguirPersonaje() {
 	shared_ptr<Personaje3D> a = es->per;
-	glm::vec3 rotacion = { 0, 0, -1 };
+	this->direccion = direccion;
 	if (!a->getPulsado()) {
 		glm::vec3 posP = es->per->pos;
 		glm::vec3 vecDir = posP - pos; // vector movimiento

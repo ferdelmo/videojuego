@@ -40,6 +40,7 @@ class CalaveraBase3D : public Render3D {
 		//para generar numeros aleatorios
 		mt19937 gen;
 		uniform_real_distribution<float> distribution;
+		uniform_real_distribution<float> distribution2;
 
 		Escena3D * es;
 

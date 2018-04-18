@@ -32,6 +32,7 @@ CalaveraBase3D::CalaveraBase3D(glm::vec3 pos, glm::vec3 dir, Escena3D * es, GLFW
 
 	};
 	distribution = uniform_real_distribution<float>(-10, 10);
+	distribution2 = uniform_real_distribution<float>(tam/2.0, es->per->tam*1.5);
 	random_device rd;
 	// Initialize Mersenne Twister pseudo-random number generator
 	gen = mt19937(rd());
@@ -98,7 +99,7 @@ void CalaveraBase3D::seguir() {
 		if (llegar) {
 			llegar = false;
 			dir[0] = distribution(gen);
-			dir[1] = abs(distribution(gen));
+			dir[1] = distribution2(gen);
 			dir[2] = distribution(gen);
 		}
 		glm::vec3 vecDir = dir - pos;
@@ -131,7 +132,7 @@ bool CalaveraBase3D::vivo() {
 		Obj3D cubo;
 		Escena3D es3D;
 		Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/cubo.obj", cubo.vertices, cubo.uvs, cubo.normals);
-		shared_ptr<Gema3D> sg = make_shared<Gema3D>(Gema3D(pos, {-1, -1,0}, es, window, cam, cubo));
+		shared_ptr<Gema3D> sg = make_shared<Gema3D>(Gema3D(pos, { 1,1,0 }, es, window, cam, cubo));
 		sg->vida = 0;
 		sg->tiempecito = clock();
 		es->add(sg);

@@ -1,5 +1,3 @@
-#include "stdafx.h"
-
 #include "text2D.h"
 #include "LoadShader.h"
 
