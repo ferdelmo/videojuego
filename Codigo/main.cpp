@@ -199,10 +199,11 @@ int main(int argc, char **argv) {
 	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/plano.obj", plano.vertices, plano.uvs, plano.normals);
 	vector<Render3D> r3d;
 	r3d.push_back(Render3D(window, "../DevilDaggers/videojuego/Codigo/Shaders/3D.vert", "../DevilDaggers/videojuego/Codigo/Shaders/3D.frag", &cam, plano, { 0.11,0.11,0.11 },6));
-	Obj3D cubo;
+	Obj3D cubo,perObj;
 	Escena3D es3D;
 	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/cubo.obj", cubo.vertices, cubo.uvs, cubo.normals);
-	Personaje3D per3D({0, 1, 0}, &es3D, window, &cam, cubo);
+	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/arma.obj", perObj.vertices, perObj.uvs, perObj.normals);
+	Personaje3D per3D({0, 1, 0}, &es3D, window, &cam, perObj);
 	es3D.add(make_shared<Personaje3D>(per3D));
 
 	CalaveraBase3D cal1({ 1, 1, 1 }, { 0, 0, 0 }, &es3D, window, &cam, cubo, 1);
@@ -213,7 +214,7 @@ int main(int argc, char **argv) {
 	es3D.add(make_shared<CalaveraBase3D>(cal3));
 	//r3d.push_back(per3D);
 	Daga3D daga1({ 10,10,10 }, { 0,0,0 }, &es3D, window, &cam, cubo, 1);
-	es3D.add(make_shared<Daga3D>(daga1));
+	//es3D.add(make_shared<Daga3D>(daga1));
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
@@ -468,6 +469,7 @@ int main(int argc, char **argv) {
 			glfwPollEvents();
 		}
 		else if (mode == 6) {
+			inicio = clock();
 			mode = 6;
 			//cout << "RENDERIZANDO" << endl;
 			for (int i = 0; i < r3d.size(); i++) {
@@ -479,6 +481,10 @@ int main(int argc, char **argv) {
 			glfwSwapBuffers(window);
 			//lee los eventos
 			glfwPollEvents();
+			int ms = (1000.0f / 60.0f) - (clock() - inicio) / (CLOCKS_PER_SEC / 1000);
+			if (ms > 0) {
+				this_thread::sleep_for(chrono::milliseconds(ms));
+			}
 		}
 		else {
 			glfwSetWindowShouldClose(window, GLFW_TRUE);

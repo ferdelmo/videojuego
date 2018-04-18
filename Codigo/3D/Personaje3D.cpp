@@ -29,7 +29,7 @@ Personaje3D::Personaje3D(glm::vec3 pos, Escena3D * es, GLFWwindow * window, Cama
 	//prepara las balas
 	ultimaBala = clock();
 	//numeros aleatorios
-	distribution = uniform_real_distribution<float>(0, 1);
+	distribution = uniform_real_distribution<float>(-1, 1);
 	random_device rd;
 	// Initialize Mersenne Twister pseudo-random number generator
 	gen = mt19937(rd());
@@ -58,7 +58,7 @@ Personaje3D::Personaje3D(glm::vec3 pos, Escena3D * es, GLFWwindow * window, Cama
 		100.0f             // Plano de corte lejano. Tan pequeño como se pueda.
 	);
 	camaras[0] = a;
-	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/ico.obj", bala.vertices, bala.uvs, bala.normals);
+	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/bala.obj", bala.vertices, bala.uvs, bala.normals);
 }
 
 void Personaje3D::getPosition(GLfloat posi[]) {
@@ -71,31 +71,6 @@ void Personaje3D::addGema() {
 	//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/gema.wav", NULL, 0, NULL);
 	this->numGemas++;
 }
-//FUNCION AUXILIAR CONTROLES POR INTERRUPCION TECLAS
-void Personaje3D::controlesP(GLFWwindow* window, int key, int scancode, int action, int mods) {
-	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
-		glfwSetWindowShouldClose(window, GLFW_TRUE);
-	}
-	/*else if (key == GLFW_KEY_W && state==GLFW_PRESS) {
-	pos[1] += velocidad*0.01f;
-	}
-	else if (key == GLFW_KEY_A && state == GLFW_PRESS) {
-	pos[0] -= velocidad*0.01f;
-	}
-	else if (key == GLFW_KEY_S && state == GLFW_PRESS) {
-	pos[1] -= velocidad* 0.01f;
-	}
-	else if (key == GLFW_KEY_D && state == GLFW_PRESS) {
-	pos[0] += velocidad* 0.01f;
-	}*/
-
-}
-//FUNCION AUXILIAR CONTROLES POR INTERRUPCION raton
-void Personaje3D::mouseP(GLFWwindow* window, int button, int action, int mods) {
-	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-		escopetazo();
-	}
-}
 
 void Personaje3D::morir() {
 	cout << "muerto" << endl;
@@ -104,24 +79,26 @@ void Personaje3D::morir() {
 }
 //dispara un escopetazo
 void Personaje3D::escopetazo() {
-	int n = 3;
+	int n = 8;
 	//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/disparo.wav", NULL, 0, NULL);
 	//cout << "ESCOPETAZO " << endl;
-	/*vector<shared_ptr<Bala>> bs = vector<shared_ptr<Bala>>(n);
+	vector<shared_ptr<Bala3D>> bs = vector<shared_ptr<Bala3D>>(n);
 	for (int i = 0; i < n; i++) {
-		float ale = distribution(gen);
-		float angle = (ale*pi / 6) - pi / 12;
-		GLfloat punto1[3] = { pos[0],pos[1] + tam,pos[2] + ale / 10 };
-		GLfloat punto1a[3] = { 0,0,0 };
+		glm::vec3 auxDir = { distribution(gen), distribution(gen), distribution(gen)};
+		auxDir = direccion + auxDir * 0.2f;
+		auxDir = auxDir / glm::length(auxDir);
 		//rotatePoint(pos, punto1, orientacion, punto1a);
-		bs[i] = make_shared<Bala3D>(Bala3D(punto1a, orientacion + pi / 2 + angle, window, cam, shaderProgramBala, log10(numGemas) + 1));
+		bs[i] = make_shared<Bala3D>(Bala3D(pos + direccion * 0.5f, auxDir, window, cam, bala, log10(numGemas) + 1));
 	}
-	es->add(bs);*/
+	es->add(bs);
 }
 
 //dispara una bala
 void Personaje3D::lanzarBala() {
-	es->add(make_shared<Bala3D>(Bala3D(pos + direccion * 0.1f , direccion, window, cam, bala, log10(numGemas) + 1)));
+	glm::vec3 auxDir = { distribution(gen), distribution(gen), distribution(gen) };
+	auxDir = direccion + auxDir * 0.05f;
+	auxDir = auxDir / glm::length(auxDir);
+	es->add(make_shared<Bala3D>(Bala3D(pos + direccion * 0.5f , auxDir, window, cam, bala, log10(numGemas) + 1)));
 }
 
 void Personaje3D::setWindow(GLFWwindow* window) {
@@ -175,7 +152,6 @@ void Personaje3D::controlesInFrame() {
 		pos += glm::normalize(glm::cross(direccion,
 			{ 0,1,0 })) * velocidad * 0.01f;
 	}
-	pos.y = 1;
 	/*state = glfwGetKey(window, GLFW_KEY_Q);
 	if (state == GLFW_PRESS) {
 		orientacion += pi / 60 / 2;
@@ -186,6 +162,8 @@ void Personaje3D::controlesInFrame() {
 	}*/
 
 	//CONTROL CAMARA
+
+	pos.y = 1;
 	Camara a;
 	a.FoV = 60;
 	a.View = glm::lookAt(
@@ -200,7 +178,8 @@ void Personaje3D::controlesInFrame() {
 		100.0f             // Plano de corte lejano. Tan pequeño como se pueda.
 	);
 	camaras[0] = a;
-	
+
+	pos.y = 0.5f;
 	//mira si se ha disparado y ha pasado el tiempo de cadencia
 	state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
 	int stateR = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);

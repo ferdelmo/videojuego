@@ -17,7 +17,7 @@ using namespace std;
 
 //Genera una bala en la posicion inicio con orientacion o
 Bala3D::Bala3D(glm::vec3 pos, glm::vec3 dir, GLFWwindow* window, Camara * c, Obj3D obj, int nivel)
-	: Render3D(window,"../DevilDaggers/videojuego/Codigo/Shaders/3D.vert", "../DevilDaggers/videojuego/Codigo/Shaders/3D.frag", c, obj, { 0,1,1 }, 0.15){
+	: Render3D(window,"../DevilDaggers/videojuego/Codigo/Shaders/3D.vert", "../DevilDaggers/videojuego/Codigo/Shaders/3D.frag", c, obj, { 0.3f,0.1f,0.1f }, 0.1){
 	this->window = window;
 	this->pos = pos;
 	direccion = dir;

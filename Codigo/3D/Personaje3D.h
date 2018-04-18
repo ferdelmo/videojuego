@@ -24,7 +24,7 @@ class Escena3D;
 class Personaje3D : public Render3D {
 public:
 	Obj3D plano;
-	const GLfloat velocidad = 2;
+	const GLfloat velocidad = 5;
 	GLfloat sensibilidad = 20;
 	GLuint numGemas = 0;
 
@@ -61,10 +61,7 @@ public:
 	void getPosition(GLfloat posi[]);
 
 	void addGema();
-	//FUNCION AUXILIAR CONTROLES POR INTERRUPCION TECLAS
-	void controlesP(GLFWwindow* window, int key, int scancode, int action, int mods);
-	//FUNCION AUXILIAR CONTROLES POR INTERRUPCION raton
-	void mouseP(GLFWwindow* window, int button, int action, int mods);
+
 	void morir();
 	//dispara un escopetazo
 	void escopetazo();

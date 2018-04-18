@@ -20,7 +20,7 @@ class Camara;
 class Bala3D : public Render3D {
 	public:
 		//Propiedades de la bala
-		float velocidad = 20;
+		float velocidad = 60;
 
 		int danyo = 5;
 		clock_t inicio;

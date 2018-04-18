@@ -118,17 +118,17 @@ class Render3D {
 					int matches = 9;
 					file >> vertexIndex[0];
 					file.ignore(100, '/');
-					file >> uvIndex[0]; 
+					//file >> uvIndex[0]; 
 					file.ignore(100, '/');
 					file >> normalIndex[0]; 
 					file >> vertexIndex[1];
 					file.ignore(100, '/');
-					file >> uvIndex[1];
+					//file >> uvIndex[1];
 					file.ignore(100, '/');
 					file >> normalIndex[1];
 					file >> vertexIndex[2];
 					file.ignore(100, '/');
-					file >> uvIndex[2];
+					//file >> uvIndex[2];
 					file.ignore(100, '/');
 					file >> normalIndex[2];
 					if (matches != 9) {
