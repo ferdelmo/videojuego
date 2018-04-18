@@ -26,7 +26,7 @@ class Gema3D;
 
 class CalaveraBase3D : public Render3D {
 	public:
-		GLfloat velocidad = 3.5;
+		GLfloat velocidad = 4;
 		GLfloat velRot = pi / 10;
 		bool llegar = false;
 		int vida = 35;

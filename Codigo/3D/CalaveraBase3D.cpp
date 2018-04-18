@@ -31,15 +31,15 @@ CalaveraBase3D::CalaveraBase3D(glm::vec3 pos, glm::vec3 dir, Escena3D * es, GLFW
 		1.0f, 1.0f
 
 	};
-	distribution = uniform_real_distribution<float>(-10, 10);
+	distribution = uniform_real_distribution<float>(-1, 1);
 	distribution2 = uniform_real_distribution<float>(tam/2.0, es->per->tam*1.5);
 	random_device rd;
 	// Initialize Mersenne Twister pseudo-random number generator
 	gen = mt19937(rd());
 
-	dir[0] = distribution(gen);
+	/*dir[0] = distribution(gen);
 	dir[1] = distribution(gen);
-	dir[2] = abs(distribution(gen));
+	dir[2] = abs(distribution(gen));*/
 	direccion = dir;
 	/*int nivelPer = log10(es->getPer()->numGemas);
 	if (nivelPer + 1 <= 1) {
@@ -70,32 +70,45 @@ CalaveraBase3D::CalaveraBase3D(glm::vec3 pos, glm::vec3 dir, Escena3D * es, GLFW
 		}
 		vida = 100;
 	}
+
+	velRot = 0.085+distribution(gen)*0.005;
+	velocidad = velocidad + distribution(gen)*0.5;
+	direccion = { distribution(gen),abs(distribution(gen)),distribution(gen) };
+	cout << "{ " << direccion.x << ", " << direccion.y << ", " << direccion.z << " }" << endl;
+	direccion = direccion / length(direccion);
 }
 
 void CalaveraBase3D::seguir() {
 	glm::vec3 posP = es->per->pos;
-	if (vida <= 25) {
-		if (double(clock() - tiempecito) / CLOCKS_PER_SEC >= tiempoSeguir || llegar) {
+	cout << "{ " << direccion.x << ", " << direccion.y << ", " << direccion.z << " }" << endl;
+	if (nivel == 1) { //NORMALES
+		/*if (double(clock() - tiempecito) / CLOCKS_PER_SEC >= tiempoSeguir || llegar) {
 			dir = posP;
 			tiempecito = clock();
 			tiempoSeguir = abs(distribution(gen))*2.0;
 			llegar = false;
+		}*/
+		glm::vec3 vecDir = posP - pos; // vector movimiento
+		vecDir = vecDir / glm::length(vecDir);
+		vecDir = glm::mix(vecDir,direccion,0.9+velRot);
+		if (pos.y < 0.5 && vecDir.y < 0) {
+			vecDir.y = abs(vecDir.y);
 		}
-		glm::vec3 vecDir = dir - pos; // vector movimiento
 		vecDir = vecDir / glm::length(vecDir); //normalizar vector
-		pos += (0.005f * velocidad) * vecDir;
-		if (glm::length(pos - dir) <= tam) {
+		pos += (0.01f * velocidad) * vecDir;
+		/*if (glm::length(pos - dir) <= tam) {
 			llegar = true;
-		}
+		}*/
 		direccion = vecDir;
 	}
-	else if (vida > 25 && vida <= 50) {
+	else if (nivel == 2) { //SIGUEN PERFECTO
 		glm::vec3 vecDir = posP - pos; // vector movimiento
 		vecDir = vecDir / glm::length(vecDir); //normalizar vector
-		pos += (0.005f * velocidad) * vecDir;
+		pos += (0.01f * velocidad) * vecDir;
 		direccion = vecDir;
 	}
 	else{
+		// A SU PUTA BOLA
 		if (llegar) {
 			llegar = false;
 			dir[0] = distribution(gen);

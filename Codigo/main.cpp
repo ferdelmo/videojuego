@@ -207,14 +207,14 @@ int main(int argc, char **argv) {
 	es3D.add(make_shared<Personaje3D>(per3D));
 
 	CalaveraBase3D cal1({ 1, 1, 1 }, { 0, 0, 0 }, &es3D, window, &cam, cubo, 1);
-	es3D.add(make_shared<CalaveraBase3D>(cal1));
-	CalaveraBase3D cal2({ 1, 1,1 }, { 0,0,0 }, &es3D, window, &cam, cubo, 2);
+	//es3D.add(make_shared<CalaveraBase3D>(cal1));
+	/*CalaveraBase3D cal2({ 1, 1,1 }, { 0,0,0 }, &es3D, window, &cam, cubo, 2);
 	es3D.add(make_shared<CalaveraBase3D>(cal2));
 	CalaveraBase3D cal3({ 1, 1, 1 }, { 0,0,0 }, &es3D, window, &cam, cubo, 3);
-	es3D.add(make_shared<CalaveraBase3D>(cal3));
+	es3D.add(make_shared<CalaveraBase3D>(cal3));*/
 	//r3d.push_back(per3D);
 	Daga3D daga1({ 10,10,10 }, { 0,0,0 }, &es3D, window, &cam, cubo, 1);
-	//es3D.add(make_shared<Daga3D>(daga1));
+	es3D.add(make_shared<Daga3D>(daga1));
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
@@ -472,7 +472,10 @@ int main(int argc, char **argv) {
 			inicio = clock();
 			mode = 6;
 			//cout << "RENDERIZANDO" << endl;
+			glm::vec3 light = { 0,4,0 };
+			light = light + es3D.per->pos;
 			for (int i = 0; i < r3d.size(); i++) {
+				r3d[i].lightPos = light;
 				r3d[i].renderizar();
 			}
 			es3D.renderizar();

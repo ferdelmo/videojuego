@@ -51,7 +51,10 @@ vector<shared_ptr<Daga3D>>* Escena3D::getDagas() {
 void Escena3D::renderizar() {
 	int i = 0;
 	clock_t tieempo = clock();
+	glm::vec3 light = { 0,4,0 };
+	light = light + per->pos;
 	while (i < balas.size()) {
+		balas[i]->lightPos = light;
 		bool seguir = balas[i]->renderizar();
 		if (!seguir) {
 			balas.erase(balas.begin() + i);
@@ -62,6 +65,7 @@ void Escena3D::renderizar() {
 	}
 	i = 0;
 	while (i < calaveras.size()) {
+		calaveras[i]->lightPos = light;
 		bool seguir = calaveras[i]->renderizar();
 		if (!seguir) {
 			calaveras.erase(calaveras.begin() + i);
@@ -72,6 +76,7 @@ void Escena3D::renderizar() {
 	}
 	i = 0;
 	while (i < gemas.size()) {
+		gemas[i]->lightPos = light;
 		bool seguir = gemas[i]->renderizar();
 		if (!seguir) {
 			gemas.erase(gemas.begin() + i);
@@ -82,6 +87,7 @@ void Escena3D::renderizar() {
 	}
 	i = 0;
 	while (i < dagas.size()) {
+		dagas[i]->lightPos = light;
 		bool seguir = dagas[i]->renderizar();
 		if (!seguir) {
 			dagas.erase(dagas.begin() + i);
@@ -91,6 +97,7 @@ void Escena3D::renderizar() {
 		}
 	}
 	//if (per->vivo || per->modoDios) {
+	per->lightPos = light;
 		bool perso = per->renderizar();
 	//}
 }

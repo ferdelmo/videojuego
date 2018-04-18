@@ -85,7 +85,6 @@ bool Render3D::renderizar() {
 	glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &Model[0][0]);
 	glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &cam->View[0][0]);
 
-	glm::vec3 lightPos = { 0,4,0 };
 	glUniform3f(LightID, lightPos.x, lightPos.y, lightPos.z);
 
 	glBindVertexArray(VAO); // une el VAO, que contiene toda la

@@ -71,7 +71,7 @@ Daga3D::Daga3D(glm::vec3 pos, glm::vec3 dir, Escena3D * es, GLFWwindow* window, 
 	
 	ultimaGen = clock();
 
-	tiempecito = clock();
+	tiempecito = clock()+1;
 }
 
 void Daga3D::GenerarCalaveras(int n) {

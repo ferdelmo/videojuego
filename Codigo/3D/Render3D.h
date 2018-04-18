@@ -33,6 +33,7 @@ class Render3D {
 		GLfloat tam = 0.1f;
 		glm::vec3 pos = { 0,0,0 };
 		glm::vec3 direccion = { 1,0,0 };
+		glm::vec3 lightPos = { 0,0,0 };
 		//Para renderizar
 		GLuint shaderProgram;
 		GLuint VAO;

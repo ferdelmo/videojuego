@@ -66,7 +66,7 @@ void Gema3D::seguirPersonaje() {
 		glm::vec3 posP = es->per->pos;
 		glm::vec3 vecDir = posP - pos; // vector movimiento
 		vecDir = vecDir / glm::length(vecDir); //normalizar vector
-		pos += (0.005f * velocidad) * vecDir;
+		pos += (0.01f * velocidad) * vecDir;
 	}
 }
 
