@@ -76,7 +76,7 @@ Daga3D::Daga3D(glm::vec3 pos, glm::vec3 dir, Escena3D * es, GLFWwindow* window, 
 
 void Daga3D::GenerarCalaveras(int n) {
 	Obj3D cubo;
-	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/cubo.obj", cubo.vertices, cubo.uvs, cubo.normals);
+	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/CALAVERA.obj", cubo.vertices, cubo.uvs, cubo.normals);
 	if (nivel == 1) {
 		for (int i = 0; i < n; i++) {
 			glm::vec3 posOffset = { distribution(gen) , distribution(gen), distribution(gen) };

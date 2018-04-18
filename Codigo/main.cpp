@@ -216,7 +216,7 @@ int main(int argc, char **argv) {
 	Daga3D daga1({ 10,10,10 }, { 0,0,0 }, &es3D, window, &cam, cubo, 1);
 	es3D.add(make_shared<Daga3D>(daga1));
 
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -242,6 +242,7 @@ int main(int argc, char **argv) {
 		//BORRA EL FONDO
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		if (mode == 1) {
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 			mode = menu.renderizar();
 			//pinta lo que haya en los buffers
 			glfwSwapBuffers(window);
@@ -470,6 +471,7 @@ int main(int argc, char **argv) {
 		}
 		else if (mode == 6) {
 			inicio = clock();
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 			mode = 6;
 			//cout << "RENDERIZANDO" << endl;
 			glm::vec3 light = { 0,4,0 };
