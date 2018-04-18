@@ -21,6 +21,7 @@
 #include "Fondo.h"
 #include "Camara.h"
 #include "Partida.h"
+#include "text2d.h"
 
 
 #include "MenuPrincipal.h"
@@ -109,7 +110,7 @@ int main(int argc, char **argv) {
 	GLFWwindow* window = glfwCreateWindow(res->width, res->height, "GAME", nullptr,
 	nullptr);*/
 	GLFWwindow* window;
-	Opciones opciones;
+	Opciones opciones = Opciones();
 	window = glfwCreateWindow(opciones.px, opciones.py, "Devil Daggers", nullptr,
 		nullptr);
 
@@ -151,11 +152,7 @@ int main(int argc, char **argv) {
 	);
 	cam.actualizarMVP();
 
-	Fondo FI(-0.4, 0.75, 0, window, "../DevilDaggers/videojuego/Codigo/flecha.png", 0.1, 1, &cam), FD(0.4, 0.75, 0, window, "../DevilDaggers/videojuego/Codigo/flecha.png", 0.1, 1, &cam);
-	opciones.setFlechas(&FI, &FD);
-	Fondo atras(0.6, -1, 0, window, "../DevilDaggers/videojuego/Codigo/atras.png", 0.4, 1, &cam), guardar(-0.6, -1, 0, window, "../DevilDaggers/videojuego/Codigo/guardar.png", 0.4, 1, &cam);
-	opciones.setBotones(&atras,&guardar);
-	opciones.setWindow(window);
+	opciones.setValue(window, &cam);
 
 	//instancia el personage
 	Escena es;
@@ -196,7 +193,7 @@ int main(int argc, char **argv) {
 	float topPunt[10] = { 0,0,0,0,0,0,0,0,0,0 };
 	bool pulsado = false;
 
-
+	
 	Obj3D plano;
 	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/plano.obj", plano.vertices, plano.uvs, plano.normals);
 	vector<Render3D> r3d;
@@ -261,9 +258,6 @@ int main(int argc, char **argv) {
 				par = &partid;
 				par->start();
 				puntuacion = clock();
-				for (int i = 0; i < 10; i++) {
-					topPunt[i] = 0;
-				}
 				gameover = true;
 				pulsado = false;
 			}

@@ -3,10 +3,10 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <SOIL.h>
-#include <GL/freeglut.h>
 
 #include "Puntuaciones.h"
 #include "LoadShader.h"
+#include "text2d.h"
 
 using namespace std;
 
@@ -101,6 +101,35 @@ void Puntuaciones::LeerFichero() {
 	}
 }
 
+void Puntuaciones::mostrarTexto() {
+	text2D text2D("../DevilDaggers/videojuego/Codigo/Holstein.DDS");
+	int x = 70, y= 350;
+	char c[2]; string th;
+	for (int i = 0; i < 10; i++) {
+		switch (i) {
+		case 0:
+			text2D.printText2D("1ST: ", x, y, 20);
+			break;
+		case 1:
+			text2D.printText2D("2ND: ", x, y, 20);
+			break;
+		case 2:
+			text2D.printText2D("3RD: ", x, y, 20);
+			break;
+		default:
+			string c = to_string(i + 1) + "TH:";
+			text2D.printText2D(c.c_str(), x, y, 20);
+			break;
+		}
+		text2D.printText2D(topPunt[i].c_str(), x + 100 , y, 20);
+		y -= 50;
+		if (i == 4) {
+			x += 450;
+			y = 350;
+		}
+	}
+}
+
 void Puntuaciones::controlesInFrame() {
 
 	mode = 4;
@@ -127,7 +156,7 @@ void Puntuaciones::controlesInFrame() {
 	if (!pulsado) { // Control una pulsación
 		if (state == GLFW_PRESS) {
 			//cout << "x: " << x << " ;; y: " << y << endl;
-			if (x >= 0.5 && x <= 0.96&& y >= -0.89 && y <= -0.74) { // BOTÓN MENÚ PRINCIPAL
+			if (x >= 0.5 && x <= 0.96 && y >= -0.89 && y <= -0.74) { // BOTÓN MENÚ PRINCIPAL
 				pulsado = true;
 				mode = 1;
 			}
@@ -216,25 +245,7 @@ int Puntuaciones::renderizar() {
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);
 
-	int cont = 0;
-	GLfloat x = -1;
-	GLfloat y = 1;
-
-	for (int i = 0; i < 10; i++) {
-		if (i == 0) {
-			displayText(-0.1, 0.5 - i * 0.10, 1, 0, 0, "1ST " + topPunt[i]);
-		}
-		else if (i == 1) {
-			displayText(-0.1, 0.5 - i * 0.10, 1, 0, 0, "2ND " + topPunt[i]);
-		}
-		else if (i == 2) {
-			displayText(-0.1, 0.5 - i * 0.10, 1, 0, 0, "3RD " + topPunt[i]);
-		}
-		else {
-			displayText(-0.1, 0.5 - i * 0.10, 1, 0, 0, topPunt[i]);
-		}
-	}
-
+	mostrarTexto();
 
 	return mode;
 
