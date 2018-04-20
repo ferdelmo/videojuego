@@ -21,6 +21,22 @@
 
 using namespace std;
 
+
+Personaje3D * persoCam;
+
+
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
+	cout << "COJONES" << endl;
+	glm::vec3 pos = persoCam->pos;
+	cout << "{ " << pos.x << ", " << pos.y << ", " << pos.z << " }" << endl;
+	if (persoCam->camaraActual == 1) {
+		cout << yoffset << endl;
+		persoCam->camaras[1].FoV -= yoffset ;
+		cout << persoCam->camaras[1].FoV << endl;
+	}
+}
+
 //CONSTRUCTOR POR DEFECTO
 Personaje3D::Personaje3D(glm::vec3 pos, Escena3D * es, GLFWwindow * window, Camara * c, Obj3D obj)
 	: Render3D(window, "../DevilDaggers/videojuego/Codigo/Shaders/3D.vert", "../DevilDaggers/videojuego/Codigo/Shaders/3D.frag", c,obj, { 0,1,1 },1) {
@@ -58,13 +74,21 @@ Personaje3D::Personaje3D(glm::vec3 pos, Escena3D * es, GLFWwindow * window, Cama
 		100.0f             // Plano de corte lejano. Tan pequeño como se pueda.
 	);
 	camaras[0] = a;
+	a.View = glm::lookAt(
+		glm::vec3(0,1,0), // Camera is at (4,3,3), in World Space
+		glm::vec3(0,1,0) + glm::vec3(1, 0, 0), // and looks at the origin
+		glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+	);
+	a.Projection = glm::perspective(
+		glm::radians(camaras[1].FoV), // El campo de visión vertical, en radián: la cantidad de "zoom". Piensa en el lente de la cámara. Usualmente está entre 90° (extra ancho) y 30° (zoom aumentado)
+		px*1.0f / py,       // Proporción. Depende del tamaño de tu ventana 4/3 == 800/600 == 1280/960, Parece familiar?
+		0.1f,              // Plano de corte cercano. Tan grande como sea posible o tendrás problemas de precisión.
+		100.0f             // Plano de corte lejano. Tan pequeño como se pueda.
+	);
+	camaras[1] = a;
 	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/bala.obj", bala.vertices, bala.uvs, bala.normals);
-}
-
-void Personaje3D::getPosition(GLfloat posi[]) {
-	posi[0] = pos[0];
-	posi[1] = pos[1];
-	posi[2] = pos[2];
+	persoCam = this;
+	glfwSetScrollCallback(window, scroll_callback);
 }
 
 void Personaje3D::addGema() {
@@ -132,26 +156,63 @@ void Personaje3D::controlesInFrame() {
 	direccion = glm::normalize(dirAux);
 	lastXpos = x;
 	lastYpos = y;
-
+	glm::vec3 posVieja = pos;
 	int state = glfwGetKey(window, up);
 	glm::vec3 dirEntr = { 0,0,0 };
 	if (state == GLFW_PRESS) {
-		pos += direccion * velocidad * 0.01f;
+		if (camaraActual == 0) {
+			pos += direccion * velocidad * 0.01f;
+		}
+		else {
+			posCam += direccion * velocidad * 0.01f;
+		}
+		
 	}
 	state = glfwGetKey(window, left);
 	if (state == GLFW_PRESS) {
-		pos += glm::normalize(glm::cross(direccion,
-			{ 0,1,0 })) * -velocidad * 0.01f;
+		if (camaraActual == 0) {
+			pos += glm::normalize(glm::cross(direccion,
+				{ 0,1,0 })) * -velocidad * 0.01f;
+		}
+		else {
+			posCam += glm::normalize(glm::cross(direccion,
+				{ 0,1,0 })) * -velocidad * 0.01f;
+		}
 	}
 	state = glfwGetKey(window, down);
 	if (state == GLFW_PRESS) {
-		pos += direccion * -velocidad * 0.01f;
+		if (camaraActual == 0) {
+			pos += direccion * -velocidad * 0.01f;
+		}
+		else {
+			posCam += direccion * -velocidad * 0.01f;
+		}
 	}
 	state = glfwGetKey(window, right);
 	if (state == GLFW_PRESS) {
-		pos += glm::normalize(glm::cross(direccion,
-			{ 0,1,0 })) * velocidad * 0.01f;
+		if (camaraActual == 0) {
+			pos += glm::normalize(glm::cross(direccion,
+				{ 0,1,0 })) * velocidad * 0.01f;
+		}
+		else {
+			posCam += glm::normalize(glm::cross(direccion,
+				{ 0,1,0 })) * velocidad * 0.01f;
+		}
 	}
+	state = glfwGetKey(window, GLFW_KEY_C);
+	if (state == GLFW_PRESS && cambioCam) {
+		if (camaraActual == 0) {
+			velocidad = 10;
+			camaraActual = 1;
+		}
+		else {
+			velocidad = 5;
+			camaraActual = 0;
+		}
+		es->espectador = !es->espectador;
+		cambioCam = false;
+	}
+	cambioCam = state == GLFW_RELEASE;
 	/*state = glfwGetKey(window, GLFW_KEY_Q);
 	if (state == GLFW_PRESS) {
 		orientacion += pi / 60 / 2;
@@ -162,46 +223,66 @@ void Personaje3D::controlesInFrame() {
 	}*/
 
 	//CONTROL CAMARA
+	if (camaraActual==0) {
+		pos.y = 1;
+		Camara a;
+		a.FoV = 60;
+		a.View = glm::lookAt(
+			pos, // Camera is at (4,3,3), in World Space
+			pos + direccion, // and looks at the origin
+			glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+		);
+		a.Projection = glm::perspective(
+			glm::radians(a.FoV), // El campo de visión vertical, en radián: la cantidad de "zoom". Piensa en el lente de la cámara. Usualmente está entre 90° (extra ancho) y 30° (zoom aumentado)
+			px*1.0f / py,       // Proporción. Depende del tamaño de tu ventana 4/3 == 800/600 == 1280/960, Parece familiar?
+			0.1f,              // Plano de corte cercano. Tan grande como sea posible o tendrás problemas de precisión.
+			100.0f             // Plano de corte lejano. Tan pequeño como se pueda.
+		);
+		camaras[0] = a;
 
-	pos.y = 1;
-	Camara a;
-	a.FoV = 60;
-	a.View = glm::lookAt(
-		pos, // Camera is at (4,3,3), in World Space
-		pos + direccion, // and looks at the origin
-		glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
-	);
-	a.Projection = glm::perspective(
-		glm::radians(a.FoV), // El campo de visión vertical, en radián: la cantidad de "zoom". Piensa en el lente de la cámara. Usualmente está entre 90° (extra ancho) y 30° (zoom aumentado)
-		px*1.0f / py,       // Proporción. Depende del tamaño de tu ventana 4/3 == 800/600 == 1280/960, Parece familiar?
-		0.1f,              // Plano de corte cercano. Tan grande como sea posible o tendrás problemas de precisión.
-		100.0f             // Plano de corte lejano. Tan pequeño como se pueda.
-	);
-	camaras[0] = a;
-
-	pos.y = 0.5f;
+		pos.y = 0.5f;
+	}
+	else {
+		Camara a;
+		a.FoV = camaras[1].FoV;
+		a.View = glm::lookAt(
+			posCam, // Camera is at (4,3,3), in World Space
+			posCam + direccion, // and looks at the origin
+			glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+		);
+		a.Projection = glm::perspective(
+			glm::radians(a.FoV), // El campo de visión vertical, en radián: la cantidad de "zoom". Piensa en el lente de la cámara. Usualmente está entre 90° (extra ancho) y 30° (zoom aumentado)
+			px*1.0f / py,       // Proporción. Depende del tamaño de tu ventana 4/3 == 800/600 == 1280/960, Parece familiar?
+			0.1f,              // Plano de corte cercano. Tan grande como sea posible o tendrás problemas de precisión.
+			100.0f             // Plano de corte lejano. Tan pequeño como se pueda.
+		);
+		camaras[1] = a;
+	}
+	
 	//mira si se ha disparado y ha pasado el tiempo de cadencia
-	state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
-	int stateR = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
+	if (camaraActual == 0) {
+		state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+		int stateR = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
 
-	disparando = state == GLFW_PRESS;
-	if (state == GLFW_PRESS && (clock() - ultimaBala) / (CLOCKS_PER_SEC / 1000) > cadencia) {
-		lanzarBala();
-		ultimaBala = clock();
-		escopeta = false;
-	}
-	else if (state == GLFW_PRESS) {
-		escopeta = false;
-	}
-	else if (stateR == GLFW_PRESS && escopeta) {
-		escopetazo();
+		disparando = state == GLFW_PRESS;
+		if (state == GLFW_PRESS && (clock() - ultimaBala) / (CLOCKS_PER_SEC / 1000) > cadencia) {
+			lanzarBala();
+			ultimaBala = clock();
+			escopeta = false;
+		}
+		else if (state == GLFW_PRESS) {
+			escopeta = false;
+		}
+		else if (stateR == GLFW_PRESS && escopeta) {
+			escopetazo();
 
-		disparando = true;
-		escopetaGema = true;
-		escopeta = false;
-	}
-	else if (stateR == GLFW_RELEASE) {
-		escopeta = true;
+			disparando = true;
+			escopetaGema = true;
+			escopeta = false;
+		}
+		else if (stateR == GLFW_RELEASE) {
+			escopeta = true;
+		}
 	}
 }
 
@@ -210,14 +291,16 @@ GLfloat Personaje3D::distancia(GLfloat x, GLfloat y, GLfloat xp, GLfloat yp) {
 }
 
 void Personaje3D::mover() {
+	persoCam = this;
+	//cout << this << " - " << persoCam << endl;
 	/*cam->View = glm::lookAt(
 		glm::vec3(pos[0], pos[1], pos[2]), // Camera is at (4,3,3), in World Space
 		glm::vec3(pos[0]*cos(orientacion), pos[1], pos[2]*sin(orientacion)), // and looks at the origin
 		glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
 	);*/
-	cam->Projection = camaras[0].Projection;
-	cam->View = camaras[0].View;
-	cam->FoV = camaras[0].FoV;
+	cam->Projection = camaras[camaraActual].Projection;
+	cam->View = camaras[camaraActual].View;
+	cam->FoV = camaras[camaraActual].FoV;
 	cam->actualizarMVP();
 	controlesInFrame();
 }

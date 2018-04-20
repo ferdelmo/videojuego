@@ -175,9 +175,6 @@ void Daga3D::mover() {
 
 void Daga3D::fisicas() {
 	//mira colision con personaje pa matarlo
-	shared_ptr<Personaje3D> a = es->per;
-	GLfloat posPer[] = { 0,0,0 };
-	a->getPosition(posPer);
 	if (glm::length(pos - es->per->pos) <= tam + es->per->tam && !es->per->modoDios) {
 		//a->morir();
 	}

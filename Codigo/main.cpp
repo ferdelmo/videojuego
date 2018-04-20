@@ -216,7 +216,7 @@ int main(int argc, char **argv) {
 	Daga3D daga1({ 10,10,10 }, { 0,0,0 }, &es3D, window, &cam, cubo, 1);
 	es3D.add(make_shared<Daga3D>(daga1));
 
-	
+	glEnable(GL_CULL_FACE);
 
 	while (!glfwWindowShouldClose(window))
 	{

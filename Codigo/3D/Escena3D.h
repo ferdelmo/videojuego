@@ -36,6 +36,8 @@ class Escena3D {
 	public:
 		int calavsMatadas = 0;
 
+		bool espectador = false;
+
 		Escena3D();
 		
 		void add(shared_ptr<Personaje3D> p);

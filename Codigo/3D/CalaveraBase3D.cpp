@@ -80,7 +80,7 @@ CalaveraBase3D::CalaveraBase3D(glm::vec3 pos, glm::vec3 dir, Escena3D * es, GLFW
 
 void CalaveraBase3D::seguir() {
 	glm::vec3 posP = es->per->pos;
-	cout << "{ " << direccion.x << ", " << direccion.y << ", " << direccion.z << " }" << endl;
+	//cout << "{ " << direccion.x << ", " << direccion.y << ", " << direccion.z << " }" << endl;
 	if (nivel == 1) { //NORMALES
 		/*if (double(clock() - tiempecito) / CLOCKS_PER_SEC >= tiempoSeguir || llegar) {
 			dir = posP;
@@ -132,7 +132,7 @@ bool CalaveraBase3D::vivo() {
 	vector<shared_ptr<Bala3D>> * b = es->getBalas();
 	int i = 0;
 	while (i < b->size()) {
-		if (glm::length(pos - b->at(i)->pos) < tam + b->at(i)->tam) {
+		if (glm::length(pos - b->at(i)->pos) < tam + 0.25f + b->at(i)->tam) {
 			vida -= b->at(i)->danyo;
 			b->erase(b->begin() + i);
 		}

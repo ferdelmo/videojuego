@@ -98,22 +98,26 @@ void Escena3D::renderizar() {
 	}
 	//if (per->vivo || per->modoDios) {
 	per->lightPos = light;
+	if (!espectador) {
 		bool perso = per->renderizar();
+	}
 	//}
 }
 
 void Escena3D::moverObjetos() {
-	for (int i = 0; i < balas.size(); i++) {
-		balas[i]->mover();
-	}
-	for (int i = 0; i < calaveras.size(); i++) {
-		calaveras[i]->mover();
-	}
-	for (int i = 0; i < gemas.size(); i++) {
-		gemas[i]->mover();
-	}
-	for (int i = 0; i < dagas.size(); i++) {
-		dagas[i]->mover();
+	if (!espectador) {
+		for (int i = 0; i < balas.size(); i++) {
+			balas[i]->mover();
+		}
+		for (int i = 0; i < calaveras.size(); i++) {
+			calaveras[i]->mover();
+		}
+		for (int i = 0; i < gemas.size(); i++) {
+			gemas[i]->mover();
+		}
+		for (int i = 0; i < dagas.size(); i++) {
+			dagas[i]->mover();
+		}
 	}
 	per->mover();
 }

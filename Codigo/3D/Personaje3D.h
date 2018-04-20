@@ -21,10 +21,11 @@ using namespace std;
 
 class Escena3D;
 
+
 class Personaje3D : public Render3D {
 public:
 	Obj3D plano;
-	const GLfloat velocidad = 5;
+	GLfloat velocidad = 5;
 	GLfloat sensibilidad = 20;
 	GLuint numGemas = 0;
 
@@ -54,11 +55,12 @@ public:
 	double lastXpos=0, lastYpos=0;
 
 	Obj3D bala;
+	glm::vec3 posCam = { 0,0,0 };
+
+	bool cambioCam = true;
 public:
 	//CONSTRUCTOR EN UNA POSICION ESPECIFICA
 	Personaje3D(glm::vec3 pos, Escena3D * es, GLFWwindow * window, Camara * c, Obj3D obj);
-
-	void getPosition(GLfloat posi[]);
 
 	void addGema();
 
