@@ -31,9 +31,15 @@ public:
 
 	GLuint loadDDs(const char* imagepath);
 
+	void init_string_renderer();
+
+	void end_string_renderer();
+
 	text2D(const char* texturePath);
 
 	void printText2D(const char* text, int x, int y, int size);
+
+	void printText3D(const char* text, int x, int y, int size);
 
 	void cleanupText2D();
 

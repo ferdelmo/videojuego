@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "text2D.h"
 #include "LoadShader.h"
 
@@ -97,6 +99,65 @@ GLuint text2D::loadDDs(const char* imagepath) {
 	return tex;
 }
 
+void text2D::init_string_renderer()
+{
+
+	GLdouble winx, winy, winz;
+	GLint viewp[4];
+	GLdouble model[16], pro[16];
+
+
+	glGetDoublev(GL_MODELVIEW_MATRIX, model);
+	glGetDoublev(GL_PROJECTION_MATRIX, pro);
+	glGetIntegerv(GL_VIEWPORT, viewp);
+
+	glPushAttrib(GL_ALL_ATTRIB_BITS);
+	glDisable(GL_LIGHTING);
+	glDisable(GL_CULL_FACE);
+	glEnable(GL_BLEND);
+	glDepthMask(GL_FALSE);
+
+
+	glPushMatrix();   // Push-1
+
+	gluProject(0.0, 0.0, 0.0, model, pro, viewp, &winx, &winy, &winz);
+
+	glMatrixMode(GL_PROJECTION);
+
+	glPushMatrix(); // Push-2
+
+	glLoadIdentity();
+
+	glOrtho(0.0, viewp[2], 0.0, viewp[3], 0.0, 1.0);
+
+	glMatrixMode(GL_MODELVIEW);
+
+	glPushMatrix(); // Pop-3
+
+	glLoadIdentity();
+
+	glTranslated(winx, winy, -winz);
+}
+
+void text2D::end_string_renderer()
+{
+	glPopMatrix();    // Pop-3
+
+	glMatrixMode(GL_PROJECTION);
+
+	glPopMatrix();    // Pop-2
+
+	glMatrixMode(GL_MODELVIEW);
+
+	glPopMatrix();    // Pop-1
+
+	glDepthMask(GL_TRUE);
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_LIGHTING);
+
+	glPopAttrib();
+}
+
 text2D::text2D(const char* texturePath) {
 	// Inicializar textura
 	texture = loadDDs(texturePath);
@@ -194,6 +255,12 @@ void text2D::printText2D(const char* text, int x, int y, int size) {
 
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
+}
+
+void text2D::printText3D(const char* text, int x, int y, int size) {
+	init_string_renderer();
+	printText2D(text, x, y, size);
+	end_string_renderer();
 }
 
 void text2D::cleanupText2D() {
