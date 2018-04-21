@@ -53,21 +53,15 @@ CalaveraBase3D::CalaveraBase3D(glm::vec3 pos, glm::vec3 dir, Escena3D * es, GLFW
 	}*/
 	this->nivel = nivel;
 	if (nivel <= 1) {
-		for (int i = 0; i < vertices.size(); i++) {
-			colors[i] = {1,0,0};
-		}
+		cambiarColor({ 1,0,0 });
 		vida = 25;
 	}
 	else if (nivel == 2) {
-		for (int i = 0; i < vertices.size(); i++) {
-			colors[i] = { 0,1,0 };
-		}
+		cambiarColor({ 0,1,0 });
 		vida = 50;
 	}
 	else {
-		for (int i = 0; i < vertices.size(); i++) {
-			colors[i] = { 0,0,1 };
-		}
+		cambiarColor({ 0,0,1 });
 		vida = 100;
 	}
 

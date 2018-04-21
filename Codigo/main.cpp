@@ -216,6 +216,15 @@ int main(int argc, char **argv) {
 	Daga3D daga1({ 10,10,10 }, { 0,0,0 }, &es3D, window, &cam, cubo, 1);
 	es3D.add(make_shared<Daga3D>(daga1));
 
+	//glEnable(GL_CULL_FACE);
+
+
+	// Enable depth test
+	glEnable(GL_DEPTH_TEST);
+	// Accept fragment if it closer to the camera than the former one
+	glDepthFunc(GL_LESS);
+
+	// Cull triangles which normal is not towards the camera
 	glEnable(GL_CULL_FACE);
 
 	while (!glfwWindowShouldClose(window))

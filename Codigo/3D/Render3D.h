@@ -187,8 +187,28 @@ class Render3D {
 		//CONSTRUCTOR POR DEFECTO
 		Render3D(GLFWwindow * window, string vertSha, string fragSha, Camara * c, Obj3D obj, glm::vec3 color, GLfloat escalado);
 
+		~Render3D() {
+			/*glDeleteVertexArrays(1, &points_VBO);
+			glDeleteVertexArrays(1, &colors_VBO);
+			glDeleteVertexArrays(1, &normalbuffer);
+			glDeleteVertexArrays(1, &VAO);
+			glDeleteProgram(shaderProgram);
+			glDeleteVertexArrays(1, &points_VBO);
+			glDeleteVertexArrays(1, &colors_VBO);
+			glDeleteVertexArrays(1, &normalbuffer);
+			glDeleteVertexArrays(1, &VAO);*/
+		}
 		//Renderiza
 		bool renderizar();
+
+		void cambiarColor(glm::vec3 newColor) {
+			for (int i = 0; i < colors.size(); i++) {
+				colors[i] = newColor;
+			}
+			glBindBuffer(GL_ARRAY_BUFFER, colors_VBO);
+			// Lo rellena con la informacion del color
+			glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(glm::vec3), &colors[0], GL_STATIC_DRAW);
+		}
 };
 
 #endif

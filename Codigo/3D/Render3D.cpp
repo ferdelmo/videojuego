@@ -61,13 +61,6 @@ bool Render3D::renderizar() {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
 
-	// Enable depth test
-	glEnable(GL_DEPTH_TEST);
-	// Accept fragment if it closer to the camera than the former one
-	glDepthFunc(GL_LESS);
-
-	// Cull triangles which normal is not towards the camera
-	glEnable(GL_CULL_FACE);
 
 	glUseProgram(shaderProgram);
 	glm::mat4 escalado =
@@ -111,7 +104,7 @@ bool Render3D::renderizar() {
 	//bindea el buffer
 	glBindBuffer(GL_ARRAY_BUFFER, colors_VBO);
 	// le pasa el color de cada vertice
-	glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(glm::vec3), &colors[0], GL_STATIC_DRAW);
+	//glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(glm::vec3), &colors[0], GL_STATIC_DRAW);
 	glVertexAttribPointer(
 		1,                                // attribute. No particular reason for 1, but must match the layout in the shader.
 		3,                                // size
@@ -124,7 +117,7 @@ bool Render3D::renderizar() {
 	//NORMALS
 	glEnableVertexAttribArray(2);
 	glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-	glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW);
+	//glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW);
 	glVertexAttribPointer(
 		2,                                // attribute
 		3,                                // size
@@ -147,8 +140,6 @@ bool Render3D::renderizar() {
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);
-	glDisable(GL_BLEND);
-	glDepthMask(GL_TRUE);
 
 	return sigue;
 }
