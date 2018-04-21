@@ -141,7 +141,7 @@ int main(int argc, char **argv) {
 
 	cam.FoV = 60;
 	cam.View = glm::lookAt(
-		glm::vec3(4, 3, 8), // Camera is at (4,3,3), in World Space
+		glm::vec3(0,0,3), // Camera is at (4,3,3), in World Space
 		glm::vec3(0, 0, 0), // and looks at the origin
 		glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
 	);
@@ -207,12 +207,6 @@ int main(int argc, char **argv) {
 	es3D.add(make_shared<Personaje3D>(per3D));
 
 	CalaveraBase3D cal1({ 1, 1, 1 }, { 0, 0, 0 }, &es3D, window, &cam, cubo, 1);
-	//es3D.add(make_shared<CalaveraBase3D>(cal1));
-	/*CalaveraBase3D cal2({ 1, 1,1 }, { 0,0,0 }, &es3D, window, &cam, cubo, 2);
-	es3D.add(make_shared<CalaveraBase3D>(cal2));
-	CalaveraBase3D cal3({ 1, 1, 1 }, { 0,0,0 }, &es3D, window, &cam, cubo, 3);
-	es3D.add(make_shared<CalaveraBase3D>(cal3));*/
-	//r3d.push_back(per3D);
 	Daga3D daga1({ 10,10,10 }, { 0,0,0 }, &es3D, window, &cam, cubo, 1);
 	es3D.add(make_shared<Daga3D>(daga1));
 
@@ -284,9 +278,9 @@ int main(int argc, char **argv) {
 			if (es.getPer()->vivo) {
 				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 				//renderiza escena
-				//glDepthMask(GL_FALSE);
-				/*glEnable(GL_BLEND);
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
+				glDepthMask(GL_FALSE);
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 				//glViewport(-es.getPer()->pos[0]*ancho, -es.getPer()->pos[1]*alto, ancho, alto);
 
 				

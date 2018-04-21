@@ -13,6 +13,7 @@
 #include "Escena3D.h"
 #include <random>
 #include <cmath>
+#include <thread>
 
 using namespace std;
 
@@ -23,6 +24,8 @@ class Camara;
 class Bala3D;
 
 class Gema3D;
+
+class SistemaParticulas;
 
 class CalaveraBase3D : public Render3D {
 	public:
@@ -43,6 +46,8 @@ class CalaveraBase3D : public Render3D {
 		uniform_real_distribution<float> distribution2;
 
 		Escena3D * es;
+		SistemaParticulas * sp;
+		thread * spFin;
 
 	public:
 		CalaveraBase3D(glm::vec3 pos, glm::vec3 dir, Escena3D * es, GLFWwindow* window, Camara * c, Obj3D obj, int nivel);

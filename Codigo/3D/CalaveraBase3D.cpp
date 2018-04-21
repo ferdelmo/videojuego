@@ -17,6 +17,7 @@
 #include "Gema3D.h"
 #include "../LoadShader.h"
 #include "../Camara.h"
+#include "Particulas.h"
 
 using namespace std;
 
@@ -164,8 +165,22 @@ CalaveraBase3D CalaveraBase3D::operator=(const CalaveraBase3D& b) {
 }
 
 void CalaveraBase3D::mover() {
-	seguir();
-	sigue = vivo();
+	if (!muerto) {
+		seguir();
+		muerto = !vivo();
+		if (muerto) {
+			Obj3D cubo;
+			Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/cubo.obj", cubo.vertices, cubo.uvs, cubo.normals);
+
+			sp = new SistemaParticulas(pos, window, cam, cubo, { 1,1,1 }, 5);
+			//thread t1(&SistemaParticulas::recogeLosThreads, sp);
+			//spFin = &t1;
+			tam = 0.001f;
+		}
+	}
+	else {
+		sigue = sp->renderizar();
+	}
 }
 
 void CalaveraBase3D::fisicas() {
