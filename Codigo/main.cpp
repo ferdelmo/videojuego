@@ -29,6 +29,7 @@
 #include "Opciones.h"
 #include "Creditos.h"
 #include "Muerte.h"
+#include "text2d.h"
 
 #include "3D\Render3D.h"
 #include "3D\CalaveraBase3D.h"
@@ -36,9 +37,9 @@
 #include "3D\Escena3D.h"
 #include "3D\Daga3D.h"
 
+#pragma warning(disable:4996)
+
 using namespace std;
-
-
 void displayText(float x, float y, int r, int g, int b, string str) {
 	glUseProgram(0);
 
@@ -63,46 +64,47 @@ int duraciones[6] = {268, 146, 261, 344, 215, 268};
 
 void playSong(int indice) {
 	if (indice == 1) {
-		mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/1.mp3", NULL, 0, NULL);
+		//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/1.mp3", NULL, 0, NULL);
 	}
 	else if (indice == 2) {
-		mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/2.mp3", NULL, 0, NULL);
+		//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/2.mp3", NULL, 0, NULL);
 	}
 	else if (indice == 3) {
-		mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/3.mp3", NULL, 0, NULL);
+		//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/3.mp3", NULL, 0, NULL);
 	}
 	else if (indice == 4) {
-		mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/4.mp3", NULL, 0, NULL);
+		//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/4.mp3", NULL, 0, NULL);
 	}
 	else if (indice == 5) {
-		mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/5.mp3", NULL, 0, NULL);
+		//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/5.mp3", NULL, 0, NULL);
 	}
 	else {
-		mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/6.mp3", NULL, 0, NULL);
+		//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/6.mp3", NULL, 0, NULL);
 	}
 }
 
 void stopSong(int indice) {
 	if (indice == 1) {
-		mciSendString("pause ../DevilDaggers/videojuego/Codigo/Musica/1.mp3", NULL, 0, NULL);
+		//mciSendString("pause ../DevilDaggers/videojuego/Codigo/Musica/1.mp3", NULL, 0, NULL);
 	}
 	else if (indice == 2) {
-		mciSendString("pause ../DevilDaggers/videojuego/Codigo/Musica/2.mp3", NULL, 0, NULL);
+		//mciSendString("pause ../DevilDaggers/videojuego/Codigo/Musica/2.mp3", NULL, 0, NULL);
 	}
 	else if (indice == 3) {
-		mciSendString("pause ../DevilDaggers/videojuego/Codigo/Musica/3.mp3", NULL, 0, NULL);
+		//mciSendString("pause ../DevilDaggers/videojuego/Codigo/Musica/3.mp3", NULL, 0, NULL);
 	}
 	else if (indice == 4) {
-		mciSendString("pause ../DevilDaggers/videojuego/Codigo/Musica/4.mp3", NULL, 0, NULL);
+		//mciSendString("pause ../DevilDaggers/videojuego/Codigo/Musica/4.mp3", NULL, 0, NULL);
 	}
 	else if (indice == 5) {
-		mciSendString("pause ../DevilDaggers/videojuego/Codigo/Musica/5.mp3", NULL, 0, NULL);
+		//mciSendString("pause ../DevilDaggers/videojuego/Codigo/Musica/5.mp3", NULL, 0, NULL);
 	}
 	else {
-		mciSendString("pause ../DevilDaggers/videojuego/Codigo/Musica/6.mp3", NULL, 0, NULL);
+		//mciSendString("pause ../DevilDaggers/videojuego/Codigo/Musica/6.mp3", NULL, 0, NULL);
 	}
 }
 int main(int argc, char **argv) {
+
 	glfwInit();
 	
 	srand(time(NULL));
@@ -137,11 +139,13 @@ int main(int argc, char **argv) {
 	glfwGetFramebufferSize(window, &ancho, &alto);
 	glViewport(0, 0, ancho, alto);
 
+	text2D text2D("../DevilDaggers/videojuego/Codigo/Holstein.DDS");
+
 	Camara cam;
 
 	cam.FoV = 60;
 	cam.View = glm::lookAt(
-		glm::vec3(0,0,3), // Camera is at (4,3,3), in World Space
+		glm::vec3(4, 3, 8), // Camera is at (4,3,3), in World Space
 		glm::vec3(0, 0, 0), // and looks at the origin
 		glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
 	);
@@ -207,19 +211,16 @@ int main(int argc, char **argv) {
 	es3D.add(make_shared<Personaje3D>(per3D));
 
 	CalaveraBase3D cal1({ 1, 1, 1 }, { 0, 0, 0 }, &es3D, window, &cam, cubo, 1);
+	//es3D.add(make_shared<CalaveraBase3D>(cal1));
+	/*CalaveraBase3D cal2({ 1, 1,1 }, { 0,0,0 }, &es3D, window, &cam, cubo, 2);
+	es3D.add(make_shared<CalaveraBase3D>(cal2));
+	CalaveraBase3D cal3({ 1, 1, 1 }, { 0,0,0 }, &es3D, window, &cam, cubo, 3);
+	es3D.add(make_shared<CalaveraBase3D>(cal3));*/
+	//r3d.push_back(per3D);
 	Daga3D daga1({ 10,10,10 }, { 0,0,0 }, &es3D, window, &cam, cubo, 1);
 	es3D.add(make_shared<Daga3D>(daga1));
 
 	//glEnable(GL_CULL_FACE);
-
-
-	// Enable depth test
-	glEnable(GL_DEPTH_TEST);
-	// Accept fragment if it closer to the camera than the former one
-	glDepthFunc(GL_LESS);
-
-	// Cull triangles which normal is not towards the camera
-	glEnable(GL_CULL_FACE);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -247,6 +248,9 @@ int main(int argc, char **argv) {
 		if (mode == 1) {
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 			mode = menu.renderizar();
+			char text[256];
+			sprintf(text, "%.2f sec", glfwGetTime());
+			text2D.printText2D(text, 0, 0, 70);
 			//pinta lo que haya en los buffers
 			glfwSwapBuffers(window);
 			//lee los eventos
@@ -278,9 +282,9 @@ int main(int argc, char **argv) {
 			if (es.getPer()->vivo) {
 				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 				//renderiza escena
-				glDepthMask(GL_FALSE);
-				glEnable(GL_BLEND);
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+				//glDepthMask(GL_FALSE);
+				/*glEnable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
 				//glViewport(-es.getPer()->pos[0]*ancho, -es.getPer()->pos[1]*alto, ancho, alto);
 
 				
@@ -306,6 +310,9 @@ int main(int argc, char **argv) {
 				else {
 					pulsado = true;
 				}
+				char text[256];
+				sprintf(text, "%.2f sec", glfwGetTime());
+				text2D.printText2D(text, 0, 0, 70);
 				glfwSwapBuffers(window);
 				//lee los eventos
 				glfwPollEvents();
@@ -442,6 +449,7 @@ int main(int argc, char **argv) {
 				//displayText(0.1, -0.5, 1, 0, 0, "Asesinadas: " + to_string(es.calavsMatadas));
 
 				//displayText(0.1, -0.5, 1, 1, 1, "Gemas: " + to_string(es.getPer()->numGemas));
+
 				//pinta lo que haya en los buffers
 				glfwSwapBuffers(window);
 				//lee los eventos
@@ -485,10 +493,18 @@ int main(int argc, char **argv) {
 			}
 			es3D.renderizar();
 			es3D.moverObjetos();
+
+		
+
+			char text[256];
+			sprintf(text, "%.2f sec", glfwGetTime());
+			//text2D.printText3D(text, 0, 100, 70);
+
 			//pinta lo que haya en los buffers
 			glfwSwapBuffers(window);
 			//lee los eventos
 			glfwPollEvents();
+
 			int ms = (1000.0f / 60.0f) - (clock() - inicio) / (CLOCKS_PER_SEC / 1000);
 			if (ms > 0) {
 				this_thread::sleep_for(chrono::milliseconds(ms));
