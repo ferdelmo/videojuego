@@ -18,6 +18,7 @@ public:
 	const string fich = "opciones.txt";
 
 	int resolucion = 1;
+	int modo = 1, aux_modo = 1;
 	int oldresolucion = 1;
 
 	const int resoluciones[5][2] = {

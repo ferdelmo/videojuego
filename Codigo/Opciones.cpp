@@ -26,6 +26,7 @@ Opciones::Opciones() {
 		myfile >> px >> py >> resolucion;
 		myfile >> Fullscreen;
 		myfile >> up >> down >> right >> left;
+		myfile >> modo;
 		myfile.close();
 	}
 	else {
@@ -36,10 +37,12 @@ Opciones::Opciones() {
 		myfile << px << " " << py << " " << resolucion << '\n';
 		myfile << Fullscreen << '\n';
 		myfile << up << " " << down << " " << right << " " << left << '\n';
+		myfile << modo << '\n';
 		myfile.close();
 	}
 	oldresolucion = resolucion;
 	aux_up = up; aux_down = down; aux_left = left; aux_right = right;
+	aux_modo = modo;
 }
 
 void Opciones::setValue(GLFWwindow *window, Camara * c) {
@@ -105,6 +108,7 @@ void Opciones::setValue(GLFWwindow *window, Camara * c) {
 void Opciones::restaurarValores() {
 	resolucion = oldresolucion;
 	up = aux_up; down = aux_down; left = aux_left; right = aux_right;
+	modo = aux_modo;
 }
 
 bool Opciones::cogerTecla() {
@@ -164,7 +168,7 @@ void Opciones::controlesInFrame() {
 	if (!pulsado) { // Control una pulsación
 		if (state == GLFW_PRESS && !cambiando) {
 			cout << "x: " << x << " ;; y: " << y << endl;
-			if (x >= 0.1265 && x <= 0.433 && y >= -0.85 && y <= -0.692) { // BOTÓN GUARDAR + MENÚ PRINCIPAL
+			if (x >= -0.1303 && x <= 0.4363 && y >= -0.877 && y <= -0.719) { // BOTÓN GUARDAR + MENÚ PRINCIPAL
 				cout << "GUARDAR" << endl;
 				cout << "_______________________" << endl;
 				pulsado = true;
@@ -176,30 +180,45 @@ void Opciones::controlesInFrame() {
 				myfile << px << " " << py << " " << resolucion << '\n';
 				myfile << Fullscreen << '\n';
 				myfile << up << " " << down << " " << right << " " << left << '\n';
+				myfile << modo << '\n';
 				myfile.close();
 				cargar();
 			}
-			else if (x >= -0.43 && x <= -0.119 && y >= -0.85 && y <= -0.692) { // ATRÁS
+			else if (x >= -0.43 && x <= -0.1185 && y >= -0.8798 && y <= -0.711) { // ATRÁS
 				cout << "ATRAS" << endl;
 				cout << "_______________________" << endl;
 				pulsado = true;
 				mode = 1;
 				restaurarValores();
 			}
-			else if (x >= -0.1464 && x <= 0.0644 && y >= -0.335 && y <= 0.458) { // FLECHA IZQ
-				cout << "PULSADO FLECHA IZQ" << endl;
+			else if (x >= -0.1772 && x <= 0.0336 && y >= -0.327 && y <= 0.458) { // FLECHA IZQ RESOLUCIÓN
+				cout << "PULSADO FLECHA IZQ RESOLUCION" << endl;
 				cout << "_______________________" << endl;
 				pulsado = true;
 				if (resolucion > 0) {
 					resolucion--;
 				}
 			}
-			else if (x >= 0.4765 && x <= 0.720 && y >= 0.3244 && y <= 0.455) { // FLECHA DRX
-				cout << "PULSADO FLECHA DER" << endl;
+			else if (x >= 0.5212 && x <= 0.7510 && y >= 0.3244 && y <= 0.4632) { // FLECHA DRX RESOLUCIÓN
+				cout << "PULSADO FLECHA DER RESOLUCIÓN" << endl;
 				cout << "_______________________" << endl;
 				pulsado = true;
 				if (resolucion < 4) {
 					resolucion++;
+				}
+			}
+			else if (x >= -0.1772 && x <= 0.0336 && y >= -0.607 && y <= -0.4899) { // FLECHA IZQ MODO
+				cout << "PULSADO FLECHA IZQ MODO" << endl;
+				cout << "_______________________" << endl;
+				if (modo == 2) {
+					modo--;
+				}
+			}
+			else if (x >= 0.5212 && x <= 0.7510 && y >= -0.607 && y <= -0.4819) { // FLECHA DRX MODO
+				cout << "PULSADO FLECHA DER MODO" << endl;
+				cout << "_______________________" << endl;
+				if (modo == 1) {
+					modo++;
 				}
 			}
 			else if (x >= 0.3836 && x <= 0.42459 && y >= 0.0120 && y <= 0.0734) { // TECLA ARRIBA
@@ -250,6 +269,13 @@ void Opciones::mostrarTexto() {
 	text2D text2D("../DevilDaggers/videojuego/Codigo/Holstein.DDS");
 	string res = to_string(resoluciones[resolucion][0]) + "x" + to_string(resoluciones[resolucion][1]);
 	text2D.printText2D(res.c_str(), 428, 408, 20);
+
+	if (modo == 1) { // 2D
+		text2D.printText2D("JUEGO 2D", 427, 127, 20);
+	}
+	else {	// 3D
+		text2D.printText2D("JUEGO 3D", 427, 127, 20);
+	}
 
 	if (cambiando && aCambiar == 0) {
 		text2D.printText2D("Pulsa una tecla", 550, 305, 15);
