@@ -39,7 +39,9 @@ class CalaveraBase3D : public Render3D {
 		double tiempoSeguir = abs(distribution(gen))*2.0;
 		//direccion para seguir al personaje
 		glm::vec3 dir = { 0,0,0 };
-
+		GLfloat botarY;
+		bool botecito = false;
+		glm::vec3 posAux;
 		//para generar numeros aleatorios
 		mt19937 gen;
 		uniform_real_distribution<float> distribution;

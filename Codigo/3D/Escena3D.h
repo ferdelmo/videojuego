@@ -38,6 +38,8 @@ class Escena3D {
 
 		bool espectador = false;
 
+		bool fin = false;
+
 		Escena3D();
 		
 		void add(shared_ptr<Personaje3D> p);
@@ -61,6 +63,8 @@ class Escena3D {
 		void renderizar();
 
 		void moverObjetos();
+
+		void reset();
 
 };
 

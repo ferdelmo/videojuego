@@ -31,6 +31,7 @@ Daga3D::Daga3D(glm::vec3 pos, glm::vec3 dir, Escena3D * es, GLFWwindow* window, 
 	: Render3D(window, "../DevilDaggers/videojuego/Codigo/Shaders/3D.vert", "../DevilDaggers/videojuego/Codigo/Shaders/3D.frag", c, obj, { 1,0,0 }, 1) {
 	this->es = es;
 	this->nivel = nivel;
+	distribution = uniform_real_distribution<float>(-0.5, 0.5);
 	if (nivel <= 1) {
 		for (int i = 0; i < vertices.size(); i++) {
 			colors[i] = { 1,1,0 };
@@ -57,8 +58,9 @@ Daga3D::Daga3D(glm::vec3 pos, glm::vec3 dir, Escena3D * es, GLFWwindow* window, 
 		Obj3D cubo;
 		Escena3D es3D;
 		Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/cubo.obj", cubo.vertices, cubo.uvs, cubo.normals);
-		shared_ptr<Gema3D> sg = make_shared<Gema3D>(Gema3D(posIni, { 1,1,0 }, es, window, cam, cubo));
+		shared_ptr<Gema3D> sg = make_shared<Gema3D>(Gema3D(posIni, { 1,1,1 }, es, window, cam, cubo));
 		es->add(sg);
+		gemas.push_back(sg);
 	}
 	
 	//numeros aleatorios
@@ -79,7 +81,7 @@ void Daga3D::GenerarCalaveras(int n) {
 	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/CALAVERA.obj", cubo.vertices, cubo.uvs, cubo.normals);
 	if (nivel == 1) {
 		for (int i = 0; i < n; i++) {
-			glm::vec3 posOffset = { distribution(gen) , distribution(gen), distribution(gen) };
+			glm::vec3 posOffset = { distribution(gen), distribution(gen), distribution(gen)};
 			posOffset = pos + posOffset;
 			CalaveraBase3D cal1(posOffset, { 0, 0, 0 }, es, window, cam, cubo, 1);
 			es->add(make_shared<CalaveraBase3D>(cal1));
@@ -160,12 +162,11 @@ void Daga3D::mover() {
 	for (int i = 0; i < gemas.size(); i++) {
 		/*nuevaX = pos[0] + (tam * cos(orientacion+i*div));
 		nuevaY = pos[1] + (tam * sin(orientacion + i*div));*/
-		glm::vec3 pollas = { tam, tam ,0 };
+		glm::vec3 pollas = { tam + gemas[i]->tam, 0 ,0 };
 		nuevaPos = pos + pollas;
 		gemas[i]->setPos(nuevaPos);
 	}
 
-	//cout << int(clock() - tiempecito) / CLOCKS_PER_SEC << endl;
 	if ((int(clock() - tiempecito) / CLOCKS_PER_SEC) % tiempoGen == 0 && generadas != int(clock() - tiempecito) / CLOCKS_PER_SEC) {
 		GenerarCalaveras(8);
 		//cout << "GENERANDOOOO" << endl;

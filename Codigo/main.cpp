@@ -36,6 +36,7 @@
 #include "3D\Personaje3D.h"
 #include "3D\Escena3D.h"
 #include "3D\Daga3D.h"
+#include "3D\Partida3D.h"
 
 #pragma warning(disable:4996)
 
@@ -60,7 +61,7 @@ void displayText(float x, float y, int r, int g, int b, string str) {
 }
 
 string canciones[6] = { "1.mp3", "2.mp3", "3.mp3", "4.mp3", "5.mp3", "6.mp3" };
-int duraciones[6] = {268, 146, 261, 344, 215, 268};
+int duraciones[6] = { 268, 146, 261, 344, 215, 268 };
 
 void playSong(int indice) {
 	if (indice == 1) {
@@ -106,7 +107,7 @@ void stopSong(int indice) {
 int main(int argc, char **argv) {
 
 	glfwInit();
-	
+
 	srand(time(NULL));
 	int indice = rand() % 6 + 1;
 	/*const GLFWvidmode *res = glfwGetVideoMode(glfwGetPrimaryMonitor());
@@ -141,22 +142,36 @@ int main(int argc, char **argv) {
 
 	text2D text2D("../DevilDaggers/videojuego/Codigo/Holstein.DDS");
 
+	Camara cam3D;
+
+	cam3D.FoV = 60;
+	cam3D.View = glm::lookAt(
+		glm::vec3(4, 3, 8), // Camera is at (4,3,3), in World Space
+		glm::vec3(0, 0, 0), // and looks at the origin
+		glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+	);
+	cam3D.Projection = glm::perspective(
+		glm::radians(cam3D.FoV), // El campo de visión vertical, en radián: la cantidad de "zoom". Piensa en el lente de la cámara. Usualmente está entre 90° (extra ancho) y 30° (zoom aumentado)
+		ancho*1.0f / alto,       // Proporción. Depende del tamaño de tu ventana 4/3 == 800/600 == 1280/960, Parece familiar?
+		0.1f,              // Plano de corte cercano. Tan grande como sea posible o tendrás problemas de precisión.
+		100.0f             // Plano de corte lejano. Tan pequeño como se pueda.
+	);
+	cam3D.actualizarMVP();
 	Camara cam;
 
 	cam.FoV = 60;
 	cam.View = glm::lookAt(
-		glm::vec3(4, 3, 8), // Camera is at (4,3,3), in World Space
+		glm::vec3(0, 0, 3), // Camera is at (4,3,3), in World Space
 		glm::vec3(0, 0, 0), // and looks at the origin
 		glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
 	);
 	cam.Projection = glm::perspective(
 		glm::radians(cam.FoV), // El campo de visión vertical, en radián: la cantidad de "zoom". Piensa en el lente de la cámara. Usualmente está entre 90° (extra ancho) y 30° (zoom aumentado)
-		ancho*1.0f/alto,       // Proporción. Depende del tamaño de tu ventana 4/3 == 800/600 == 1280/960, Parece familiar?
+		ancho*1.0f / alto,       // Proporción. Depende del tamaño de tu ventana 4/3 == 800/600 == 1280/960, Parece familiar?
 		0.1f,              // Plano de corte cercano. Tan grande como sea posible o tendrás problemas de precisión.
 		100.0f             // Plano de corte lejano. Tan pequeño como se pueda.
 	);
 	cam.actualizarMVP();
-
 	opciones.setValue(window, &cam);
 
 	//instancia el personage
@@ -171,13 +186,14 @@ int main(int argc, char **argv) {
 	clock_t inicio;
 	Partida aux(&es);
 	Partida * par = &aux;
+	
 
 	// Pantallas
 	MenuPrincipal menu = MenuPrincipal(window);
 	Puntuaciones puntuaciones = Puntuaciones(window, &cam);
 	Creditos creditos = Creditos(window);
-	
-	int mode = 6;
+
+	int mode = 1;
 	//Fondo f(window, "../DevilDaggers/videojuego/Codigo/muerte.png", 1, 1, &cam);
 	Fondo f(0, 0, 0.0f, window, "../DevilDaggers/videojuego/Codigo/muerte01.png", 2, 1, &cam);
 	Muerte muerte(window, &cam, &f);
@@ -198,50 +214,58 @@ int main(int argc, char **argv) {
 	float topPunt[10] = { 0,0,0,0,0,0,0,0,0,0 };
 	bool pulsado = false;
 
-	
+
 	Obj3D plano;
 	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/plano.obj", plano.vertices, plano.uvs, plano.normals);
 	vector<Render3D> r3d;
-	r3d.push_back(Render3D(window, "../DevilDaggers/videojuego/Codigo/Shaders/3D.vert", "../DevilDaggers/videojuego/Codigo/Shaders/3D.frag", &cam, plano, { 0.11,0.11,0.11 },6));
-	Obj3D cubo,perObj;
+	r3d.push_back(Render3D(window, "../DevilDaggers/videojuego/Codigo/Shaders/3D.vert", "../DevilDaggers/videojuego/Codigo/Shaders/3D.frag", &cam, plano, { 0.11,0.11,0.11 }, 6));
+	Obj3D cubo, perObj;
 	Escena3D es3D;
 	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/cubo.obj", cubo.vertices, cubo.uvs, cubo.normals);
 	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/arma.obj", perObj.vertices, perObj.uvs, perObj.normals);
-	Personaje3D per3D({0, 1, 0}, &es3D, window, &cam, perObj);
-	es3D.add(make_shared<Personaje3D>(per3D));
-
-	CalaveraBase3D cal1({ 1, 1, 1 }, { 0, 0, 0 }, &es3D, window, &cam, cubo, 1);
+	Personaje3D per3D({ 0, 1, 0 }, &es3D, window, &cam3D, perObj);
+	//es3D.add(make_shared<Personaje3D>(per3D));
+	Partida3D aux3D(&es3D);
+	Partida3D * par3D = &aux3D;
+	CalaveraBase3D cal1({ 1, 1, 1 }, { 0, 0, 0 }, &es3D, window, &cam3D, cubo, 1);
 	//es3D.add(make_shared<CalaveraBase3D>(cal1));
 	/*CalaveraBase3D cal2({ 1, 1,1 }, { 0,0,0 }, &es3D, window, &cam, cubo, 2);
 	es3D.add(make_shared<CalaveraBase3D>(cal2));
 	CalaveraBase3D cal3({ 1, 1, 1 }, { 0,0,0 }, &es3D, window, &cam, cubo, 3);
 	es3D.add(make_shared<CalaveraBase3D>(cal3));*/
 	//r3d.push_back(per3D);
-	Daga3D daga1({ 10,10,10 }, { 0,0,0 }, &es3D, window, &cam, cubo, 1);
-	es3D.add(make_shared<Daga3D>(daga1));
+	Daga3D daga1({ 10,10,10 }, { 0,0,0 }, &es3D, window, &cam3D, cubo, 1);
+	//es3D.add(make_shared<Daga3D>(daga1));
 
 	//glEnable(GL_CULL_FACE);
+	// Enable depth test
+	//glEnable(GL_DEPTH_TEST);
+	// Accept fragment if it closer to the camera than the former one
+	//glDepthFunc(GL_LESS);
 
+	// Cull triangles which normal is not towards the camera
+	//glEnable(GL_CULL_FACE);
+	bool modo3D = true;
 	while (!glfwWindowShouldClose(window))
 	{
 		/*if (estabaMuerto && es.getPer()->vivo) {
-			mciSendString("pause ../DevilDaggers/videojuego/Codigo/Musica/gameOver.wav", NULL, 0, NULL);
-			estabaMuerto = false;
-			tiempecito = clock();
-			indice = rand() % 6 + 1;
-			playSong(indice);
+		mciSendString("pause ../DevilDaggers/videojuego/Codigo/Musica/gameOver.wav", NULL, 0, NULL);
+		estabaMuerto = false;
+		tiempecito = clock();
+		indice = rand() % 6 + 1;
+		playSong(indice);
 		}
 		if (!es.getPer()->vivo) {
-			cout << "parando cancion " << indice << endl;
-			estabaMuerto = true;
-			stopSong(indice);
-			mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/gameOver.wav", NULL, 0, NULL);
+		cout << "parando cancion " << indice << endl;
+		estabaMuerto = true;
+		stopSong(indice);
+		mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/gameOver.wav", NULL, 0, NULL);
 		}
 		if(int(clock() - tiempecito) / CLOCKS_PER_SEC >= duraciones[indice-1]){
-			tiempecito = clock();
-			indice = rand() % 6 + 1;
-			playSong(indice);
-			//PlaySound(TEXT("../DevilDaggers/videojuego/Codigo/Musica/quack.wav"), NULL, SND_ASYNC);
+		tiempecito = clock();
+		indice = rand() % 6 + 1;
+		playSong(indice);
+		//PlaySound(TEXT("../DevilDaggers/videojuego/Codigo/Musica/quack.wav"), NULL, SND_ASYNC);
 		}*/
 		//BORRA EL FONDO
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -256,22 +280,46 @@ int main(int argc, char **argv) {
 			//lee los eventos
 			glfwPollEvents();
 			if (mode == 2) {
-				//empezaar partida
-				es.reset();
-				Personaje per = Personaje(0, 0, 0, &es, window, &cam);
-				//evita perder teclas entre frames
-				glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
-				//glfwSetKeyCallback(window, Personaje::controles)
-				//glfwSetMouseButtonCallback(window, Personaje::mouse);
-				es.add(make_shared<Personaje>(per));
-				Fondo fondo(window, "../DevilDaggers/videojuego/Codigo/suelo.png", 2, 10, &cam);
-				es.setFondo(make_shared<Fondo>(fondo));
-				Partida partid(&es);
-				par = &partid;
-				par->start();
-				puntuacion = clock();
-				gameover = true;
-				pulsado = false;
+				if (modo3D) {
+					// Enable depth test
+					glEnable(GL_DEPTH_TEST);
+					// Accept fragment if it closer to the camera than the former one
+					glDepthFunc(GL_LESS);
+
+					// Cull triangles which normal is not towards the camera
+					glEnable(GL_CULL_FACE);
+					mode = 6;
+					es3D.reset();
+					Personaje3D per3D({ 0, 1, 0 }, &es3D, window, &cam3D, perObj);
+					es3D.add(make_shared<Personaje3D>(per3D));
+					glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
+					Partida3D partid3D(&es3D);
+					r3d.push_back(Render3D(window, "../DevilDaggers/videojuego/Codigo/Shaders/3D.vert", "../DevilDaggers/videojuego/Codigo/Shaders/3D.frag", &cam, plano, { 0.11,0.11,0.11 }, 6));
+					par3D = &partid3D;
+					par3D->start();
+					puntuacion = clock();
+					gameover = true;
+					pulsado = false;
+				}
+				else {
+					//empezaar partida
+					es.reset();
+					Personaje per = Personaje(0, 0, 0, &es, window, &cam);
+					//evita perder teclas entre frames
+					glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
+					//glfwSetKeyCallback(window, Personaje::controles)
+					//glfwSetMouseButtonCallback(window, Personaje::mouse);
+					es.add(make_shared<Personaje>(per));
+					Fondo fondo(window, "../DevilDaggers/videojuego/Codigo/suelo.png", 2, 10, &cam);
+					es.setFondo(make_shared<Fondo>(fondo));
+					Partida partid(&es);
+					par = &partid;
+					par->start();
+					puntuacion = clock();
+					gameover = true;
+					pulsado = false;
+				}
+				
 			}
 		}
 		else if (mode == 2) {
@@ -287,7 +335,7 @@ int main(int argc, char **argv) {
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
 				//glViewport(-es.getPer()->pos[0]*ancho, -es.getPer()->pos[1]*alto, ancho, alto);
 
-				
+
 
 				par->actualizar();
 				es.actualizarFisicas();
@@ -298,7 +346,7 @@ int main(int argc, char **argv) {
 				tiempo = tiempo.substr(0, tiempo.size() - 3);
 				displayText(0 - 0.10f, 0 + 0.8f, 1, 1, 1, "Tiempo: " + tiempo);
 
-				displayText(0 - 0.50f,0 + 0.8f, 1, 0, 0, "Asesinadas: " + to_string(es.calavsMatadas));
+				displayText(0 - 0.50f, 0 + 0.8f, 1, 0, 0, "Asesinadas: " + to_string(es.calavsMatadas));
 
 				displayText(0 + 0.35f, 0 + 0.8f, 1, 1, 1, "Gemas: " + to_string(es.getPer()->numGemas));
 				//pinta lo que haya en los buffers
@@ -352,10 +400,10 @@ int main(int argc, char **argv) {
 				tiempo = to_string(PUNTOS);
 				tiempo = tiempo.substr(0, tiempo.size() - 3);
 				//cout << tiempo << endl;
-				displayText(-0.1f,-0.0f, 1, 0, 0,tiempo);	
+				displayText(-0.1f, -0.0f, 1, 0, 0, tiempo);
 				for (int i = 0; i < 10; i++) {
 					if (PUNTOS > topPunt[i]) {
-						displayText(-0.25f, -0.1f, 1, 1, 1, "NUEVO RECORD, PUESTO: " + to_string(i+1));
+						displayText(-0.25f, -0.1f, 1, 1, 1, "NUEVO RECORD, PUESTO: " + to_string(i + 1));
 						i = 10;
 					}
 				}
@@ -422,7 +470,7 @@ int main(int argc, char **argv) {
 							j = 10;
 						}
 					}
-					for (int j = 9; j > k ; j--) {
+					for (int j = 9; j > k; j--) {
 						topPunt[j] = topPunt[j - 1];
 					}
 					topPunt[k] = PUNTOS;
@@ -443,7 +491,7 @@ int main(int argc, char **argv) {
 					pulsado = false;
 					puntuaciones.LeerFichero();
 				}
-				else if(!glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS){
+				else if (!glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
 					pulsado = true;
 				}
 				//displayText(0.1, -0.5, 1, 0, 0, "Asesinadas: " + to_string(es.calavsMatadas));
@@ -481,6 +529,13 @@ int main(int argc, char **argv) {
 			glfwPollEvents();
 		}
 		else if (mode == 6) {
+			// Enable depth test
+			glEnable(GL_DEPTH_TEST);
+			// Accept fragment if it closer to the camera than the former one
+			glDepthFunc(GL_LESS);
+
+			// Cull triangles which normal is not towards the camera
+			glEnable(GL_CULL_FACE);
 			inicio = clock();
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 			mode = 6;
@@ -494,7 +549,7 @@ int main(int argc, char **argv) {
 			es3D.renderizar();
 			es3D.moverObjetos();
 
-		
+
 
 			char text[256];
 			sprintf(text, "%.2f sec", glfwGetTime());

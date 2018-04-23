@@ -21,7 +21,7 @@ class Camara;
 class Gema3D : public Render3D {
 public:
 	// propiedades del personaje
-	const GLfloat velocidad = 7.5;
+	const GLfloat velocidad = 35;
 	GLfloat velRot = pi / 30;
 	clock_t tiempecito = 0;
 	

@@ -32,11 +32,15 @@ CalaveraBase3D::CalaveraBase3D(glm::vec3 pos, glm::vec3 dir, Escena3D * es, GLFW
 		1.0f, 1.0f
 
 	};
+	
 	distribution = uniform_real_distribution<float>(-1, 1);
 	distribution2 = uniform_real_distribution<float>(tam/2.0, es->per->tam*1.5);
 	random_device rd;
 	// Initialize Mersenne Twister pseudo-random number generator
 	gen = mt19937(rd());
+	GLfloat auxY = pos.y;
+	posAux = es->per->pos;
+	posAux.y = auxY + distribution(gen);
 
 	/*dir[0] = distribution(gen);
 	dir[1] = distribution(gen);
@@ -69,31 +73,22 @@ CalaveraBase3D::CalaveraBase3D(glm::vec3 pos, glm::vec3 dir, Escena3D * es, GLFW
 	velRot = 0.085+distribution(gen)*0.005;
 	velocidad = velocidad + distribution(gen)*0.5;
 	direccion = { distribution(gen),abs(distribution(gen)),distribution(gen) };
-	cout << "{ " << direccion.x << ", " << direccion.y << ", " << direccion.z << " }" << endl;
+	//cout << "{ " << direccion.x << ", " << direccion.y << ", " << direccion.z << " }" << endl;
 	direccion = direccion / length(direccion);
 }
 
 void CalaveraBase3D::seguir() {
 	glm::vec3 posP = es->per->pos;
 	//cout << "{ " << direccion.x << ", " << direccion.y << ", " << direccion.z << " }" << endl;
-	if (nivel == 1) { //NORMALES
-		/*if (double(clock() - tiempecito) / CLOCKS_PER_SEC >= tiempoSeguir || llegar) {
-			dir = posP;
-			tiempecito = clock();
-			tiempoSeguir = abs(distribution(gen))*2.0;
-			llegar = false;
-		}*/
+	if (nivel == 1) { 
 		glm::vec3 vecDir = posP - pos; // vector movimiento
 		vecDir = vecDir / glm::length(vecDir);
-		vecDir = glm::mix(vecDir,direccion,0.9+velRot);
+		vecDir = glm::mix(vecDir, direccion, 0.9 + velRot);
 		if (pos.y < 0.5 && vecDir.y < 0) {
 			vecDir.y = abs(vecDir.y);
 		}
 		vecDir = vecDir / glm::length(vecDir); //normalizar vector
 		pos += (0.01f * velocidad) * vecDir;
-		/*if (glm::length(pos - dir) <= tam) {
-			llegar = true;
-		}*/
 		direccion = vecDir;
 	}
 	else if (nivel == 2) { //SIGUEN PERFECTO

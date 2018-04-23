@@ -117,7 +117,17 @@ void Escena3D::moverObjetos() {
 		}
 		for (int i = 0; i < dagas.size(); i++) {
 			dagas[i]->mover();
+			dagas[i]->fisicas();
 		}
 	}
 	per->mover();
+}
+
+void Escena3D::reset() {
+	calaveras.clear();
+	dagas.clear();
+	per.reset();
+	//fon.reset();
+	fin = false;
+	calavsMatadas = 0;
 }

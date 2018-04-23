@@ -24,12 +24,21 @@ Bala3D::Bala3D(glm::vec3 pos, glm::vec3 dir, GLFWwindow* window, Camara * c, Obj
 	this->inicio = clock();
 	if (nivel <= 1) {
 		danyo = 5;
+		for (int i = 0; i < vertices.size(); i++) {
+			colors[i] = { 1,0,0 };
+		}
 	}
 	else if (nivel == 2) {
 		danyo = 10;
+		for (int i = 0; i < vertices.size(); i++) {
+			colors[i] = { 0,1,1 };
+		}
 	}
 	else {
 		danyo = 20;
+		for (int i = 0; i < vertices.size(); i++) {
+			colors[i] = { 1,0,1 };
+		}
 	}
 }
 
