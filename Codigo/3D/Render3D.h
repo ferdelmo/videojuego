@@ -209,6 +209,12 @@ class Render3D {
 			// Lo rellena con la informacion del color
 			glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(glm::vec3), &colors[0], GL_STATIC_DRAW);
 		}
+
+		void actualizarVertices() {
+			glBindBuffer(GL_ARRAY_BUFFER, points_VBO);
+			// Lo rellena con la informacion del color
+			glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
+		}
 };
 
 #endif

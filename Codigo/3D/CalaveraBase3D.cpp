@@ -34,13 +34,13 @@ CalaveraBase3D::CalaveraBase3D(glm::vec3 pos, glm::vec3 dir, Escena3D * es, GLFW
 	};
 	
 	distribution = uniform_real_distribution<float>(-1, 1);
-	distribution2 = uniform_real_distribution<float>(tam/2.0, es->per->tam*1.5);
+	distribution2 = uniform_real_distribution<float>(2,3);
 	random_device rd;
 	// Initialize Mersenne Twister pseudo-random number generator
 	gen = mt19937(rd());
 	GLfloat auxY = pos.y;
-	posAux = es->per->pos;
-	posAux.y = auxY + distribution(gen);
+	/*posAux = es->per->pos;
+	posAux.y = auxY + distribution(gen);*(¡/
 
 	/*dir[0] = distribution(gen);
 	dir[1] = distribution(gen);
@@ -80,8 +80,10 @@ CalaveraBase3D::CalaveraBase3D(glm::vec3 pos, glm::vec3 dir, Escena3D * es, GLFW
 void CalaveraBase3D::seguir() {
 	glm::vec3 posP = es->per->pos;
 	//cout << "{ " << direccion.x << ", " << direccion.y << ", " << direccion.z << " }" << endl;
-	if (nivel == 1) { 
+	if (nivel == 1) { //NORMALES
 		glm::vec3 vecDir = posP - pos; // vector movimiento
+
+
 		vecDir = vecDir / glm::length(vecDir);
 		vecDir = glm::mix(vecDir, direccion, 0.9 + velRot);
 		if (pos.y < 0.5 && vecDir.y < 0) {
@@ -167,13 +169,16 @@ void CalaveraBase3D::mover() {
 			Obj3D cubo;
 			Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/cubo.obj", cubo.vertices, cubo.uvs, cubo.normals);
 
-			sp = new SistemaParticulas(pos, window, cam, cubo, { 1,1,1 }, 5);
+			sp = new SistemaParticulas(pos, window, cam, cubo, { 1,1,1 }, 20);
 			//thread t1(&SistemaParticulas::recogeLosThreads, sp);
 			//spFin = &t1;
 			tam = 0.001f;
 		}
 	}
 	else {
+		for (int i = 0; i < sp->parts.size(); i++) {
+			sp->parts[i].lightPos = es->per->lightPos;
+		}
 		sigue = sp->renderizar();
 	}
 }

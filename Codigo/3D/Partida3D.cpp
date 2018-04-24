@@ -41,7 +41,7 @@ void Partida3D::generarDaga1() {
 			int p = distribution(gen);
 			Obj3D cubo, perObj;
 			Escena3D es3D;
-			Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/cubo.obj", cubo.vertices, cubo.uvs, cubo.normals);
+			Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/daga.obj", cubo.vertices, cubo.uvs, cubo.normals);
 			es->add(make_shared<Daga3D>(Daga3D(posiposibles[p], { 0,0,0 }, es, es->per->window, es->per->cam, cubo, 1)));
 			if (daga1p) {
 				daga1p = false;
@@ -62,7 +62,7 @@ void Partida3D::generarDaga2() {
 			int p = distribution(gen);
 			Obj3D cubo, perObj;
 			Escena3D es3D;
-			Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/cubo.obj", cubo.vertices, cubo.uvs, cubo.normals);
+			Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/daga.obj", cubo.vertices, cubo.uvs, cubo.normals);
 			es->add(make_shared<Daga3D>(Daga3D(posiposibles[p], { 0,0,0 }, es, es->per->window, es->per->cam, cubo, 2)));
 			if (daga2p) {
 				daga2p = false;
@@ -83,7 +83,7 @@ void Partida3D::generarDaga3() {
 			int p = distribution(gen);
 			Obj3D cubo, perObj;
 			Escena3D es3D;
-			Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/cubo.obj", cubo.vertices, cubo.uvs, cubo.normals);
+			Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/daga.obj", cubo.vertices, cubo.uvs, cubo.normals);
 			es->add(make_shared<Daga3D>(Daga3D(posiposibles[p], { 0,0,0 }, es, es->per->window, es->per->cam, cubo, 3)));
 			if (daga3p) {
 				daga3p = false;

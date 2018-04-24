@@ -32,7 +32,7 @@ class Bala3D;
 
 class Daga3D : public Render3D {
 
-	GLfloat velocidad = 0.75f, velRot = 0.005f;
+	GLfloat velocidad = 2, velRot = 0.1f;
 	bool generadaPos = false;
 	bool muerto = false;
 	clock_t tiempecito = 0;
@@ -66,10 +66,6 @@ class Daga3D : public Render3D {
 		bool sigueVivo();
 
 		void GenerarCalaveras(int n);
-
-		void GenerarCalaverasII(int n);
-
-		void GenerarCalaverasIII(int n);
 
 		void mover();
 

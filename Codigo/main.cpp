@@ -214,7 +214,6 @@ int main(int argc, char **argv) {
 	float topPunt[10] = { 0,0,0,0,0,0,0,0,0,0 };
 	bool pulsado = false;
 
-
 	Obj3D plano;
 	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/plano.obj", plano.vertices, plano.uvs, plano.normals);
 	vector<Render3D> r3d;
@@ -224,17 +223,16 @@ int main(int argc, char **argv) {
 	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/cubo.obj", cubo.vertices, cubo.uvs, cubo.normals);
 	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/arma.obj", perObj.vertices, perObj.uvs, perObj.normals);
 	Personaje3D per3D({ 0, 1, 0 }, &es3D, window, &cam3D, perObj);
-	//es3D.add(make_shared<Personaje3D>(per3D));
 	Partida3D aux3D(&es3D);
 	Partida3D * par3D = &aux3D;
-	CalaveraBase3D cal1({ 1, 1, 1 }, { 0, 0, 0 }, &es3D, window, &cam3D, cubo, 1);
+	//CalaveraBase3D cal1({ 1, 1, 1 }, { 0, 0, 0 }, &es3D, window, &cam3D, cubo, 1);
 	//es3D.add(make_shared<CalaveraBase3D>(cal1));
 	/*CalaveraBase3D cal2({ 1, 1,1 }, { 0,0,0 }, &es3D, window, &cam, cubo, 2);
 	es3D.add(make_shared<CalaveraBase3D>(cal2));
 	CalaveraBase3D cal3({ 1, 1, 1 }, { 0,0,0 }, &es3D, window, &cam, cubo, 3);
 	es3D.add(make_shared<CalaveraBase3D>(cal3));*/
 	//r3d.push_back(per3D);
-	Daga3D daga1({ 10,10,10 }, { 0,0,0 }, &es3D, window, &cam3D, cubo, 1);
+	//Daga3D daga1({ 10,10,10 }, { 0,0,0 }, &es3D, window, &cam3D, cubo, 1);
 	//es3D.add(make_shared<Daga3D>(daga1));
 
 	//glEnable(GL_CULL_FACE);
@@ -348,6 +346,8 @@ int main(int argc, char **argv) {
 
 				displayText(0 - 0.50f, 0 + 0.8f, 1, 0, 0, "Asesinadas: " + to_string(es.calavsMatadas));
 
+
+				text2D.printText2D("MIS COJONES 33", 0, 0, 6);
 				displayText(0 + 0.35f, 0 + 0.8f, 1, 1, 1, "Gemas: " + to_string(es.getPer()->numGemas));
 				//pinta lo que haya en los buffers
 
@@ -539,6 +539,7 @@ int main(int argc, char **argv) {
 			inicio = clock();
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 			mode = 6;
+			
 			//cout << "RENDERIZANDO" << endl;
 			glm::vec3 light = { 0,4,0 };
 			light = light + es3D.per->pos;
@@ -548,7 +549,7 @@ int main(int argc, char **argv) {
 			}
 			es3D.renderizar();
 			es3D.moverObjetos();
-
+			par3D->actualizar();
 
 
 			char text[256];

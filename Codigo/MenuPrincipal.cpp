@@ -122,7 +122,7 @@ void MenuPrincipal::controlesInFrame() {
 			}
 			if (x >= 0.11 && x <= 0.85 && y >= -0.87 && y <= -0.54) { // BOTÓN SALIR
 				pulsado = true;
-				mode = 6;
+				mode = 80;
 			}
 		}
 
