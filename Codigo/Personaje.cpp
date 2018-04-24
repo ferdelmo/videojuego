@@ -178,12 +178,12 @@ GLfloat Personaje::distancia(GLfloat x, GLfloat y, GLfloat xp, GLfloat yp) {
 }
 
 void Personaje::mover() {
-	/*cam->View = glm::lookAt(
+	cam->View = glm::lookAt(
 		glm::vec3(pos[0], pos[1], 3), // Camera is at (4,3,3), in World Space
 		glm::vec3(pos[0], pos[1], 0), // and looks at the origin
 		glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
 	);
-	cam->actualizarMVP();*/
+	cam->actualizarMVP();
 	controlesInFrame();
 }
 

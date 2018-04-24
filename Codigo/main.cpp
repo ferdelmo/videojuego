@@ -243,7 +243,7 @@ int main(int argc, char **argv) {
 
 	// Cull triangles which normal is not towards the camera
 	//glEnable(GL_CULL_FACE);
-	bool modo3D = true;
+	bool modo3D = false;
 	while (!glfwWindowShouldClose(window))
 	{
 		/*if (estabaMuerto && es.getPer()->vivo) {
@@ -266,6 +266,7 @@ int main(int argc, char **argv) {
 		//PlaySound(TEXT("../DevilDaggers/videojuego/Codigo/Musica/quack.wav"), NULL, SND_ASYNC);
 		}*/
 		//BORRA EL FONDO
+		modo3D = opciones.modo == 2;
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		if (mode == 1) {
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);

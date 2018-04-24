@@ -31,16 +31,9 @@ void Partida3D::stop() {
 }
 
 void Partida3D::actualizar() {
-	if (es != nullptr) {
-		Obj3D cubo;
-		Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/CALAVERA.obj", cubo.vertices, cubo.uvs, cubo.normals);
-		CalaveraBase3D cal3({ 5,0,5 }, { 0, 0, 0 }, es, es->per->window, es->per->cam, cubo, 3);
-		es->add(make_shared<CalaveraBase3D>(cal3));
-		es = nullptr;
-	}
-	/*generarDaga1();
+	generarDaga1();
 	generarDaga2();
-	generarDaga3();*/
+	generarDaga3();
 }
 
 void Partida3D::generarDaga1() {
@@ -55,7 +48,7 @@ void Partida3D::generarDaga1() {
 				daga1p = false;
 				daga1sec = 10;
 			}
-			else if (daga1sec > 5) {
+			else if (daga1sec > 10) {
 				daga1sec = daga1sec - 0.25;
 			}
 			cout << "Genera cada: " << daga1sec << endl;;
@@ -76,7 +69,7 @@ void Partida3D::generarDaga2() {
 				daga2p = false;
 				daga2sec = 10;
 			}
-			else if (daga2sec > 6.5f) {
+			else if (daga2sec > 15) {
 				daga2sec = daga2sec - 0.25;
 			}
 			cout << "Genera cada: " << daga2sec << endl;
@@ -97,7 +90,7 @@ void Partida3D::generarDaga3() {
 				daga3p = false;
 				daga3sec = 10;
 			}
-			else if (daga3sec > 6.5f) {
+			else if (daga3sec > 20) {
 				daga3sec = daga3sec - 0.25;
 			}
 			cout << "Genera cada: " << daga3sec << endl;;

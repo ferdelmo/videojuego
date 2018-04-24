@@ -121,6 +121,9 @@ void CalaveraBase3D::seguir() {
 		cout << "DIRAUX: " << "{ " << dirAux.x << ", " << dirAux.y << ", " << dirAux.z << " }" << endl;
 		cout << "DIRFINAL: " << "{ " << direccion.x << ", " << direccion.y << ", " << direccion.z << " }" << endl;
 		*/
+		if (pos.y > 0.5f) {
+			pos += glm::vec3({ 0,-velocidad / 5,0 })*0.01f;
+		}
 	}
 	if (glm::length(pos - posP) <= tam + es->per->tam && !es->per->modoDios) {
 		//cout << "MUERTO MATAO" << endl;
