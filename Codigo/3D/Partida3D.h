@@ -8,6 +8,7 @@
 #include <ctime>
 #include <random>
 #include <thread>
+#include "Render3D.h"
 
 using namespace std;
 
@@ -38,6 +39,8 @@ class Partida3D {
 		//para generar numeros aleatorios
 		mt19937 gen;
 		uniform_int_distribution<> distribution;
+
+		Obj3D * modelo;
 
 	public:
 		Partida3D(Escena3D * es);

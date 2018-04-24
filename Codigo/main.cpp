@@ -37,6 +37,7 @@
 #include "3D\Escena3D.h"
 #include "3D\Daga3D.h"
 #include "3D\Partida3D.h"
+#include "3D\Particulas.h"
 
 using namespace std;
 
@@ -219,8 +220,6 @@ int main(int argc, char **argv) {
 
 	Obj3D plano;
 	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/plano.obj", plano.vertices, plano.uvs, plano.normals);
-	vector<Render3D> r3d;
-	r3d.push_back(Render3D(window, "../DevilDaggers/videojuego/Codigo/Shaders/3D.vert", "../DevilDaggers/videojuego/Codigo/Shaders/3D.frag", &cam, plano, { 0.11,0.11,0.11 }, 6));
 	Obj3D cubo, perObj;
 	Escena3D es3D;
 	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/cubo.obj", cubo.vertices, cubo.uvs, cubo.normals);
@@ -268,6 +267,7 @@ int main(int argc, char **argv) {
 
 					// Cull triangles which normal is not towards the camera
 					glDisable(GL_CULL_FACE);
+
 					//empezaar partida
 					es.reset();
 					Personaje per = Personaje(0, 0, 0, &es, window, &cam);
@@ -299,7 +299,6 @@ int main(int argc, char **argv) {
 					es3D.add(make_shared<Personaje3D>(per3D));
 					glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
 					Partida3D partid3D(&es3D);
-					r3d.push_back(Render3D(window, "../DevilDaggers/videojuego/Codigo/Shaders/3D.vert", "../DevilDaggers/videojuego/Codigo/Shaders/3D.frag", &cam3D, plano, { 0.11,0.11,0.11 }, 6));
 					par3D = &partid3D;
 					par3D->start();
 					puntuacion = clock();
@@ -491,12 +490,6 @@ int main(int argc, char **argv) {
 				string tiempo;
 				//BORRA EL FONDO
 				if (es3D.per->vivo) {
-					glm::vec3 light = { 0,4,0 };
-					light = light + es3D.per->pos;
-					for (int i = 0; i < r3d.size(); i++) {
-						r3d[i].lightPos = light;
-						r3d[i].renderizar();
-					}
 					//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 					//renderiza escena
 					//glDepthMask(GL_FALSE);
@@ -704,12 +697,6 @@ int main(int argc, char **argv) {
 			mode = 6;
 			
 			//cout << "RENDERIZANDO" << endl;
-			glm::vec3 light = { 0,4,0 };
-			light = light + es3D.per->pos;
-			for (int i = 0; i < r3d.size(); i++) {
-				r3d[i].lightPos = light;
-				r3d[i].renderizar();
-			}
 			es3D.renderizar();
 			es3D.moverObjetos();
 			par3D->actualizar();

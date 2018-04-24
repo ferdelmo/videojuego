@@ -104,42 +104,28 @@ void Daga3D::GenerarCalaveras(int n) {
 	pos = pos + glm::vec3({ 0,2,0 });
 	if (nivel == 1) {
 		for (int i = 0; i < n; i++) {
-			glm::vec3 posOffset = { distribution(gen), distribution(gen), distribution(gen)};
-			posOffset = pos + posOffset;
-			CalaveraBase3D cal1(posOffset, { 0, 0, 0 }, es, window, cam, cubo, 1);
+			CalaveraBase3D cal1(pos, { 0, 0, 0 }, es, window, cam, cubo, 1);
 			es->add(make_shared<CalaveraBase3D>(cal1));
 		}
-		glm::vec3 posOffset = { distribution(gen) , distribution(gen), distribution(gen) };
-		posOffset = pos + posOffset;
-		CalaveraBase3D cal3( posOffset , { 0, 0, 0 }, es, window, cam, cubo, 3);
+		CalaveraBase3D cal3( pos , { 0, 0, 0 }, es, window, cam, cubo, 3);
 		es->add(make_shared<CalaveraBase3D>(cal3));
 	}
 	else if (nivel == 2) {
 		for (int i = 0; i < n; i++) {
-			glm::vec3 posOffset = { distribution(gen) , distribution(gen), distribution(gen) };
-			posOffset = pos + posOffset;
-			CalaveraBase3D cal1(posOffset , { 0, 0, 0 }, es, window, cam, cubo, 1);
+			CalaveraBase3D cal1(pos , { 0, 0, 0 }, es, window, cam, cubo, 1);
 			es->add(make_shared<CalaveraBase3D>(cal1));
 		}
-		glm::vec3 posOffset = { distribution(gen) , distribution(gen), distribution(gen) };
-		posOffset = pos + posOffset;
-		CalaveraBase3D cal2(posOffset , { 0, 0, 0 }, es, window, cam, cubo, 2);
+		CalaveraBase3D cal2(pos , { 0, 0, 0 }, es, window, cam, cubo, 2);
 		es->add(make_shared<CalaveraBase3D>(cal2));
 	}
 	else {
 		for (int i = 0; i < n; i++) {
-			glm::vec3 posOffset = { distribution(gen) , distribution(gen), distribution(gen) };
-			posOffset = pos + posOffset;
-			CalaveraBase3D cal1(posOffset , { 0, 0, 0 }, es, window, cam, cubo, 1);
+			CalaveraBase3D cal1(pos , { 0, 0, 0 }, es, window, cam, cubo, 1);
 			es->add(make_shared<CalaveraBase3D>(cal1));
 		}
-		glm::vec3 posOffset = { distribution(gen) , distribution(gen), distribution(gen) };
-		posOffset = pos + posOffset;
-		CalaveraBase3D cal2(posOffset, { 0, 0, 0 }, es, window, cam, cubo, 2);
+		CalaveraBase3D cal2(pos, { 0, 0, 0 }, es, window, cam, cubo, 2);
 		es->add(make_shared<CalaveraBase3D>(cal2));
-		posOffset = { distribution(gen) , distribution(gen), distribution(gen) };
-		posOffset = pos + posOffset;
-		CalaveraBase3D cal3(posOffset, { 0, 0, 0 }, es, window, cam, cubo, 3);
+		CalaveraBase3D cal3(pos, { 0, 0, 0 }, es, window, cam, cubo, 3);
 		es->add(make_shared<CalaveraBase3D>(cal3));
 	}
 	pos = posVieja;
@@ -220,25 +206,24 @@ void Daga3D::mover() {
 		}
 		//cout << int(clock() - tiempecito) / CLOCKS_PER_SEC << endl;
 		if ((int(clock() - tiempecito) / CLOCKS_PER_SEC) % tiempoGen == 0 && generadas != int(clock() - tiempecito) / CLOCKS_PER_SEC) {
-			GenerarCalaveras(5);
+			GenerarCalaveras(8);
 			//cout << "GENERANDOOOO" << endl;
 			generadas = int(clock() - tiempecito) / CLOCKS_PER_SEC;
 		}
 	}
 	else {
-		glm::vec3 final = { pos.x, -1, pos.z };
-		velRot = 4;
-		if (pos.y > 0) {
-			cout << "posicion; " << pos.y << endl;
-			final = { pos.x, -1, pos.z };
-			glm::vec3 vecDir = final - pos; // vector movimiento
-			vecDir = vecDir / glm::length(vecDir); //normalizar vector
-			pos += (0.01f * velocidad) * vecDir;
-			direccion = vecDir;
+		if (pos.y > -3) {
+			pos += (0.01f * velocidad) * glm::vec3({0,-2,0});
+			velRot = 10;
+			float ang = glm::radians(velRot);
+			glm::vec3 nueva = direccion;
+			nueva.x = direccion.x*cos(ang) + direccion.z*sin(ang);
+			nueva.z = -direccion.x*sin(ang) + direccion.z*cos(ang);
+			direccion = nueva;
 		}
-	}
-	if (pos.y < 0) {
-		sigue = false;
+		else {
+			sigue = false;
+		}
 	}
 }
 

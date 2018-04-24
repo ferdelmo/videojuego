@@ -67,7 +67,7 @@ CalaveraBase3D::CalaveraBase3D(glm::vec3 pos, glm::vec3 dir, Escena3D * es, GLFW
 	}
 	else {
 		cambiarColor({ 0,0,1 });
-		vida = 100;
+		vida = 50;
 	}
 
 	velRot = 0.085+distribution(gen)*0.005;
@@ -122,7 +122,7 @@ void CalaveraBase3D::seguir() {
 		cout << "DIRFINAL: " << "{ " << direccion.x << ", " << direccion.y << ", " << direccion.z << " }" << endl;
 		*/
 		if (pos.y > 0.5f) {
-			pos += glm::vec3({ 0,-velocidad / 5,0 })*0.01f;
+			pos += glm::vec3({ 0,-velocidad /2,0 })*0.01f;
 		}
 	}
 	if (glm::length(pos - posP) <= tam + es->per->tam && !es->per->modoDios) {
@@ -177,10 +177,7 @@ void CalaveraBase3D::mover() {
 		seguir();
 		muerto = !vivo();
 		if (muerto) {
-			Obj3D cubo;
-			Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/cubo.obj", cubo.vertices, cubo.uvs, cubo.normals);
-
-			sp = new SistemaParticulas(pos, window, cam, cubo, { 1,1,1 }, 20);
+			sp = new SistemaParticulas(pos, window, cam, colors[0], 20);
 			//thread t1(&SistemaParticulas::recogeLosThreads, sp);
 			//spFin = &t1;
 			tam = 0.001f;
