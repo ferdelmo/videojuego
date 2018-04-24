@@ -303,9 +303,13 @@ void Personaje3D::mover() {
 	cam->FoV = camaras[camaraActual].FoV;
 	cam->actualizarMVP();
 	controlesInFrame();
+	if (pos.x < -es->limite || pos.x > es->limite || pos.z < -es->limite || pos.z > es->limite) {
+		morir();
+	}
 }
 
 void Personaje3D::fisicas() {
+
 	/*if ((pos[0] > es->getLimites() || pos[0] < -es->getLimites()) || (pos[1] > es->getLimites() || pos[1] < -es->getLimites())) {
 		if (!modoDios) {
 			morir();

@@ -229,9 +229,9 @@ void Daga3D::mover() {
 
 void Daga3D::fisicas() {
 	//mira colision con personaje pa matarlo
-	/*if (glm::length(pos - es->per->pos) <= tam + es->per->tam && !es->per->modoDios) {
+	if (glm::length(pos - es->per->pos) <= tam + es->per->tam && !es->per->modoDios) {
 		//a->morir();
-	}*/
+	}
 	//colisiona las gemas con las balas
 	sigueVivo();
 
