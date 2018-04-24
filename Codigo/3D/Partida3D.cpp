@@ -4,6 +4,7 @@
 #include "Escena3D.h"
 #include "Personaje3D.h"
 #include "Daga3D.h"
+#include "CalaveraBase3D.h"
 #include "../Camara.h"
 #include "../LoadShader.h"
 
@@ -30,9 +31,16 @@ void Partida3D::stop() {
 }
 
 void Partida3D::actualizar() {
-	generarDaga1();
+	if (es != nullptr) {
+		Obj3D cubo;
+		Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/CALAVERA.obj", cubo.vertices, cubo.uvs, cubo.normals);
+		CalaveraBase3D cal3({ 5,0,5 }, { 0, 0, 0 }, es, es->per->window, es->per->cam, cubo, 3);
+		es->add(make_shared<CalaveraBase3D>(cal3));
+		es = nullptr;
+	}
+	/*generarDaga1();
 	generarDaga2();
-	generarDaga3();
+	generarDaga3();*/
 }
 
 void Partida3D::generarDaga1() {

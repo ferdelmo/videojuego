@@ -100,20 +100,27 @@ void CalaveraBase3D::seguir() {
 		direccion = vecDir;
 	}
 	else{
-		// A SU PUTA BOLA
-		if (llegar) {
-			llegar = false;
-			dir[0] = distribution(gen);
-			dir[1] = distribution2(gen);
-			dir[2] = distribution(gen);
+		glm::vec3 mira = es->per->direccion;
+		glm::vec3 dirAux = posP - pos;
+		mira.y = 0; dirAux.y = 0;
+		mira = mira / glm::length(mira);
+		dirAux = dirAux / glm::length(dirAux);
+		double alpha = glm::dot(mira,dirAux) / (glm::length(mira)*glm::length(dirAux));
+		alpha = acos(alpha);
+		if (glm::cross(mira, dirAux).y > 0) {
+			alpha = -alpha;
 		}
-		glm::vec3 vecDir = dir - pos;
+		alpha = alpha / 2;
+		glm::vec3 vecDir = { 0,0,0 }; // vector movimient
+		vecDir.x = dirAux.x * cos(alpha) - dirAux.z*sin(alpha);
+		vecDir.z = dirAux.x * sin(alpha) + dirAux.z*cos(alpha);
 		vecDir = vecDir / glm::length(vecDir); //normalizar vector
-		pos += (0.005f * velocidad) * vecDir;
-		if (glm::length(pos - dir) <= tam) {
-			llegar = true;
-		}
+		pos += (0.01f * velocidad) * vecDir;
 		direccion = vecDir;
+		/*cout << "MIRA: " << "{ " << mira.x << ", " << mira.y << ", " << mira.z << " }" << endl;
+		cout << "DIRAUX: " << "{ " << dirAux.x << ", " << dirAux.y << ", " << dirAux.z << " }" << endl;
+		cout << "DIRFINAL: " << "{ " << direccion.x << ", " << direccion.y << ", " << direccion.z << " }" << endl;
+		*/
 	}
 	if (glm::length(pos - posP) <= tam + es->per->tam && !es->per->modoDios) {
 		//cout << "MUERTO MATAO" << endl;
