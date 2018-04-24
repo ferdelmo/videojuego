@@ -77,7 +77,6 @@ Daga3D::Daga3D(glm::vec3 pos, glm::vec3 dir, Escena3D * es, GLFWwindow* window, 
 
 	//ESCALA EL EJE Y PARA QUE SEAN MAS ALARGADAS
 	for (int i = 0; i < vertices.size(); i++) {
-		cout << "CAMBIA XD" << endl;
 		vertices[i].y = vertices[i].y * 2;
 	}
 	actualizarVertices();

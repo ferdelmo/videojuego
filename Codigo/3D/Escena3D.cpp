@@ -14,6 +14,7 @@ Escena3D::Escena3D() {
 
 void Escena3D::add(shared_ptr<Personaje3D> p) {
 	per = p;
+	fondo = make_shared<Render3D>(Render3D(p->window,p->cam,"../DevilDaggers/videojuego/Codigo/suelo.png",limite*1,limite));
 }
 
 void Escena3D::add(shared_ptr<Bala3D> b) {
@@ -53,6 +54,8 @@ void Escena3D::renderizar() {
 	clock_t tieempo = clock();
 	glm::vec3 light = { 0,4,0 };
 	light = light + per->pos;
+	fondo->lightPos = light;
+	fondo->renderizar();
 	while (i < balas.size()) {
 		balas[i]->lightPos = light;
 		bool seguir = balas[i]->renderizar();

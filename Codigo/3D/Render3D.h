@@ -67,6 +67,11 @@ class Render3D {
 
 		Camara * cam;
 
+		int texWid, texHei, texChan;
+		unsigned char* texImage=nullptr;
+
+		GLuint texture;
+
 	public:
 
 		static bool loadOBJ(
@@ -186,6 +191,8 @@ class Render3D {
 
 		//CONSTRUCTOR POR DEFECTO
 		Render3D(GLFWwindow * window, string vertSha, string fragSha, Camara * c, Obj3D obj, glm::vec3 color, GLfloat escalado);
+
+		Render3D(GLFWwindow * window, Camara * c, string textura, GLfloat offset, GLfloat escalado);
 
 		~Render3D() {
 			/*glDeleteVertexArrays(1, &points_VBO);

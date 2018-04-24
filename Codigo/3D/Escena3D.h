@@ -11,6 +11,7 @@
 #include <mmsystem.h>
 #include <thread>
 #include <thread>
+#include "Render3D.h"
 
 
 
@@ -33,10 +34,13 @@ class Escena3D {
 		vector<shared_ptr<CalaveraBase3D>> calaveras;
 		vector<shared_ptr<Gema3D>> gemas;
 		vector<shared_ptr<Daga3D>> dagas;
+		shared_ptr<Render3D> fondo;
 	public:
 		int calavsMatadas = 0;
 
 		bool espectador = false;
+
+		float limite = 10; //(10,10) (-10,-10)
 
 		bool fin = false;
 

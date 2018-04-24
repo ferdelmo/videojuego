@@ -85,6 +85,12 @@ void Gema3D::mover() {
 		noCogida = false;
 	}
 	if (vida <= 0) {
+		if (tam > 0.1) {
+			tam -= 0.005f;
+		}
+		if (pos.y > 0.5f) {
+			pos += glm::vec3({ 0,-velocidad/5,0 })*0.01f;
+		}
 		//cout << "seguir al personaje " << endl;
 		seguirPersonaje();
 	}
