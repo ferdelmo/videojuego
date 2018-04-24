@@ -146,7 +146,17 @@ void Daga3D::GenerarCalaveras(int n) {
 }
 
 bool Daga3D::sigueVivo() {
+	vector<shared_ptr<Bala3D>> * b = es->getBalas();
 	int i = 0;
+	while (i < b->size()) {
+		if (glm::length(pos - b->at(i)->pos) < tam + b->at(i)->tam) {
+			b->erase(b->begin() + i);
+		}
+		else {
+			i++;
+		}
+	}
+	 i = 0;
 	while (i < gemas.size()) {
 		bool siguenViva = gemas[i]->colisionBala();
 		if (!siguenViva) {
@@ -160,68 +170,88 @@ bool Daga3D::sigueVivo() {
 }
 
 void Daga3D::mover() {
-	if(!generadaPos){
-		generadaPos = true;
-		posFinal = { distribution(gen), 2, distribution2(gen) };
-		if (pos[0] < 0 && posFinal[0] > 0) {
-			posFinal[0] = -posFinal[0];
+	if (gemas.size() > 0) {
+		if (!generadaPos) {
+			generadaPos = true;
+			posFinal = { distribution(gen), 2, distribution2(gen) };
+			if (pos[0] < 0 && posFinal[0] > 0) {
+				posFinal[0] = -posFinal[0];
+			}
+			else if (pos[0] > 0 && posFinal[0] < 0) {
+				posFinal[0] = -posFinal[0];
+			}
+			if (pos[1] < 0 && posFinal[1] > 0) {
+				posFinal[1] = -posFinal[1];
+			}
+			else if (pos[1] > 0 && posFinal[1] < 0) {
+				posFinal[1] = -posFinal[1];
+			}
 		}
-		else if (pos[0] > 0 && posFinal[0] < 0) {
-			posFinal[0] = -posFinal[0];
-		}
-		if (pos[1] < 0 && posFinal[1] > 0) {
-			posFinal[1] = -posFinal[1];
-		}
-		else if (pos[1] > 0 && posFinal[1] < 0) {
-			posFinal[1] = -posFinal[1];
-		}
-	}
-	
-	glm::vec3 nuevaPos;
-	glm::vec3 direccioncita = posFinal - pos;
-	if (glm::length(pos - posFinal) > tam/2.5){ 
-		pos += (0.01f * velocidad)*(direccioncita/glm::length(direccioncita));
-	}
 
-	float ang = glm::radians(velRot);
-	glm::vec3 nueva = direccion;
-	nueva.x = direccion.x*cos(ang) + direccion.z*sin(ang);
-	nueva.z = -direccion.x*sin(ang) + direccion.z*cos(ang);
-	direccion = nueva;
+		glm::vec3 nuevaPos;
+		glm::vec3 direccioncita = posFinal - pos;
+		if (glm::length(pos - posFinal) > tam / 2.5) {
+			pos += (0.01f * velocidad)*(direccioncita / glm::length(direccioncita));
+		}
 
-	GLfloat div = 2 * pi / gemas.size(); //para colocarlas alrededor de la torre
-	for (int i = 0; i < gemas.size(); i++) {
-		/*nuevaX = pos[0] + (tam * cos(orientacion+i*div));
-		nuevaY = pos[1] + (tam * sin(orientacion + i*div));*/
-
+		float ang = glm::radians(velRot);
 		glm::vec3 nueva = direccion;
-		nueva.x = direccion.x*cos(i*div) + direccion.z*sin(i*div);
-		nueva.z = -direccion.x*sin(i*div) + direccion.z*cos(i*div);
-		glm::vec3 pollas = nueva * glm::vec3({ tam, 0, tam });
-		nuevaPos = pos + pollas + glm::vec3({0,2,0});
+		nueva.x = direccion.x*cos(ang) + direccion.z*sin(ang);
+		nueva.z = -direccion.x*sin(ang) + direccion.z*cos(ang);
+		direccion = nueva;
 
-		gemas[i]->setPos(nuevaPos);
-		gemas[i]->tam = 0.35f;
-		gemas[i]->direccion = nueva;
+		GLfloat div = 2 * pi / gemas.size(); //para colocarlas alrededor de la torre
+		for (int i = 0; i < gemas.size(); i++) {
+			/*nuevaX = pos[0] + (tam * cos(orientacion+i*div));
+			nuevaY = pos[1] + (tam * sin(orientacion + i*div));*/
+
+			glm::vec3 nueva = direccion;
+			nueva.x = direccion.x*cos(i*div) + direccion.z*sin(i*div);
+			nueva.z = -direccion.x*sin(i*div) + direccion.z*cos(i*div);
+			glm::vec3 pollas = nueva * glm::vec3({ tam, 0, tam });
+			nuevaPos = pos + pollas + glm::vec3({ 0,2,0 });
+
+			gemas[i]->setPos(nuevaPos);
+			gemas[i]->tam = 0.35f;
+			gemas[i]->direccion = nueva;
+		}
+		if (glm::length(pos - es->per->pos) <= tam + es->per->tam && !es->per->modoDios) {
+			//a->morir();
+		}
+		//cout << int(clock() - tiempecito) / CLOCKS_PER_SEC << endl;
+		if ((int(clock() - tiempecito) / CLOCKS_PER_SEC) % tiempoGen == 0 && generadas != int(clock() - tiempecito) / CLOCKS_PER_SEC) {
+			GenerarCalaveras(5);
+			//cout << "GENERANDOOOO" << endl;
+			generadas = int(clock() - tiempecito) / CLOCKS_PER_SEC;
+		}
 	}
-	//cout << int(clock() - tiempecito) / CLOCKS_PER_SEC << endl;
-	if ((int(clock() - tiempecito) / CLOCKS_PER_SEC) % tiempoGen == 0 && generadas != int(clock() - tiempecito) / CLOCKS_PER_SEC) {
-		GenerarCalaveras(5);
-		//cout << "GENERANDOOOO" << endl;
-		generadas = int(clock() - tiempecito) / CLOCKS_PER_SEC;
+	else {
+		glm::vec3 final = { pos.x, -1, pos.z };
+		velRot = 4;
+		if (pos.y > 0) {
+			cout << "posicion; " << pos.y << endl;
+			final = { pos.x, -1, pos.z };
+			glm::vec3 vecDir = final - pos; // vector movimiento
+			vecDir = vecDir / glm::length(vecDir); //normalizar vector
+			pos += (0.01f * velocidad) * vecDir;
+			direccion = vecDir;
+		}
+	}
+	if (pos.y < 0) {
+		sigue = false;
 	}
 }
 
 void Daga3D::fisicas() {
 	//mira colision con personaje pa matarlo
-	if (glm::length(pos - es->per->pos) <= tam + es->per->tam && !es->per->modoDios) {
+	/*if (glm::length(pos - es->per->pos) <= tam + es->per->tam && !es->per->modoDios) {
 		//a->morir();
-	}
+	}*/
 	//colisiona las gemas con las balas
-	sigue = sigueVivo();
+	sigueVivo();
 
 	//busca colisiones con las balas para eliminarlas
-	vector<shared_ptr<Bala3D>> * b = es->getBalas();
+	/*vector<shared_ptr<Bala3D>> * b = es->getBalas();
 	int i = 0;
 	while (i < b->size()) {
 		if (glm::length(pos - b->at(i)->pos) < tam + b->at(i)->tam) {
@@ -230,5 +260,5 @@ void Daga3D::fisicas() {
 		else {
 			i++;
 		}
-	}
+	}*/
 }
