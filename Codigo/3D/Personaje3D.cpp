@@ -99,7 +99,7 @@ void Personaje3D::addGema() {
 void Personaje3D::morir() {
 	cout << "muerto" << endl;
 	vivo = false;
-	mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/muerte.wav", NULL, 0, NULL);
+	//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/muerte.wav", NULL, 0, NULL);
 }
 //dispara un escopetazo
 void Personaje3D::escopetazo() {

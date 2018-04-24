@@ -20,11 +20,12 @@ class Partida3D {
 		GLfloat daga3sec = 244;
 		Escena3D * es;
 		bool fin = false;
+		float limite = 15;
 		const GLfloat tam = 2;
 		const GLfloat numPosis = 8;
 		glm::vec3 posiposibles[8] = { 
-			{tam,5,tam}, {-tam,5,tam} , {tam,5,-tam}, {-tam,5,-tam},
-			{0,5,tam},{ -tam,5,0 } ,{ 0,5,-tam },{ -tam,5, 0 }
+			{limite,5,limite }, {-limite,5,limite } , { limite,5,-limite },
+			{-limite,5,-limite }, {0,5,limite },{ -limite,5,0 } ,{ 0,5,-limite },{ -limite,5, 0 }
 		};
 		bool daga1p = true;
 		bool daga2p = true;

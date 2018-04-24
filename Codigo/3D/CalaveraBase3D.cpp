@@ -22,7 +22,7 @@
 using namespace std;
 
 CalaveraBase3D::CalaveraBase3D(glm::vec3 pos, glm::vec3 dir, Escena3D * es, GLFWwindow* window, Camara * c, Obj3D obj, int nivel)
-	: Render3D(window, "../DevilDaggers/videojuego/Codigo/Shaders/3D.vert", "../DevilDaggers/videojuego/Codigo/Shaders/3D.frag", c, obj, { 1,0,0 }, 0.25){
+	: Render3D(window, "../DevilDaggers/videojuego/Codigo/Shaders/3D.vert", "../DevilDaggers/videojuego/Codigo/Shaders/3D.frag", c, obj, { 1,0,0 }, 0.15){
 	this->pos = pos;
 	this->es = es;
 	GLfloat texCoords[8] = {
@@ -127,6 +127,7 @@ void CalaveraBase3D::seguir() {
 	}
 	if (glm::length(pos - posP) <= tam + es->per->tam && !es->per->modoDios) {
 		//cout << "MUERTO MATAO" << endl;
+		es->per->morir();
 	}
 }
 

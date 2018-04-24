@@ -31,7 +31,6 @@ Daga3D::Daga3D(glm::vec3 pos, glm::vec3 dir, Escena3D * es, GLFWwindow* window, 
 	: Render3D(window, "../DevilDaggers/videojuego/Codigo/Shaders/3D.vert", "../DevilDaggers/videojuego/Codigo/Shaders/3D.frag", c, obj, { 0.2,0.2,0.2 }, 1) {
 	this->es = es;
 	this->nivel = nivel;
-	distribution = uniform_real_distribution<float>(-0.5, 0.5);
 	if (nivel <= 1) {
 		for (int i = 0; i < vertices.size(); i++) {
 			colors[i] = { 1,1,0 };
@@ -64,9 +63,25 @@ Daga3D::Daga3D(glm::vec3 pos, glm::vec3 dir, Escena3D * es, GLFWwindow* window, 
 	}
 	
 	//numeros aleatorios
+	if (pos.x > 0) {
+		distribution = uniform_real_distribution<float>(2.5, 5);
+	}
+	else if(pos.x == 0){
+		distribution = uniform_real_distribution<float>(-2.5, 2.5);
+	}
+	else {
+		distribution = uniform_real_distribution<float>(-5, -2.5);
+	}
+	if (pos.z > 0) {
+		distribution2 = uniform_real_distribution<float>(2.5, 5);
+	}
+	else if (pos.z == 0) {
+		distribution2 = uniform_real_distribution<float>(-2.5, 5);
+	}
+	else {
+		distribution2 = uniform_real_distribution<float>(-5, -2.5);
+	}
 	
-	distribution = uniform_real_distribution<float>(-0.5, 0.5);
-	distribution2 = uniform_real_distribution<float>(tam/2, tam);
 	random_device rd;
 	// Initialize Mersenne Twister pseudo-random number generator
 	gen = mt19937(rd());
@@ -147,7 +162,7 @@ bool Daga3D::sigueVivo() {
 void Daga3D::mover() {
 	if(!generadaPos){
 		generadaPos = true;
-		posFinal = { distribution(gen), 2, distribution(gen) };
+		posFinal = { distribution(gen), 2, distribution2(gen) };
 		if (pos[0] < 0 && posFinal[0] > 0) {
 			posFinal[0] = -posFinal[0];
 		}
@@ -191,7 +206,7 @@ void Daga3D::mover() {
 	}
 	//cout << int(clock() - tiempecito) / CLOCKS_PER_SEC << endl;
 	if ((int(clock() - tiempecito) / CLOCKS_PER_SEC) % tiempoGen == 0 && generadas != int(clock() - tiempecito) / CLOCKS_PER_SEC) {
-		GenerarCalaveras(8);
+		GenerarCalaveras(5);
 		//cout << "GENERANDOOOO" << endl;
 		generadas = int(clock() - tiempecito) / CLOCKS_PER_SEC;
 	}

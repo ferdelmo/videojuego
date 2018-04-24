@@ -72,6 +72,7 @@ void Escena3D::renderizar() {
 		bool seguir = calaveras[i]->renderizar();
 		if (!seguir) {
 			calaveras.erase(calaveras.begin() + i);
+			calavsMatadas++;
 		}
 		else {
 			i++;
@@ -123,12 +124,16 @@ void Escena3D::moverObjetos() {
 			dagas[i]->fisicas();
 		}
 	}
-	per->mover();
+	if (per->vivo || per->modoDios) {
+		per->mover();
+	}
+	
 }
 
 void Escena3D::reset() {
 	calaveras.clear();
 	dagas.clear();
+	gemas.clear();
 	per.reset();
 	//fon.reset();
 	fin = false;
