@@ -27,6 +27,8 @@ Opciones::Opciones() {
 		myfile >> Fullscreen;
 		myfile >> up >> down >> right >> left;
 		myfile >> modo;
+		myfile >> sonido;
+		myfile >> Fov;
 		myfile.close();
 	}
 	else {
@@ -38,11 +40,15 @@ Opciones::Opciones() {
 		myfile << Fullscreen << '\n';
 		myfile << up << " " << down << " " << right << " " << left << '\n';
 		myfile << modo << '\n';
+		myfile << sonido << '\n';
+		myfile << Fov << '\n';
 		myfile.close();
 	}
 	oldresolucion = resolucion;
 	aux_up = up; aux_down = down; aux_left = left; aux_right = right;
 	aux_modo = modo;
+	aux_sonido = sonido;
+	aux_Fov = Fov;
 }
 
 void Opciones::setValue(GLFWwindow *window, Camara * c) {
@@ -109,6 +115,8 @@ void Opciones::restaurarValores() {
 	resolucion = oldresolucion;
 	up = aux_up; down = aux_down; left = aux_left; right = aux_right;
 	modo = aux_modo;
+	sonido = aux_sonido;
+	Fov = aux_Fov;
 }
 
 bool Opciones::cogerTecla() {
@@ -168,7 +176,7 @@ void Opciones::controlesInFrame() {
 	if (!pulsado) { // Control una pulsación
 		if (state == GLFW_PRESS && !cambiando) {
 			cout << "x: " << x << " ;; y: " << y << endl;
-			if (x >= -0.1303 && x <= 0.4363 && y >= -0.877 && y <= -0.719) { // BOTÓN GUARDAR + MENÚ PRINCIPAL
+			if (x >= 0.1288 && x <= 0.4363 && y >= -0.8825 && y <= -0.7240) { // BOTÓN GUARDAR + MENÚ PRINCIPAL
 				cout << "GUARDAR" << endl;
 				cout << "_______________________" << endl;
 				pulsado = true;
@@ -181,17 +189,19 @@ void Opciones::controlesInFrame() {
 				myfile << Fullscreen << '\n';
 				myfile << up << " " << down << " " << right << " " << left << '\n';
 				myfile << modo << '\n';
+				myfile << sonido << '\n';
+				myfile << Fov << '\n';
 				myfile.close();
 				cargar();
 			}
-			else if (x >= -0.43 && x <= -0.1185 && y >= -0.8798 && y <= -0.711) { // ATRÁS
+			else if (x >= -0.4304 && x <= -0.1185 && y >= -0.8825 && y <= -0.72229) { // ATRÁS
 				cout << "ATRAS" << endl;
 				cout << "_______________________" << endl;
 				pulsado = true;
 				mode = 1;
 				restaurarValores();
 			}
-			else if (x >= -0.1772 && x <= 0.0336 && y >= -0.327 && y <= 0.458) { // FLECHA IZQ RESOLUCIÓN
+			else if (x >= -0.1786 && x <= -0.0219 && y >= 0.3698 && y <= 0.4633) { // FLECHA IZQ RESOLUCIÓN
 				cout << "PULSADO FLECHA IZQ RESOLUCION" << endl;
 				cout << "_______________________" << endl;
 				pulsado = true;
@@ -199,7 +209,7 @@ void Opciones::controlesInFrame() {
 					resolucion--;
 				}
 			}
-			else if (x >= 0.5212 && x <= 0.7510 && y >= 0.3244 && y <= 0.4632) { // FLECHA DRX RESOLUCIÓN
+			else if (x >= 0.5549 && x <= 0.6969 && y >= 0.3832 && y <= 0.46595) { // FLECHA DRX RESOLUCIÓN
 				cout << "PULSADO FLECHA DER RESOLUCIÓN" << endl;
 				cout << "_______________________" << endl;
 				pulsado = true;
@@ -207,41 +217,79 @@ void Opciones::controlesInFrame() {
 					resolucion++;
 				}
 			}
-			else if (x >= -0.1772 && x <= 0.0336 && y >= -0.607 && y <= -0.4899) { // FLECHA IZQ MODO
+			else if (x >= -0.1742 && x <= -0.0219 && y >= -0.2950 && y <= -0.1935) { // FLECHA IZQ MODO
 				cout << "PULSADO FLECHA IZQ MODO" << endl;
 				cout << "_______________________" << endl;
+				pulsado = true;
 				if (modo == 2) {
 					modo--;
 				}
 			}
-			else if (x >= 0.5212 && x <= 0.7510 && y >= -0.607 && y <= -0.4819) { // FLECHA DRX MODO
+			else if (x >= 0.5534 && x <= 0.6998 && y >= -0.2950 && y <= -0.1935) { // FLECHA DRX MODO
 				cout << "PULSADO FLECHA DER MODO" << endl;
 				cout << "_______________________" << endl;
+				pulsado = true;
 				if (modo == 1) {
 					modo++;
 				}
 			}
-			else if (x >= 0.3836 && x <= 0.42459 && y >= 0.0120 && y <= 0.0734) { // TECLA ARRIBA
+			else if (x >= -0.1757 && x <= -0.0205 && y >= -0.4633 && y <= -0.3692) { // FLECHA IZQ SONIDO
+				cout << "PULSADO FLECHA IZQ SONIDO" << endl;
+				cout << "_______________________" << endl;
+				pulsado = true;
+				if (sonido == 1) {
+					sonido++;
+				}
+			}
+			else if (x >= 0.5534 && x <= 0.6999 && y >= -0.4633 && y <= -0.3692) { // FLECHA DRX SONIDO
+				cout << "PULSADO FLECHA DER SONIDO" << endl;
+				cout << "_______________________" << endl;
+				pulsado = true;
+				if (sonido == 2) {
+					sonido--;
+				}
+			}
+			else if (x >= -0.1757 && x <= -0.01756 && y >= -0.6635 && y <= -0.5674) { // FLECHA IZQ FOV
+				cout << "PULSADO FLECHA IZQ FOV" << endl;
+				cout << "_______________________" << endl;
+				pulsado = true;
+				if (Fov > minFov) {
+					Fov -= 5;
+				}
+			}
+			else if (x >= 0.5505 && x <= 0.6983 && y >= -0.6635 && y <= -0.5674) { // FLECHA DRX FOV
+				cout << "PULSADO FLECHA DER FOV" << endl;
+				cout << "_______________________" << endl;
+				pulsado = true;
+				if (Fov < maxFov) {
+					Fov += 5;
+				}
+			}
+			else if (x >= 0.3836 && x <= 0.4202 && y >= 0.2149 && y <= 0.2657) { // TECLA ARRIBA
 				cout << "PULSADO TECLA DE ARRIBA" << endl;
 				cout << "_______________________" << endl;
+				pulsado = true;
 				cambiando = true;
 				aCambiar = 0;
 			}
-			else if (x >= 0.3836 && x <= 0.42459 && y >= -0.1054 && y <= -0.04939) { // TECLA ABAJO
+			else if (x >= 0.3850 && x <= 0.4187 && y >= 0.10814 && y <= 0.1615) { // TECLA ABAJO
 				cout << "PULSADO TECLA DE ABAJO" << endl;
 				cout << "_______________________" << endl;
+				pulsado = true;
 				cambiando = true;
 				aCambiar = 1;
 			}
-			else if (x >= 0.3836 && x <= 0.42459 && y >= -0.2202 && y <= -0.16154) { // TECLA IZQ
+			else if (x >= 0.3865 && x <= 0.4202 && y >= 0.0147 && y <= 0.0654) { // TECLA IZQ
 				cout << "PULSADO TECLA DE IZQUIERDA" << endl;
 				cout << "_______________________" << endl;
+				pulsado = true;
 				cambiando = true;
 				aCambiar = 2;
 			}
-			else if (x >= 0.3836 && x <= 0.42459 && y >= -0.335 && y <= -0.279) { // TECLA DRX
+			else if (x >= 0.3806 && x <= 0.4158 && y >= -0.0707 && y <= -0.02) { // TECLA DRX
 				cout << "PULSADO TECLA DE DERECHA" << endl;
 				cout << "_______________________" << endl;
+				pulsado = true;
 				cambiando = true;
 				aCambiar = 3;
 			}
@@ -250,7 +298,7 @@ void Opciones::controlesInFrame() {
 			cambiando = !cogerTecla();
 		}
 	}
-
+	
 	oldState = state;
 }
 
@@ -268,17 +316,26 @@ void Opciones::cargar() {
 void Opciones::mostrarTexto() {
 	text2D text2D("../DevilDaggers/videojuego/Codigo/Holstein.DDS");
 	string res = to_string(resoluciones[resolucion][0]) + "x" + to_string(resoluciones[resolucion][1]);
-	text2D.printText2D(res.c_str(), 428, 408, 20);
+	text2D.printText2D(res.c_str(), 428, 415, 20);
 
 	if (modo == 1) { // 2D
-		text2D.printText2D("JUEGO 2D", 427, 127, 20);
+		text2D.printText2D("JUEGO 2D", 427, 215, 20);
 	}
 	else {	// 3D
-		text2D.printText2D("JUEGO 3D", 427, 127, 20);
+		text2D.printText2D("JUEGO 3D", 427, 215, 20);
 	}
 
+	if (sonido == 1) {
+		text2D.printText2D("SI", 487, 160, 20);
+	}
+	else {
+		text2D.printText2D("NO", 487, 160, 20);
+	}
+
+	text2D.printText2D(to_string(Fov).c_str(), 487, 103, 20);
+
 	if (cambiando && aCambiar == 0) {
-		text2D.printText2D("Pulsa una tecla", 550, 305, 15);
+		text2D.printText2D("Pulsa una tecla", 550, 367, 15);
 	}
 	else {
 		stringstream ssa;
@@ -286,11 +343,11 @@ void Opciones::mostrarTexto() {
 		char a = up;
 		ssa << a;
 		ssa >> sa;
-		text2D.printText2D(sa.c_str(), 550, 300, 25);
+		text2D.printText2D(sa.c_str(), 550, 362, 20);
 	}
 
 	if (cambiando && aCambiar == 1) {
-		text2D.printText2D("Pulsa una tecla", 550, 270, 15);
+		text2D.printText2D("Pulsa una tecla", 550, 335, 15);
 	}
 	else {
 		stringstream ssb;
@@ -298,11 +355,11 @@ void Opciones::mostrarTexto() {
 		char b = down;
 		ssb << b;
 		ssb >> sb;
-		text2D.printText2D(sb.c_str(), 550, 265, 25);
+		text2D.printText2D(sb.c_str(), 550, 330, 20);
 	}
 
 	if (cambiando && aCambiar == 2) {
-		text2D.printText2D("Pulsa una tecla", 550, 235, 15);
+		text2D.printText2D("Pulsa una tecla", 550, 307, 15);
 	}
 	else {
 		stringstream ssc;
@@ -310,11 +367,11 @@ void Opciones::mostrarTexto() {
 		char c = left;
 		ssc << c;
 		ssc >> sc;
-		text2D.printText2D(sc.c_str(), 550, 230, 25);
+		text2D.printText2D(sc.c_str(), 550, 302, 20);
 	}
 
 	if (cambiando && aCambiar == 3) {
-		text2D.printText2D("Pulsa una tecla", 550, 200, 15);
+		text2D.printText2D("Pulsa una tecla", 550, 280, 15);
 	}
 	else {
 		stringstream ssd;
@@ -322,9 +379,9 @@ void Opciones::mostrarTexto() {
 		char d = right;
 		ssd << d;
 		ssd >> sd;
-		text2D.printText2D(sd.c_str(), 550, 195, 25);
+		text2D.printText2D(sd.c_str(), 550, 275, 20);
 	}
-
+	text2D.cleanupText2D();
 }
 
 int Opciones::renderizar() {
