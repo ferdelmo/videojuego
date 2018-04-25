@@ -46,10 +46,10 @@ void Partida3D::generarDaga1() {
 			es->add(make_shared<Daga3D>(Daga3D(posiposibles[p], { 0,0,0 }, es, es->per->window, es->per->cam, *modelo, 1)));
 			if (daga1p) {
 				daga1p = false;
-				daga1sec = 15;
+				daga1sec = 20;
 			}
-			else if (daga1sec > 15) {
-				daga1sec = daga1sec - 0.25;
+			else if (daga1sec > 20) {
+				daga1sec = daga1sec - 0.15;
 			}
 			cout << "Genera cada: " << daga1sec << endl;;
 			daga1 = clock();
@@ -64,10 +64,10 @@ void Partida3D::generarDaga2() {
 			es->add(make_shared<Daga3D>(Daga3D(posiposibles[p], { 0,0,0 }, es, es->per->window, es->per->cam, *modelo, 2)));
 			if (daga2p) {
 				daga2p = false;
-				daga2sec = 20;
+				daga2sec = 30;
 			}
-			else if (daga2sec > 20) {
-				daga2sec = daga2sec - 0.25;
+			else if (daga2sec > 30) {
+				daga2sec = daga2sec - 0.2;
 			}
 			cout << "Genera cada: " << daga2sec << endl;
 			daga2 = clock();
@@ -82,9 +82,9 @@ void Partida3D::generarDaga3() {
 			es->add(make_shared<Daga3D>(Daga3D(posiposibles[p], { 0,0,0 }, es, es->per->window, es->per->cam, *modelo, 3)));
 			if (daga3p) {
 				daga3p = false;
-				daga3sec = 25;
+				daga3sec = 40;
 			}
-			else if (daga3sec > 25) {
+			else if (daga3sec > 40) {
 				daga3sec = daga3sec - 0.25;
 			}
 			cout << "Genera cada: " << daga3sec << endl;;
