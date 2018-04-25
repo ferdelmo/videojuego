@@ -124,7 +124,7 @@ void Puntuaciones::mostrarTexto() {
 		text2D.printText2D(topPunt[i].c_str(), x + 100 , y, 20);
 		y -= 50;
 		if (i == 4) {
-			x += 450;
+			x += 400;
 			y = 350;
 		}
 	}

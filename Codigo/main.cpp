@@ -655,10 +655,8 @@ int main(int argc, char **argv) {
 			}	
 		}
 		else if (mode == 3) {
-			text2D.init_string_renderer();
 			mode = opciones.renderizar();
 			//pinta lo que haya en los buffers
-			text2D.end_string_renderer();
 			glfwSwapBuffers(window);
 			//lee los eventos
 			glfwPollEvents();
@@ -667,18 +665,14 @@ int main(int argc, char **argv) {
 			}
 		}
 		else if (mode == 4) {
-			text2D.init_string_renderer();
 			mode = puntuaciones.renderizar();
-			text2D.end_string_renderer();
 			//pinta lo que haya en los buffers
 			glfwSwapBuffers(window);
 			//lee los eventos
 			glfwPollEvents();
 		}
 		else if (mode == 5) {
-			text2D.init_string_renderer();
 			mode = creditos.renderizar();
-			text2D.end_string_renderer();
 			//pinta lo que haya en los buffers
 			glfwSwapBuffers(window);
 			//lee los eventos
