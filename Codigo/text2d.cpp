@@ -1,5 +1,3 @@
-//#include "stdafx.h"
-
 #include "text2D.h"
 #include "LoadShader.h"
 
@@ -114,6 +112,7 @@ void text2D::init_string_renderer()
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 	glDisable(GL_LIGHTING);
 	glDisable(GL_CULL_FACE);
+	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glDepthMask(GL_FALSE);
 
@@ -137,6 +136,14 @@ void text2D::init_string_renderer()
 	glLoadIdentity();
 
 	glTranslated(winx, winy, -winz);
+
+	//Set ortho view
+	glMatrixMode(GL_PROJECTION); // Tell opengl that we are doing project matrix work
+	glLoadIdentity(); // Clear the matrix
+	glOrtho(-9.0, 9.0, -9.0, 9.0, 0.0, 30.0); // Setup an Ortho view
+	glMatrixMode(GL_MODELVIEW); // Tell opengl that we are doing model matrix work. (drawing)
+	glLoadIdentity(); // Clear the model matrix
+
 }
 
 void text2D::end_string_renderer()
@@ -154,8 +161,10 @@ void text2D::end_string_renderer()
 	glDepthMask(GL_TRUE);
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_LIGHTING);
+	glEnable(GL_DEPTH_TEST);
 
 	glPopAttrib();
+
 }
 
 text2D::text2D(const char* texturePath) {
