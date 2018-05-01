@@ -9,8 +9,6 @@
 #include <ctime>
 #include <thread>
 #include <string>
-#include <Windows.h>
-#include <mmsystem.h>
 #include <GL/freeglut.h>
 #include <fstream>
 #include <stdio.h>   
@@ -38,6 +36,8 @@
 #include "3D\Daga3D.h"
 #include "3D\Partida3D.h"
 #include "3D\Particulas.h"
+
+#include "3D\Sonidos.h"
 
 using namespace std;
 
@@ -229,6 +229,9 @@ int main(int argc, char **argv) {
 	Partida3D * par3D = &aux3D;
 	bool ratonActualizado = false;
 	bool modo3D = true;
+
+	Sonidos::genBuffs();
+
 	while (!glfwWindowShouldClose(window))
 	{
 		/*if (estabaMuerto && es.getPer()->vivo) {
@@ -511,7 +514,7 @@ int main(int argc, char **argv) {
 					text3D.printText3D(tiempo.c_str(), 150, 520, 17);
 					text3D.printText3D("GEMAS:", 20, 490, 17);
 					text3D.printText3D(to_string(es3D.per->numGemas).c_str(), 130, 490, 17);
-					cout << es3D.per->numGemas << endl;
+					//cout << es3D.per->numGemas << endl;
 
 					//pinta lo que haya en los buffers
 					if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS && pulsado) {

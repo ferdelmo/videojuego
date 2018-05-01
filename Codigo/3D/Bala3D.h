@@ -6,9 +6,6 @@
 #include <glm/glm.hpp>
 #include <SOIL.h>
 
-#include <Windows.h>
-#include <mmsystem.h>
-
 #include "Render3D.h"
 
 #include <ctime>

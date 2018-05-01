@@ -116,7 +116,7 @@ bool CalaveraBaseII::vivo() {
 		}
 	}
 	if (vida <= 0) {
-		mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/calaveraI.mp3", NULL, 0, NULL);
+		//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/calaveraI.mp3", NULL, 0, NULL);
 		shared_ptr<Gema> sg = make_shared<Gema>(Gema(pos[0], pos[1], pos[2], es, window,cam));
 		sg->vida = 0;
 		sg->tiempecito = clock();

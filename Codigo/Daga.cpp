@@ -12,9 +12,6 @@
 #include <string>
 #include <stdlib.h>
 
-#include <Windows.h>
-#include <mmsystem.h>
-
 #include "CalaveraBase.h"
 #include "CalaveraBaseII.h"
 #include "CalaveraBaseIII.h"
@@ -151,7 +148,7 @@ bool Daga::sigueVivo() {
 		}
 	}
 	if (gemas.size() <= 0) {
-		mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/calaveraI.mp3", NULL, 0, NULL);
+		//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/calaveraI.mp3", NULL, 0, NULL);
 	}
 	return gemas.size() > 0;
 }

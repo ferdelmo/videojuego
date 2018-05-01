@@ -19,6 +19,8 @@
 #include "../Camara.h"
 #include "../Opciones.h"
 
+#include "Sonidos.h"
+
 using namespace std;
 
 
@@ -59,7 +61,7 @@ Personaje3D::Personaje3D(glm::vec3 pos, Escena3D * es, GLFWwindow * window, Cama
 
 	numGemas = 1;
 	Camara a;
-	a.FoV = 60;
+	a.FoV = o.Fov;
 	a.View = glm::lookAt(
 		pos, // Camera is at (4,3,3), in World Space
 		pos+glm::vec3(1,0,0), // and looks at the origin
@@ -89,6 +91,8 @@ Personaje3D::Personaje3D(glm::vec3 pos, Escena3D * es, GLFWwindow * window, Cama
 	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/bala.obj", bala.vertices, bala.uvs, bala.normals);
 	persoCam = this;
 	glfwSetScrollCallback(window, scroll_callback);
+	Sonido = Sonidos::loadWavFile("../DevilDaggers/videojuego/Codigo/Musica/musical001.wav", &buffer, &size, &frequency, &format);
+	Sonido = -1;
 }
 
 void Personaje3D::addGema() {
@@ -103,6 +107,9 @@ void Personaje3D::morir() {
 }
 //dispara un escopetazo
 void Personaje3D::escopetazo() {
+
+	thread t(&Sonidos::play, &Sonido, buffer, pos);
+	t.detach();
 	int n = 8;
 	//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/disparo.wav", NULL, 0, NULL);
 	//cout << "ESCOPETAZO " << endl;
@@ -292,6 +299,8 @@ GLfloat Personaje3D::distancia(GLfloat x, GLfloat y, GLfloat xp, GLfloat yp) {
 
 void Personaje3D::mover() {
 	persoCam = this;
+
+	Sonidos::setListener(pos, direccion);
 	//cout << this << " - " << persoCam << endl;
 	/*cam->View = glm::lookAt(
 		glm::vec3(pos[0], pos[1], pos[2]), // Camera is at (4,3,3), in World Space

@@ -18,6 +18,7 @@
 #include "../LoadShader.h"
 #include "../Camara.h"
 #include "Particulas.h"
+#include "Sonidos.h"
 
 using namespace std;
 
@@ -125,7 +126,7 @@ void CalaveraBase3D::seguir() {
 			pos += glm::vec3({ 0,-velocidad /2,0 })*0.01f;
 		}
 	}
-	if (glm::length(pos - posP) <= tam + es->per->tam && !es->per->modoDios) {
+	if (glm::length(pos - posP) <= 2*tam && !es->per->modoDios) {
 		//cout << "MUERTO MATAO" << endl;
 		es->per->morir();
 	}
