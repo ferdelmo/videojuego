@@ -91,7 +91,6 @@ Personaje3D::Personaje3D(glm::vec3 pos, Escena3D * es, GLFWwindow * window, Cama
 	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/bala.obj", bala.vertices, bala.uvs, bala.normals);
 	persoCam = this;
 	glfwSetScrollCallback(window, scroll_callback);
-	Sonido = Sonidos::loadWavFile("../DevilDaggers/videojuego/Codigo/Musica/musical001.wav", &buffer, &size, &frequency, &format);
 	Sonido = -1;
 }
 
@@ -108,7 +107,7 @@ void Personaje3D::morir() {
 //dispara un escopetazo
 void Personaje3D::escopetazo() {
 
-	thread t(&Sonidos::play, &Sonido, buffer, pos);
+	thread t(&Sonidos::play, &Sonido, buffer, pos, "../DevilDaggers/videojuego/Codigo/Musica/musical001.wav");
 	t.detach();
 	int n = 8;
 	//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/disparo.wav", NULL, 0, NULL);

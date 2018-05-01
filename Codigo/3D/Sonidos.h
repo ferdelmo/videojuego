@@ -68,5 +68,5 @@ class Sonidos {
 
 		static void genBuffs();
 
-		static void play(int * b, ALuint buf, glm::vec3 pos);
+		static void play(int * b, ALuint buf, glm::vec3 pos, string sf);
 };

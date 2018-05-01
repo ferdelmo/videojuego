@@ -155,7 +155,7 @@ void Sonidos::genBuffs() {
 	alGenSources(256,sources);
 }
 
-void Sonidos::play(int * b, ALuint buf, glm::vec3 pos) {
+void Sonidos::play(int * b, ALuint buf, glm::vec3 pos, string sf) {
 	if (dev == nullptr) {
 		const char * devicename = alcGetString(NULL, ALC_DEFAULT_DEVICE_SPECIFIER);
 		dev = alcOpenDevice(nullptr);
@@ -184,7 +184,7 @@ void Sonidos::play(int * b, ALuint buf, glm::vec3 pos) {
 	//SI DESCOMENTAS ESTA LINEA VA PERO TIENE Q IR LEYENDO ESO SOLO UNA VEZ
 	if (*b == -1) {
 		cout << "CARGAAAAAAAAAAAAAAAANDO" << endl;
-		*b=Sonidos::loadWavFile("../DevilDaggers/videojuego/Codigo/Musica/musical001.wav", &buf, &size, &frequency, &format);
+		*b=Sonidos::loadWavFile(sf, &buf, &size, &frequency, &format);
 	}
 	cout << "SONIDOS 1 " << alGetError() << endl;
 	alGenSources((ALuint)1, &sources[viejaI]);
