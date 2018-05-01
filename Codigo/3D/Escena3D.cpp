@@ -5,6 +5,7 @@
 #include "Bala3D.h"
 #include "Gema3D.h"
 #include "Daga3D.h"
+#include "Sonidos.h"
 
 using namespace std;
 
@@ -71,6 +72,8 @@ void Escena3D::renderizar() {
 		calaveras[i]->lightPos = light;
 		bool seguir = calaveras[i]->renderizar();
 		if (!seguir) {
+			/*thread t(&Sonidos::play, &Sonido, buffer, calaveras[i]->pos, "../DevilDaggers/videojuego/Codigo/Musica/muerteCalavera.wav");
+			t.detach();*/
 			calaveras.erase(calaveras.begin() + i);
 			calavsMatadas++;
 		}

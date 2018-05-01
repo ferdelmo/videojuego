@@ -13,6 +13,9 @@
 #include <cmath>
 #include <thread>
 
+#include <al.h>
+#include <alc.h>
+
 using namespace std;
 
 class Escena3D;
@@ -34,6 +37,11 @@ class CalaveraBase3D : public Render3D {
 		bool muerto = false;
 		int nivel = 0;
 		clock_t tiempecito = clock();
+		
+		clock_t tiempoSonido = clock();
+		bool haSonado = false;
+		float intervalo = 10.0;
+		bool pillada = false;
 		double tiempoSeguir = abs(distribution(gen))*2.0;
 		//direccion para seguir al personaje
 		glm::vec3 dir = { 0,0,0 };
@@ -44,11 +52,19 @@ class CalaveraBase3D : public Render3D {
 		mt19937 gen;
 		uniform_real_distribution<float> distribution;
 		uniform_real_distribution<float> distribution2;
-
+		uniform_real_distribution<float> distribution3;
+		uniform_real_distribution<float> distribution4;
+		uniform_real_distribution<float> distributionXLejos;
+		uniform_real_distribution<float> distributionYLejos;
 		Escena3D * es;
 		SistemaParticulas * sp;
 		thread * spFin;
 
+		ALuint buffer;
+		ALsizei size;
+		ALsizei frequency;
+		ALenum format;
+		int Sonido = -1;
 	public:
 		CalaveraBase3D(glm::vec3 pos, glm::vec3 dir, Escena3D * es, GLFWwindow* window, Camara * c, Obj3D obj, int nivel);
 

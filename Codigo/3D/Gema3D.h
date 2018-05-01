@@ -11,7 +11,8 @@
 #include <random>
 #include <ctime>
 #include <cmath>
-
+#include <al.h>
+#include <alc.h>
 using namespace std;
 
 class Escena3D;
@@ -33,6 +34,12 @@ public:
 
 	int vida = 20;
 	bool noCogida = true;
+
+	ALuint buffer;
+	ALsizei size;
+	ALsizei frequency;
+	ALenum format;
+	int Sonido = -1;
 
 public:
 

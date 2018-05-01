@@ -102,13 +102,15 @@ void Personaje3D::addGema() {
 void Personaje3D::morir() {
 	cout << "muerto" << endl;
 	vivo = false;
+	thread t(&Sonidos::play, &Sonido, buffer, pos, "../DevilDaggers/videojuego/Codigo/Musica/muerte.wav");
+	t.detach();
 	//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/muerte.wav", NULL, 0, NULL);
 }
 //dispara un escopetazo
 void Personaje3D::escopetazo() {
 
-	thread t(&Sonidos::play, &Sonido, buffer, pos, "../DevilDaggers/videojuego/Codigo/Musica/musical001.wav");
-	t.detach();
+	//thread t(&Sonidos::play, &Sonido, buffer, pos, "../DevilDaggers/videojuego/Codigo/Musica/musical001.wav");
+	//t.detach();
 	int n = 8;
 	//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/disparo.wav", NULL, 0, NULL);
 	//cout << "ESCOPETAZO " << endl;
@@ -172,7 +174,6 @@ void Personaje3D::controlesInFrame() {
 		else {
 			posCam += direccion * velocidad * 0.01f;
 		}
-		
 	}
 	state = glfwGetKey(window, left);
 	if (state == GLFW_PRESS) {

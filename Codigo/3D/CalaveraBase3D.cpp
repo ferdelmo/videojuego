@@ -36,9 +36,17 @@ CalaveraBase3D::CalaveraBase3D(glm::vec3 pos, glm::vec3 dir, Escena3D * es, GLFW
 	
 	distribution = uniform_real_distribution<float>(-1, 1);
 	distribution2 = uniform_real_distribution<float>(2,3);
+	distribution3 = uniform_real_distribution<float>(5, 14);
+	distribution3 = uniform_real_distribution<float>(2, 14);
+	distribution4 = uniform_real_distribution<float>(2, 3);
+	distributionXLejos = uniform_real_distribution<float>(-10, -10);
+	//distributionYLejos = uniform_real_distribution<float>(tam / 1.5, es->per->tam*1.5);
+	distributionYLejos = uniform_real_distribution<float>(tam/1.5, es->per->tam*1.5);
 	random_device rd;
+
 	// Initialize Mersenne Twister pseudo-random number generator
 	gen = mt19937(rd());
+	intervalo = distribution3(gen);
 	GLfloat auxY = pos.y;
 	/*posAux = es->per->pos;
 	posAux.y = auxY + distribution(gen);*(¡/
@@ -81,10 +89,14 @@ CalaveraBase3D::CalaveraBase3D(glm::vec3 pos, glm::vec3 dir, Escena3D * es, GLFW
 void CalaveraBase3D::seguir() {
 	glm::vec3 posP = es->per->pos;
 	//cout << "{ " << direccion.x << ", " << direccion.y << ", " << direccion.z << " }" << endl;
+	if (double(clock() - tiempoSonido) / CLOCKS_PER_SEC >= intervalo) {
+		//intervalo = distribution3(gen);
+		tiempoSonido = clock();
+		thread t(&Sonidos::play, &Sonido, buffer, pos, "../DevilDaggers/videojuego/Codigo/Musica/calavera2.wav");
+		t.detach();
+	}
 	if (nivel == 1) { //NORMALES
 		glm::vec3 vecDir = posP - pos; // vector movimiento
-
-
 		vecDir = vecDir / glm::length(vecDir);
 		vecDir = glm::mix(vecDir, direccion, 0.9 + velRot);
 		if (pos.y < 0.5 && vecDir.y < 0) {
@@ -106,25 +118,72 @@ void CalaveraBase3D::seguir() {
 		mira.y = 0; dirAux.y = 0;
 		mira = mira / glm::length(mira);
 		dirAux = dirAux / glm::length(dirAux);
-		double alpha = glm::dot(mira,dirAux) / (glm::length(mira)*glm::length(dirAux));
+		double alpha = glm::dot(mira, dirAux) / (glm::length(mira)*glm::length(dirAux));
 		alpha = acos(alpha);
-		if (glm::cross(mira, dirAux).y > 0) {
-			alpha = -alpha;
+		//cout << "ALPHA: " << alpha << endl;
+		if (glm::length(pos - posP) <= es->per->tam * 8 && alpha < 2.9 || alpha > 3.5) { // esta cerca, y no de frente al jugador, busca la espalda
+			llegar = true;
+			pillada = false;
+			/*glm::vec3 mira = es->per->direccion;
+			glm::vec3 dirAux = posP - pos;
+			mira.y = 0; dirAux.y = 0;
+			mira = mira / glm::length(mira);
+			dirAux = dirAux / glm::length(dirAux);
+			double alpha = glm::dot(mira, dirAux) / (glm::length(mira)*glm::length(dirAux));
+			alpha = acos(alpha);*/
+			if (glm::cross(mira, dirAux).y > 0) {
+				alpha = -alpha;
+			}
+			alpha = alpha / 2;
+			glm::vec3 vecDir = { 0,0,0 }; // vector movimient
+			vecDir.x = dirAux.x * cos(alpha) - dirAux.z*sin(alpha);
+			vecDir.z = dirAux.x * sin(alpha) + dirAux.z*cos(alpha);
+			vecDir = vecDir / glm::length(vecDir); //normalizar vector
+			pos += (0.01f * velocidad) * vecDir;
+			direccion = vecDir;
+			if (pos.y > 0.5f) {
+				pos += glm::vec3({ 0,-velocidad / 2,0 })*0.01f;
+			}
 		}
-		alpha = alpha / 2;
-		glm::vec3 vecDir = { 0,0,0 }; // vector movimient
-		vecDir.x = dirAux.x * cos(alpha) - dirAux.z*sin(alpha);
-		vecDir.z = dirAux.x * sin(alpha) + dirAux.z*cos(alpha);
-		vecDir = vecDir / glm::length(vecDir); //normalizar vector
-		pos += (0.01f * velocidad) * vecDir;
-		direccion = vecDir;
-		/*cout << "MIRA: " << "{ " << mira.x << ", " << mira.y << ", " << mira.z << " }" << endl;
-		cout << "DIRAUX: " << "{ " << dirAux.x << ", " << dirAux.y << ", " << dirAux.z << " }" << endl;
-		cout << "DIRFINAL: " << "{ " << direccion.x << ", " << direccion.y << ", " << direccion.z << " }" << endl;
-		*/
-		if (pos.y > 0.5f) {
-			pos += glm::vec3({ 0,-velocidad /2,0 })*0.01f;
+		else if (glm::length(pos - posP) > es->per->tam*8 || pillada) { //esta lejos, va a su bola
+			/*cout << "voy a  en: {" << dir[0] << ", " << dir[1] << ", " <<
+				dir[2] << "}" << endl;
+			cout << "estoy  en: {" << pos[0] << ", " << pos[1] << ", " <<
+				pos[2] << "}" << endl;*/
+			if (llegar) {
+				cout << "HE LLEGAO" << endl;
+				llegar = false;
+				dir[0] = distributionXLejos(gen);
+				dir[1] = distributionYLejos(gen);
+				dir[2] = distributionXLejos(gen);
+				pillada = false;
+			}
+			glm::vec3 vecDir = dir - pos;
+			vecDir = vecDir / glm::length(vecDir); //normalizar vector
+			pos += (0.005f * velocidad) * vecDir;
+			if (glm::length(pos - dir) <= tam) {
+				llegar = true;
+			}
+			direccion = vecDir;
+			if (llegar && pillada) {
+				pillada = false;
+			}
 		}
+		else if (glm::length(pos - posP) <= es->per->tam * 6 && alpha >= 2.9 && alpha <= 3.5) { //esta muy cerca y de frente al jugador
+			pillada = true;
+			llegar = false;
+			/*cout << "personaje en: {" << es->per->pos.x << ", " << es->per->pos.y << ", " <<
+				es->per->pos.z << "}" << endl;*/
+			
+			dir[0] = distributionXLejos(gen)*(es->per->pos.x/abs(es->per->pos.x));
+			dir[1] = distributionYLejos(gen);
+			dir[2] = distributionXLejos(gen)*(es->per->pos.z / abs(es->per->pos.z));
+			/*cout << "voy a  en: {" << dir[0] << ", " << dir[1] << ", " <<
+				dir[2] << "}" << endl;*/
+		}
+		
+		
+		
 	}
 	if (glm::length(pos - posP) <= 2*tam && !es->per->modoDios) {
 		//cout << "MUERTO MATAO" << endl;

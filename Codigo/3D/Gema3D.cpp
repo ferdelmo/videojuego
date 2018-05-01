@@ -11,6 +11,7 @@
 #include "Bala3D.h"
 #include "Escena3D.h"
 //#include "Gema3D.h"
+#include "Sonidos.h"
 #include "../LoadShader.h"
 #include "../Camara.h"
 
@@ -81,6 +82,8 @@ void Gema3D::mover() {
 	if (glm::length(pos - a->pos) <= tam + a->tam && vida <= 0) {
 		a->addGema();
 		cout << "El personaje tiene: " << a->numGemas << " gemas." << endl;
+		/*thread t(&Sonidos::play, &Sonido, buffer, pos, "../DevilDaggers/videojuego/Codigo/Musica/gema3D.wav");
+		t.detach();*/
 		sigue = false;
 		noCogida = false;
 	}

@@ -10,7 +10,8 @@
 #include <thread>
 #include <thread>
 #include "Render3D.h"
-
+#include <al.h>
+#include <alc.h>
 
 
 using namespace std;
@@ -33,6 +34,12 @@ class Escena3D {
 		vector<shared_ptr<Gema3D>> gemas;
 		vector<shared_ptr<Daga3D>> dagas;
 		shared_ptr<Render3D> fondo;
+
+		ALuint buffer;
+		ALsizei size;
+		ALsizei frequency;
+		ALenum format;
+		int Sonido = -1;
 	public:
 		int calavsMatadas = 0;
 

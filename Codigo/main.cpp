@@ -36,8 +36,11 @@
 #include "3D\Daga3D.h"
 #include "3D\Partida3D.h"
 #include "3D\Particulas.h"
-
+#include <Windows.h>
+#include <mmsystem.h>
 #include "3D\Sonidos.h"
+#include <al.h>
+#include <alc.h>
 
 using namespace std;
 
@@ -231,7 +234,7 @@ int main(int argc, char **argv) {
 	bool modo3D = true;
 
 	Sonidos::genBuffs();
-
+	
 	while (!glfwWindowShouldClose(window))
 	{
 		/*if (estabaMuerto && es.getPer()->vivo) {

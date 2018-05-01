@@ -16,7 +16,6 @@
 #include <memory>
 #include <al.h>
 #include <alc.h>
-
 using namespace std;
 
 class Escena3D;
@@ -64,7 +63,7 @@ class Daga3D : public Render3D {
 	ALsizei size;
 	ALsizei frequency;
 	ALenum format;
-
+	int Sonido = -1;
 	public:
 		Daga3D(glm::vec3 pos, glm::vec3 dir, Escena3D * es, GLFWwindow* window, Camara * c, Obj3D obj, int nivel);
 
