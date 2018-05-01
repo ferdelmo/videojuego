@@ -135,7 +135,7 @@ bool CalaveraBase::vivo() {
 		}
 	}
 	if (vida <= 0) {
-		mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/calaveraI.mp3", NULL, 0, NULL);
+		//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/calaveraI.mp3", NULL, 0, NULL);
 	}
 	return vida>0;
 }

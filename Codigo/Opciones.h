@@ -14,11 +14,13 @@ using namespace std;
 class Opciones {
 public:
 	int mode;
-
+	
 	const string fich = "opciones.txt";
 
 	int resolucion = 1;
 	int modo = 1, aux_modo = 1;
+	int sonido = 1, aux_sonido = 1;
+	int maxFov = 120, minFov = 20, Fov = 30, aux_Fov = 30;
 	int oldresolucion = 1;
 
 	const int resoluciones[5][2] = {

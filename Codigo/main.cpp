@@ -9,8 +9,6 @@
 #include <ctime>
 #include <thread>
 #include <string>
-#include <Windows.h>
-#include <mmsystem.h>
 #include <GL/freeglut.h>
 #include <fstream>
 #include <stdio.h>   
@@ -38,6 +36,8 @@
 #include "3D\Daga3D.h"
 #include "3D\Partida3D.h"
 #include "3D\Particulas.h"
+
+#include "3D\Sonidos.h"
 
 using namespace std;
 
@@ -140,7 +140,7 @@ int main(int argc, char **argv) {
 	glfwGetFramebufferSize(window, &ancho, &alto);
 	glViewport(0, 0, ancho, alto);
 
-	text2D text2D("../DevilDaggers/videojuego/Codigo/Holstein.DDS");
+	text2D text3D("../DevilDaggers/videojuego/Codigo/Holstein.DDS");
 
 	Camara cam;
 	cam.FoV = 60;
@@ -229,6 +229,9 @@ int main(int argc, char **argv) {
 	Partida3D * par3D = &aux3D;
 	bool ratonActualizado = false;
 	bool modo3D = true;
+
+	Sonidos::genBuffs();
+
 	while (!glfwWindowShouldClose(window))
 	{
 		/*if (estabaMuerto && es.getPer()->vivo) {
@@ -335,6 +338,7 @@ int main(int argc, char **argv) {
 					displayText(0 - 0.50f, 0 + 0.8f, 1, 0, 0, "Asesinadas: " + to_string(es.calavsMatadas));
 					displayText(0 + 0.35f, 0 + 0.8f, 1, 1, 1, "Gemas: " + to_string(es.getPer()->numGemas));
 					//pinta lo que haya en los buffers
+
 					if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS && pulsado) {
 						mode = 1;
 						pulsado = false;
@@ -342,6 +346,7 @@ int main(int argc, char **argv) {
 					else {
 						pulsado = true;
 					}
+
 					glfwSwapBuffers(window);
 					//lee los eventos
 					glfwPollEvents();
@@ -499,10 +504,18 @@ int main(int argc, char **argv) {
 					es3D.renderizar();
 					es3D.moverObjetos();
 					par3D->actualizar();
-					char text[256];
-					sprintf_s(text, "%.2f sec", glfwGetTime());
+					
 					tiempo = to_string((clock() - puntuacion) / (CLOCKS_PER_SEC / 1000) / 1000.0f);
 					tiempo = tiempo.substr(0, tiempo.size() - 3);
+	
+					text3D.printText3D("ASESINADAS:", 20, 550, 17);
+					text3D.printText3D(to_string(es3D.calavsMatadas).c_str(), 220, 550, 17);
+					text3D.printText3D("TIEMPO:", 20, 520, 17);
+					text3D.printText3D(tiempo.c_str(), 150, 520, 17);
+					text3D.printText3D("GEMAS:", 20, 490, 17);
+					text3D.printText3D(to_string(es3D.per->numGemas).c_str(), 130, 490, 17);
+					//cout << es3D.per->numGemas << endl;
+
 					//pinta lo que haya en los buffers
 					if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS && pulsado) {
 						mode = 1;
@@ -511,6 +524,7 @@ int main(int argc, char **argv) {
 					else {
 						pulsado = true;
 					}
+
 					glfwSwapBuffers(window);
 					//lee los eventos
 					glfwPollEvents();
@@ -545,10 +559,10 @@ int main(int argc, char **argv) {
 					tiempo = to_string(PUNTOS);
 					tiempo = tiempo.substr(0, tiempo.size() - 3);
 					//cout << tiempo << endl;
-					displayText(-0.1f, -0.0f, 1, 0, 0, tiempo);
+					//displayText(-0.1f, -0.0f, 1, 0, 0, tiempo);
 					for (int i = 0; i < 10; i++) {
 						if (PUNTOS > topPunt[i]) {
-							displayText(-0.25f, -0.1f, 1, 1, 1, "NUEVO RECORD, PUESTO: " + to_string(i + 1));
+							//displayText(-0.25f, -0.1f, 1, 1, 1, "NUEVO RECORD, PUESTO: " + to_string(i + 1));
 							i = 10;
 						}
 					}
@@ -558,9 +572,9 @@ int main(int argc, char **argv) {
 					x = (x / opciones.px - 0.5f) * 2;
 					y = (abs(y - opciones.py) / opciones.py - 0.5f) * 2;
 					es3D.renderizar();
-					text2D.init_string_renderer();
+					text3D.init_string_renderer();
 					f.renderizar();
-					text2D.end_string_renderer();
+					text3D.end_string_renderer();
 					if (!ratonActualizado) {
 						cout << "muerto y no actualizado" << endl;
 						glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -655,10 +669,8 @@ int main(int argc, char **argv) {
 			}	
 		}
 		else if (mode == 3) {
-			text2D.init_string_renderer();
 			mode = opciones.renderizar();
 			//pinta lo que haya en los buffers
-			text2D.end_string_renderer();
 			glfwSwapBuffers(window);
 			//lee los eventos
 			glfwPollEvents();
@@ -667,18 +679,14 @@ int main(int argc, char **argv) {
 			}
 		}
 		else if (mode == 4) {
-			text2D.init_string_renderer();
 			mode = puntuaciones.renderizar();
-			text2D.end_string_renderer();
 			//pinta lo que haya en los buffers
 			glfwSwapBuffers(window);
 			//lee los eventos
 			glfwPollEvents();
 		}
 		else if (mode == 5) {
-			text2D.init_string_renderer();
 			mode = creditos.renderizar();
-			text2D.end_string_renderer();
 			//pinta lo que haya en los buffers
 			glfwSwapBuffers(window);
 			//lee los eventos

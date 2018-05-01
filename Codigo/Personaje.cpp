@@ -50,7 +50,7 @@ void Personaje::getPosition(GLfloat posi[]) {
 }
 
 void Personaje::addGema() {
-	mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/gema.wav", NULL, 0, NULL);
+	//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/gema.wav", NULL, 0, NULL);
 	this->numGemas++;
 }
 //FUNCION AUXILIAR CONTROLES POR INTERRUPCION TECLAS
@@ -82,7 +82,7 @@ void Personaje::mouseP(GLFWwindow* window, int button, int action, int mods) {
 void Personaje::morir() {
 	cout << "muerto" << endl;
 	vivo = false;
-	mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/muerte.wav", NULL, 0, NULL);
+	//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/muerte.wav", NULL, 0, NULL);
 }
 //dispara un escopetazo
 void Personaje::escopetazo() {

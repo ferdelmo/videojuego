@@ -33,7 +33,9 @@ void Partida3D::stop() {
 }
 
 void Partida3D::actualizar() {
-	generarDaga1();
+	if (true) {
+		generarDaga1();
+	}
 	generarDaga2();
 	generarDaga3();
 }
@@ -53,6 +55,7 @@ void Partida3D::generarDaga1() {
 			}
 			cout << "Genera cada: " << daga1sec << endl;;
 			daga1 = clock();
+			una = false;
 		}
 	}
 }

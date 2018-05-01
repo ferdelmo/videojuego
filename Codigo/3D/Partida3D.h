@@ -41,6 +41,7 @@ class Partida3D {
 		uniform_int_distribution<> distribution;
 
 		Obj3D * modelo;
+		bool una = true;
 
 	public:
 		Partida3D(Escena3D * es);

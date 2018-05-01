@@ -10,8 +10,7 @@
 #include <cmath>
 #include <thread>
 #include <ctime>
-#include <Windows.h>
-#include <mmsystem.h>
+
 #include <vector>
 #include <stdlib.h>
 

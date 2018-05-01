@@ -10,12 +10,13 @@
 #include <cmath>
 #include <thread>
 #include <ctime>
-#include <Windows.h>
-#include <mmsystem.h>
 #include <vector>
 #include <stdlib.h>
 #include "Render3D.h"
 #include "../Camara.h"
+
+#include <al.h>
+#include <alc.h>
 
 using namespace std;
 
@@ -58,6 +59,13 @@ public:
 	glm::vec3 posCam = { 0,0,0 };
 
 	bool cambioCam = true;
+
+
+	ALuint buffer;
+	ALsizei size;
+	ALsizei frequency;
+	ALenum format;
+	int Sonido = -1;
 public:
 	//CONSTRUCTOR EN UNA POSICION ESPECIFICA
 	Personaje3D(glm::vec3 pos, Escena3D * es, GLFWwindow * window, Camara * c, Obj3D obj);

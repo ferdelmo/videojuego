@@ -14,7 +14,8 @@
 #include <ctime>
 #include <vector>
 #include <memory>
-
+#include <al.h>
+#include <alc.h>
 
 using namespace std;
 
@@ -58,6 +59,11 @@ class Daga3D : public Render3D {
 
 	//cuando tenga 0 muere la torre
 	vector<shared_ptr<Gema3D>> gemas;
+
+	ALuint buffer;
+	ALsizei size;
+	ALsizei frequency;
+	ALenum format;
 
 	public:
 		Daga3D(glm::vec3 pos, glm::vec3 dir, Escena3D * es, GLFWwindow* window, Camara * c, Obj3D obj, int nivel);

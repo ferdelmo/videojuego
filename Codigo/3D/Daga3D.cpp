@@ -12,8 +12,6 @@
 #include <string>
 #include <stdlib.h>
 
-#include <Windows.h>
-#include <mmsystem.h>
 
 #include "CalaveraBase3D.h"
 #include "../LoadShader.h"
@@ -24,6 +22,8 @@
 #include "Gema3D.h"
 #include <SOIL.h>
 #include <string>
+
+#include "Sonidos.h"
 
 using namespace std;
 
@@ -207,14 +207,20 @@ void Daga3D::mover() {
 		//cout << int(clock() - tiempecito) / CLOCKS_PER_SEC << endl;
 		if ((int(clock() - tiempecito) / CLOCKS_PER_SEC) % tiempoGen == 0 && generadas != int(clock() - tiempecito) / CLOCKS_PER_SEC) {
 			GenerarCalaveras(8);
+
 			//cout << "GENERANDOOOO" << endl;
 			generadas = int(clock() - tiempecito) / CLOCKS_PER_SEC;
 		}
 	}
 	else {
 		if (pos.y > -3) {
-			pos += (0.01f * velocidad) * glm::vec3({0,-2,0});
-			velRot = 10;
+			if (velocidad < 8) { 
+				velocidad += 0.2; 
+			}
+			if (velRot < 15) {
+				velRot += 0.2; 
+			}
+			pos += (0.01f * velocidad) * glm::vec3({0,-1,0});
 			float ang = glm::radians(velRot);
 			glm::vec3 nueva = direccion;
 			nueva.x = direccion.x*cos(ang) + direccion.z*sin(ang);

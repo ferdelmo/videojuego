@@ -7,8 +7,6 @@
 #include <glm/glm.hpp>
 #include <memory>
 
-#include <Windows.h>
-#include <mmsystem.h>
 #include <thread>
 #include <thread>
 #include "Render3D.h"
