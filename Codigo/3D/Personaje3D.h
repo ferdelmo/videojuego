@@ -46,7 +46,7 @@ public:
 	GLuint shaderProgramBala;
 
 	Escena3D * es;
-	bool modoDios = false;
+	bool modoDios = true;
 	Opciones* opciones;
 	int up, down, left, right;
 
