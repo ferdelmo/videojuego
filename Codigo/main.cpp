@@ -247,7 +247,6 @@ int main(int argc, char **argv) {
 	//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/6.mp3", NULL, 0, NULL);
 	while (!glfwWindowShouldClose(window))
 	{
-		cout << puntuacion3D << endl;
 		if (mode == 2 && opciones.modo == 2 && es3D.espectador && tiempoInicializado) {
 			//cout << "espectadooor" << endl;
 			//espectando = true;
