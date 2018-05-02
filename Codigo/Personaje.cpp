@@ -11,7 +11,8 @@
 #include <ctime>
 #include <vector>
 #include <stdlib.h>
-
+#include <Windows.h>
+#include <mmsystem.h>
 #include "LoadShader.h"
 #include "Bala.h"
 #include "Escena.h"
@@ -33,8 +34,8 @@ Personaje::Personaje(GLfloat x, GLfloat y, GLfloat z, Escena * es, GLFWwindow * 
 	// Initialize Mersenne Twister pseudo-random number generator
 	gen = mt19937(rd());
 	shaderProgramBala = LoadShaders("../DevilDaggers/videojuego/Codigo/Shaders/gema.vert", "../DevilDaggers/videojuego/Codigo/Shaders/gema.frag");
-
 	Opciones o;
+	opciones = new Opciones();
 	up = o.up;
 	down = o.down;
 	right = o.right;
@@ -82,7 +83,9 @@ void Personaje::mouseP(GLFWwindow* window, int button, int action, int mods) {
 void Personaje::morir() {
 	cout << "muerto" << endl;
 	vivo = false;
-	//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/muerte.wav", NULL, 0, NULL);
+	if (opciones->sonido == 1) {
+		mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/muerte.wav", NULL, 0, NULL);
+	}
 }
 //dispara un escopetazo
 void Personaje::escopetazo() {

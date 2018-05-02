@@ -16,12 +16,15 @@
 
 #include "Renderizable.h"
 
+#include "Opciones.h"
 
 using namespace std;
 
 class Escena;
 
 class Camara;
+
+class Opciones;
 
 class Personaje : public Renderizable {
 public:
@@ -41,7 +44,7 @@ public:
 	bool disparando = false;
 
 	GLuint shaderProgramBala;
-
+	Opciones* opciones;
 	Escena * es;
 	bool modoDios = false;
 

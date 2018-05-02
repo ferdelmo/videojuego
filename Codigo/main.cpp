@@ -108,6 +108,7 @@ void stopSong(int indice) {
 		mciSendString("pause ../DevilDaggers/videojuego/Codigo/Musica/6.mp3", NULL, 0, NULL);
 	}
 }
+
 int main(int argc, char **argv) {
 	glfwInit();
 
@@ -353,6 +354,9 @@ int main(int argc, char **argv) {
 					puntuacion = clock();
 					gameover = true;
 					pulsado = false;
+					lastEspectador = clock();
+					tiempoInicializado = true;
+					puntuacion3D = 0;
 				}
 			}
 		}
@@ -530,7 +534,6 @@ int main(int argc, char **argv) {
 			else {
 				//chrono c++11
 				inicio = clock();
-
 				ratonActualizado = false; 
 				glEnable(GL_DEPTH_TEST);
 				// Accept fragment if it closer to the camera than the former one
@@ -545,28 +548,18 @@ int main(int argc, char **argv) {
 						tiempoInicializado = true;
 						lastEspectador = clock();
 					}
-					//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-					//renderiza escena
-					//glDepthMask(GL_FALSE);
-					/*glEnable(GL_BLEND);
-					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
-					//glViewport(-es.getPer()->pos[0]*ancho, -es.getPer()->pos[1]*alto, ancho, alto);
 					es3D.renderizar();
 					es3D.moverObjetos();
 					par3D->actualizar();
-					
 					//tiempo = to_string((clock() - puntuacion) / (CLOCKS_PER_SEC / 1000) / 1000.0f);
 					tiempo = to_string(puntuacion3D / (CLOCKS_PER_SEC / 1000) / 1000.0f);
 					tiempo = tiempo.substr(0, tiempo.size() - 3);
-	
 					text3D.printText3D("ASESINADAS:", 20, 550, 17);
 					text3D.printText3D(to_string(es3D.calavsMatadas).c_str(), 220, 550, 17);
 					text3D.printText3D("TIEMPO:", 20, 520, 17);
 					text3D.printText3D(tiempo.c_str(), 150, 520, 17);
 					text3D.printText3D("GEMAS:", 20, 490, 17);
 					text3D.printText3D(to_string(es3D.per->numGemas).c_str(), 130, 490, 17);
-					//cout << es3D.per->numGemas << endl;
-
 					//pinta lo que haya en los buffers
 					if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS && pulsado) {
 						mode = 1;
@@ -576,7 +569,6 @@ int main(int argc, char **argv) {
 					else {
 						pulsado = true;
 					}
-
 					glfwSwapBuffers(window);
 					//lee los eventos
 					glfwPollEvents();
@@ -603,19 +595,11 @@ int main(int argc, char **argv) {
 						gameover = false;
 						pulsado = false;
 					}
-					/*cam.View = glm::lookAt(
-					glm::vec3(0, 0, 3), // Camera is at (4,3,3), in World Space
-					glm::vec3(0, 0, 0), // and looks at the origin
-					glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
-					);
-					cam.actualizarMVP();*/
 					//float PUNTOS = (finPunt - puntuacion) / (CLOCKS_PER_SEC / 1000) / 1000.0f;
 					float PUNTOS = puntuacion3D / (CLOCKS_PER_SEC / 1000) / 1000.0f;
 					cout << "puntos = " << puntuacion3D << endl;
 					tiempo = to_string(PUNTOS);
 					tiempo = tiempo.substr(0, tiempo.size() - 3);
-					//cout << tiempo << endl;
-					//displayText(-0.1f, -0.0f, 1, 0, 0, tiempo);
 					for (int i = 0; i < 10; i++) {
 						if (PUNTOS > topPunt[i]) {
 							//displayText(-0.25f, -0.1f, 1, 1, 1, "NUEVO RECORD, PUESTO: " + to_string(i + 1));
@@ -688,6 +672,9 @@ int main(int argc, char **argv) {
 						cout << "_______________________" << endl;
 						tiempoInicializado = false;
 						mode = 1;
+						lastEspectador = clock();
+						tiempoInicializado = false;
+						puntuacion3D = 0;
 						ofstream f(puntuaciones.fich);
 						int k = -1;
 						for (int j = 0; j < 10; j++) {
@@ -724,7 +711,6 @@ int main(int argc, char **argv) {
 					glfwSwapBuffers(window);
 					//lee los eventos
 					glfwPollEvents();
-					
 				}
 			}	
 		}
@@ -757,19 +743,15 @@ int main(int argc, char **argv) {
 			glEnable(GL_DEPTH_TEST);
 			// Accept fragment if it closer to the camera than the former one
 			glDepthFunc(GL_LESS);
-
 			// Cull triangles which normal is not towards the camera
 			glEnable(GL_CULL_FACE);
 			inicio = clock();
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 			mode = 6;
-			
 			//cout << "RENDERIZANDO" << endl;
 			es3D.renderizar();
 			es3D.moverObjetos();
 			par3D->actualizar();
-
-
 			char text[256];
 			sprintf_s(text, "%.2f sec", glfwGetTime());
 			//text2D.printText3D(text, 0, 100, 70);

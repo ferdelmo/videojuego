@@ -5,7 +5,8 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <SOIL.h>
-
+#include <Windows.h>
+#include <mmsystem.h>
 #include <random>
 #include <cmath>
 #include <ctime>
@@ -134,8 +135,8 @@ bool CalaveraBase::vivo() {
 			i++;
 		}
 	}
-	if (vida <= 0) {
-		//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/calaveraI.mp3", NULL, 0, NULL);
+	if (vida <= 0 && es->getPer()->opciones->sonido == 1) {
+		mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/calaveraI.mp3", NULL, 0, NULL);
 	}
 	return vida>0;
 }

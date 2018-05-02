@@ -6,7 +6,8 @@
 #include <ctime>
 #include <vector>
 #include <stdlib.h>
-
+#include <Windows.h>
+#include <mmsystem.h>
 #include "LoadShader.h"
 #include "Personaje.h"
 #include "Bala.h"

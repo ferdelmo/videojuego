@@ -4,7 +4,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
-
+#include <Windows.h>
+#include <mmsystem.h>
 #include <random>
 #include <cmath>
 #include <ctime>
@@ -147,8 +148,8 @@ bool Daga::sigueVivo() {
 			i++;
 		}
 	}
-	if (gemas.size() <= 0) {
-		//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/calaveraI.mp3", NULL, 0, NULL);
+	if (gemas.size() <= 0 && es->getPer()->opciones->sonido == 1) {
+		mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/calaveraI.mp3", NULL, 0, NULL);
 	}
 	return gemas.size() > 0;
 }
