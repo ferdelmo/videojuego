@@ -247,7 +247,7 @@ int main(int argc, char **argv) {
 	//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/6.mp3", NULL, 0, NULL);
 	while (!glfwWindowShouldClose(window))
 	{
-		cout << puntuacion3D << endl;
+		//cout << puntuacion3D << endl;
 		if (mode == 2 && opciones.modo == 2 && es3D.espectador && tiempoInicializado) {
 			//cout << "espectadooor" << endl;
 			//espectando = true;
@@ -554,12 +554,15 @@ int main(int argc, char **argv) {
 					//tiempo = to_string((clock() - puntuacion) / (CLOCKS_PER_SEC / 1000) / 1000.0f);
 					tiempo = to_string(puntuacion3D / (CLOCKS_PER_SEC / 1000) / 1000.0f);
 					tiempo = tiempo.substr(0, tiempo.size() - 3);
-					text3D.printText3D("ASESINADAS:", 20, 550, 17);
-					text3D.printText3D(to_string(es3D.calavsMatadas).c_str(), 220, 550, 17);
-					text3D.printText3D("TIEMPO:", 20, 520, 17);
-					text3D.printText3D(tiempo.c_str(), 150, 520, 17);
-					text3D.printText3D("GEMAS:", 20, 490, 17);
-					text3D.printText3D(to_string(es3D.per->numGemas).c_str(), 130, 490, 17);
+	
+					/*text3D.printText3D("ASESINADAS:", 20, 550, 17);
+					text3D.printText3D(to_string(es3D.calavsMatadas).c_str(), 220, 550, 17);*/
+					text3D.printText3D("TIEMPO:", 20, 550, 17);
+					text3D.printText3D(tiempo.c_str(), 150, 550, 17);
+					/*text3D.printText3D("GEMAS:", 20, 490, 17);
+					text3D.printText3D(to_string(es3D.per->numGemas).c_str(), 130, 490, 17);*/
+					//cout << es3D.per->numGemas << endl;
+
 					//pinta lo que haya en los buffers
 					if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS && pulsado) {
 						mode = 1;
@@ -611,10 +614,16 @@ int main(int argc, char **argv) {
 					//calula la posicion relativa de la raton en la pantalla
 					x = (x / opciones.px - 0.5f) * 2;
 					y = (abs(y - opciones.py) / opciones.py - 0.5f) * 2;
-					es3D.renderizar();
+					//es3D.renderizar();
 					text3D.init_string_renderer();
 					f.renderizar();
 					text3D.end_string_renderer();
+					text3D.printText3D("ASESINADAS:", 300, 260, 17);
+					text3D.printText3D(to_string(es3D.calavsMatadas).c_str(), 500, 260, 17); 
+						text3D.printText3D("TIEMPO:", 300, 200, 17);
+					text3D.printText3D(tiempo.c_str(), 470, 200, 17);
+					text3D.printText3D("GEMAS:", 300, 140, 17);
+					text3D.printText3D(to_string(es3D.per->numGemas).c_str(), 410, 140, 17);
 					if (!ratonActualizado) {
 						//cout << "muerto y no actualizado" << endl;
 						glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);

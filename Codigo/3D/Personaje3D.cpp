@@ -29,9 +29,7 @@ Personaje3D * persoCam;
 
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
-	cout << "COJONES" << endl;
 	glm::vec3 pos = persoCam->pos;
-	cout << "{ " << pos.x << ", " << pos.y << ", " << pos.z << " }" << endl;
 	if (persoCam->camaraActual == 1) {
 		cout << yoffset << endl;
 		persoCam->camaras[1].FoV -= yoffset ;
@@ -159,12 +157,20 @@ void Personaje3D::controlesInFrame() {
 	y *= py * 1.0f / px;*/
 
 	angHoriz += (x - lastXpos) * sensibilidad * 0.01;
-	angVert += (lastYpos - y) * sensibilidad * 0.01;
+	double auxAngVert = (lastYpos - y) * sensibilidad * 0.01;
+	if (abs(angVert + auxAngVert) < 70) {
+		angVert += (lastYpos - y) * sensibilidad * 0.01;
+	}
+
+	cout << angVert << endl;
 
 	glm::vec3 dirAux = { cos(glm::radians(angHoriz)) * cos(glm::radians(angVert)),
 		sin(glm::radians(angVert)),
 		sin(glm::radians(angHoriz)) * cos(glm::radians(angVert)) };
-	direccion = glm::normalize(dirAux);
+	dirAux = glm::normalize(dirAux);
+	//if (abs(dirAux.y) < 0.9) {
+		direccion = dirAux;
+	//}
 	lastXpos = x;
 	lastYpos = y;
 	glm::vec3 posVieja = pos;

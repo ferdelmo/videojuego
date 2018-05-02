@@ -40,9 +40,9 @@ CalaveraBase3D::CalaveraBase3D(glm::vec3 pos, glm::vec3 dir, Escena3D * es, GLFW
 	distribution3 = uniform_real_distribution<float>(5, 14);
 	distribution3 = uniform_real_distribution<float>(2, 14);
 	distribution4 = uniform_real_distribution<float>(2, 3);
-	distributionXLejos = uniform_real_distribution<float>(-10, -10);
+	distributionXLejos = uniform_real_distribution<float>(-10, 10);
 	//distributionYLejos = uniform_real_distribution<float>(tam / 1.5, es->per->tam*1.5);
-	distributionYLejos = uniform_real_distribution<float>(tam/1.5, es->per->tam*1.5);
+	distributionYLejos = uniform_real_distribution<float>(0.5, 2);
 	random_device rd;
 
 	// Initialize Mersenne Twister pseudo-random number generator
@@ -124,33 +124,48 @@ void CalaveraBase3D::seguir() {
 		dirAux = dirAux / glm::length(dirAux);
 		double alpha = glm::dot(mira, dirAux) / (glm::length(mira)*glm::length(dirAux));
 		alpha = acos(alpha);
-		if (glm::length(pos - posP) <= es->per->tam * 8 && alpha < 2.9 || alpha > 3.5) { // esta cerca, y no de frente al jugador, busca la espalda
+		cout << alpha << endl;
+		if (glm::length(pos - posP) <= es->limite ) { // esta cerca, y no de frente al jugador, busca la espalda
 			llegar = true;
 			pillada = false;
 			//cout << "ALPHA: " << alpha << endl;
-			if (glm::cross(mira, dirAux).y > 0) {
-				alpha = -alpha;
+			if (alpha > 160*pi/180) {
+				//alpha = pi - alpha;
+				if (glm::cross(mira, dirAux).y > 0) {
+					alpha = -alpha;
+				}
+				glm::vec3 vecDir = { 0,0,0 }; // vector movimient
+				vecDir.x = dirAux.x * cos(alpha) - dirAux.z*sin(alpha);
+				vecDir.z = dirAux.x * sin(alpha) + dirAux.z*cos(alpha);
+				vecDir = vecDir / glm::length(vecDir); //normalizar vector
+				pos += (0.01f * velocidad) * vecDir;
+				direccion = vecDir;
 			}
-			boost::numeric::ublas::vector<double> aux(1);
-			aux[0] = alpha / pi;
-			cout << "ANG: " << aux[0];
-			alpha = (*(es->redCalavs->predict(aux)))[0] * pi;
-			cout << " PREDICT: " << alpha * 180.0 / pi << endl;
-			if (alpha != alpha) {
-				cout << "CHECKEA SI ES NAN " << endl;
-				alpha = 0;
+			else {
+				if (glm::cross(mira, dirAux).y > 0) {
+					alpha = -alpha;
+				}
+				boost::numeric::ublas::vector<double> aux(1);
+				aux[0] = alpha / pi;
+				//cout << "ANG: " << aux[0];
+				alpha = (*(es->redCalavs->predict(aux)))[0] * pi;
+				//cout << " PREDICT: " << alpha * 180.0 / pi << endl;
+				if (alpha != alpha) {
+					//cout << "CHECKEA SI ES NAN " << endl;
+					alpha = 0;
+				}
+				glm::vec3 vecDir = { 0,0,0 }; // vector movimient
+				vecDir.x = dirAux.x * cos(alpha) - dirAux.z*sin(alpha);
+				vecDir.z = dirAux.x * sin(alpha) + dirAux.z*cos(alpha);
+				vecDir = vecDir / glm::length(vecDir); //normalizar vector
+				pos += (0.01f * velocidad) * vecDir;
+				direccion = vecDir;
 			}
-			glm::vec3 vecDir = { 0,0,0 }; // vector movimient
-			vecDir.x = dirAux.x * cos(alpha) - dirAux.z*sin(alpha);
-			vecDir.z = dirAux.x * sin(alpha) + dirAux.z*cos(alpha);
-			vecDir = vecDir / glm::length(vecDir); //normalizar vector
-			pos += (0.01f * velocidad) * vecDir;
-			direccion = vecDir;
 			if (pos.y > 0.5f) {
 				pos += glm::vec3({ 0,-velocidad / 2,0 })*0.01f;
 			}
 		}
-		else if (glm::length(pos - posP) > es->per->tam*8 || pillada) { //esta lejos, va a su bola
+		else  { //esta lejos, va a su bola
 			/*cout << "voy a  en: {" << dir[0] << ", " << dir[1] << ", " <<
 				dir[2] << "}" << endl;
 			cout << "estoy  en: {" << pos[0] << ", " << pos[1] << ", " <<
@@ -165,7 +180,7 @@ void CalaveraBase3D::seguir() {
 			}
 			glm::vec3 vecDir = dir - pos;
 			vecDir = vecDir / glm::length(vecDir); //normalizar vector
-			pos += (0.005f * velocidad) * vecDir;
+			pos += (0.01f * velocidad) * vecDir;
 			if (glm::length(pos - dir) <= tam) {
 				llegar = true;
 			}
@@ -173,18 +188,6 @@ void CalaveraBase3D::seguir() {
 			if (llegar && pillada) {
 				pillada = false;
 			}
-		}
-		else if (glm::length(pos - posP) <= es->per->tam * 6 && alpha >= 2.9 && alpha <= 3.5) { //esta muy cerca y de frente al jugador
-			pillada = true;
-			llegar = false;
-			/*cout << "personaje en: {" << es->per->pos.x << ", " << es->per->pos.y << ", " <<
-				es->per->pos.z << "}" << endl;*/
-			
-			dir[0] = distributionXLejos(gen)*(es->per->pos.x/abs(es->per->pos.x));
-			dir[1] = distributionYLejos(gen);
-			dir[2] = distributionXLejos(gen)*(es->per->pos.z / abs(es->per->pos.z));
-			/*cout << "voy a  en: {" << dir[0] << ", " << dir[1] << ", " <<
-				dir[2] << "}" << endl; */
 		}
 	}
 	if (glm::length(pos - posP) <= 2*tam && !es->per->modoDios) {

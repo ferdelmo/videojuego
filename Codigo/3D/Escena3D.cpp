@@ -20,17 +20,17 @@ Escena3D::Escena3D() {
 void Escena3D::entrenarRed() {
 	std::vector<int> layers;
 	layers.push_back(1); //capas de entrada
-	layers.push_back(2); //capas intermedias
+	layers.push_back(3); //capas intermedias
 	layers.push_back(1); //capas de salida
 
 	redCalavs = new Network(layers, 0.001);
 	cout << *redCalavs << endl;
 	matrix<double> X(360, 1), Y(360, 1);
 	for (int i = -180; i < 180; i++) {
-		X(i + 180, 0) = i*1.0 / 180.0;
-		Y(i + 180, 0) = i*1.0/ 2 /180.0;
+		X(i + 180, 0) = i * 1.0 / 180.0;
+		Y(i + 180, 0) = i * 1.0 / 2 / 180.0;
 	}
-	redCalavs->fit(X, Y, 100);
+	redCalavs->fit(X, Y, 200);
 	for (int i = -180; i <= 180; i = i + 10) {
 		boost::numeric::ublas::vector<double> aux(1);
 		aux[0] = i/180.0;

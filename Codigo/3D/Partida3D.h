@@ -42,6 +42,9 @@ class Partida3D {
 
 		Obj3D * modelo;
 		bool una = true;
+		clock_t te1=0, te2=0, te3=0;
+		bool entrar = true;
+		bool salida = false;
 
 	public:
 		Partida3D(Escena3D * es);
