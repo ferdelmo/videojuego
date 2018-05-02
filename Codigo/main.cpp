@@ -531,7 +531,6 @@ int main(int argc, char **argv) {
 				//chrono c++11
 				inicio = clock();
 
-				glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 				ratonActualizado = false; 
 				glEnable(GL_DEPTH_TEST);
 				// Accept fragment if it closer to the camera than the former one
@@ -541,6 +540,7 @@ int main(int argc, char **argv) {
 				string tiempo;
 				//BORRA EL FONDO
 				if (es3D.per->vivo) {
+					glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 					if (!tiempoInicializado) {
 						tiempoInicializado = true;
 						lastEspectador = clock();
@@ -587,6 +587,7 @@ int main(int argc, char **argv) {
 					}
 				}
 				else {
+					glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 					tiempoInicializado = false;
 					if (gameover) {
 						fstream f;
@@ -627,9 +628,9 @@ int main(int argc, char **argv) {
 					x = (x / opciones.px - 0.5f) * 2;
 					y = (abs(y - opciones.py) / opciones.py - 0.5f) * 2;
 					es3D.renderizar();
-					//text3D.init_string_renderer();
+					text3D.init_string_renderer();
 					f.renderizar();
-					//text3D.end_string_renderer();
+					text3D.end_string_renderer();
 					if (!ratonActualizado) {
 						//cout << "muerto y no actualizado" << endl;
 						glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
