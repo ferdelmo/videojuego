@@ -6,11 +6,36 @@
 #include "Gema3D.h"
 #include "Daga3D.h"
 #include "Sonidos.h"
+#include "Network.hpp"
+
+#pragma warning(disable : 4996)
 
 using namespace std;
 
 Escena3D::Escena3D() {
-	balas = vector<shared_ptr<Bala3D>>();
+	balas = std::vector<shared_ptr<Bala3D>>();
+	
+}
+
+void Escena3D::entrenarRed() {
+	std::vector<int> layers;
+	layers.push_back(1); //capas de entrada
+	layers.push_back(2); //capas intermedias
+	layers.push_back(1); //capas de salida
+
+	redCalavs = new Network(layers, 0.001);
+	cout << *redCalavs << endl;
+	matrix<double> X(360, 1), Y(360, 1);
+	for (int i = -180; i < 180; i++) {
+		X(i + 180, 0) = i*1.0 / 180.0;
+		Y(i + 180, 0) = i*1.0/ 2 /180.0;
+	}
+	redCalavs->fit(X, Y, 100);
+	for (int i = -180; i <= 180; i = i + 10) {
+		boost::numeric::ublas::vector<double> aux(1);
+		aux[0] = i/180.0;
+		cout << "ANG: " << aux[0] * 180.0 << " PREDICT: " << (*(redCalavs->predict(aux)))[0]*180.0 << endl;	}
+
 }
 
 void Escena3D::add(shared_ptr<Personaje3D> p) {
@@ -34,19 +59,19 @@ void Escena3D::add(shared_ptr<Daga3D> d) {
 	dagas.push_back(d);
 
 }
-void Escena3D::add(vector<shared_ptr<Bala3D>> bs) {
+void Escena3D::add(std::vector<shared_ptr<Bala3D>> bs) {
 	balas.insert(balas.end(), bs.begin(), bs.end());
 }
 
-vector<shared_ptr<Bala3D>>* Escena3D::getBalas() {
+std::vector<shared_ptr<Bala3D>>* Escena3D::getBalas() {
 	return &balas;
 }
 
-vector<shared_ptr<Gema3D>>* Escena3D::getGemas() {
+std::vector<shared_ptr<Gema3D>>* Escena3D::getGemas() {
 	return &gemas;
 }
 
-vector<shared_ptr<Daga3D>>* Escena3D::getDagas() {
+std::vector<shared_ptr<Daga3D>>* Escena3D::getDagas() {
 	return &dagas;
 
 }

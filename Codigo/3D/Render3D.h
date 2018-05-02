@@ -20,9 +20,9 @@ class Camara;
 
 class Obj3D {
 	public:
-		vector< glm::vec3 > vertices;
-		vector< glm::vec2 > uvs;
-		vector< glm::vec3 > normals;
+		std::vector< glm::vec3 > vertices;
+		std::vector< glm::vec2 > uvs;
+		std::vector< glm::vec3 > normals;
 };
 
 class Render3D {
@@ -42,11 +42,11 @@ class Render3D {
 		GLuint normalbuffer;
 
 		//textura
-		vector< glm::vec3 > colors;
+		std::vector< glm::vec3 > colors;
 
-		vector< glm::vec3 > vertices;
-		vector< glm::vec2 > uvs;
-		vector< glm::vec3 > normals;
+		std::vector< glm::vec3 > vertices;
+		std::vector< glm::vec2 > uvs;
+		std::vector< glm::vec3 > normals;
 
 		glm::mat4 Model = glm::mat4(1.0f);
 

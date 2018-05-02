@@ -26,13 +26,15 @@ class Gema3D;
 
 class Daga3D;
 
+class Network;
+
 class Escena3D {
 	public:
 		shared_ptr<Personaje3D> per;
-		vector<shared_ptr<Bala3D>> balas;
-		vector<shared_ptr<CalaveraBase3D>> calaveras;
-		vector<shared_ptr<Gema3D>> gemas;
-		vector<shared_ptr<Daga3D>> dagas;
+		std::vector<shared_ptr<Bala3D>> balas;
+		std::vector<shared_ptr<CalaveraBase3D>> calaveras;
+		std::vector<shared_ptr<Gema3D>> gemas;
+		std::vector<shared_ptr<Daga3D>> dagas;
 		shared_ptr<Render3D> fondo;
 
 		ALuint buffer;
@@ -40,6 +42,9 @@ class Escena3D {
 		ALsizei frequency;
 		ALenum format;
 		int Sonido = -1;
+
+		Network * redCalavs;
+
 	public:
 		int calavsMatadas = 0;
 
@@ -51,6 +56,8 @@ class Escena3D {
 
 		Escena3D();
 		
+		void entrenarRed();
+
 		void add(shared_ptr<Personaje3D> p);
 
 		void add(shared_ptr<Bala3D> b);
@@ -61,13 +68,13 @@ class Escena3D {
 
 		void add(shared_ptr<Daga3D> D);
 
-		void add(vector<shared_ptr<Bala3D>> bs);
+		void add(std::vector<shared_ptr<Bala3D>> bs);
 
-		vector<shared_ptr<Bala3D>>* getBalas();
+		std::vector<shared_ptr<Bala3D>>* getBalas();
 
-		vector<shared_ptr<Gema3D>>* getGemas();
+		std::vector<shared_ptr<Gema3D>>* getGemas();
 
-		vector<shared_ptr<Daga3D>>* getDagas();
+		std::vector<shared_ptr<Daga3D>>* getDagas();
 
 		void renderizar();
 

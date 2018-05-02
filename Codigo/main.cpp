@@ -230,6 +230,7 @@ int main(int argc, char **argv) {
 	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/plano.obj", plano.vertices, plano.uvs, plano.normals);
 	Obj3D cubo, perObj;
 	Escena3D es3D;
+	es3D.entrenarRed();
 	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/cubo.obj", cubo.vertices, cubo.uvs, cubo.normals);
 	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/arma.obj", perObj.vertices, perObj.uvs, perObj.normals);
 	Personaje3D per3D({ 0, 1, 0 }, &es3D, window, &cam3D, perObj);
@@ -569,6 +570,7 @@ int main(int argc, char **argv) {
 					//pinta lo que haya en los buffers
 					if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS && pulsado) {
 						mode = 1;
+						glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 						pulsado = false;
 					}
 					else {
@@ -625,9 +627,9 @@ int main(int argc, char **argv) {
 					x = (x / opciones.px - 0.5f) * 2;
 					y = (abs(y - opciones.py) / opciones.py - 0.5f) * 2;
 					es3D.renderizar();
-					text3D.init_string_renderer();
+					//text3D.init_string_renderer();
 					f.renderizar();
-					text3D.end_string_renderer();
+					//text3D.end_string_renderer();
 					if (!ratonActualizado) {
 						//cout << "muerto y no actualizado" << endl;
 						glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);

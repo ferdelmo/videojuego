@@ -19,6 +19,7 @@
 #include "../Camara.h"
 #include "Particulas.h"
 #include "Sonidos.h"
+#include "Network.hpp"
 
 using namespace std;
 
@@ -123,21 +124,22 @@ void CalaveraBase3D::seguir() {
 		dirAux = dirAux / glm::length(dirAux);
 		double alpha = glm::dot(mira, dirAux) / (glm::length(mira)*glm::length(dirAux));
 		alpha = acos(alpha);
-		//cout << "ALPHA: " << alpha << endl;
 		if (glm::length(pos - posP) <= es->per->tam * 8 && alpha < 2.9 || alpha > 3.5) { // esta cerca, y no de frente al jugador, busca la espalda
 			llegar = true;
 			pillada = false;
-			/*glm::vec3 mira = es->per->direccion;
-			glm::vec3 dirAux = posP - pos;
-			mira.y = 0; dirAux.y = 0;
-			mira = mira / glm::length(mira);
-			dirAux = dirAux / glm::length(dirAux);
-			double alpha = glm::dot(mira, dirAux) / (glm::length(mira)*glm::length(dirAux));
-			alpha = acos(alpha);*/
+			//cout << "ALPHA: " << alpha << endl;
 			if (glm::cross(mira, dirAux).y > 0) {
 				alpha = -alpha;
 			}
-			alpha = alpha / 2;
+			boost::numeric::ublas::vector<double> aux(1);
+			aux[0] = alpha / pi;
+			cout << "ANG: " << aux[0];
+			alpha = (*(es->redCalavs->predict(aux)))[0] * pi;
+			cout << " PREDICT: " << alpha * 180.0 / pi << endl;
+			if (alpha != alpha) {
+				cout << "CHECKEA SI ES NAN " << endl;
+				alpha = 0;
+			}
 			glm::vec3 vecDir = { 0,0,0 }; // vector movimient
 			vecDir.x = dirAux.x * cos(alpha) - dirAux.z*sin(alpha);
 			vecDir.z = dirAux.x * sin(alpha) + dirAux.z*cos(alpha);
@@ -182,11 +184,8 @@ void CalaveraBase3D::seguir() {
 			dir[1] = distributionYLejos(gen);
 			dir[2] = distributionXLejos(gen)*(es->per->pos.z / abs(es->per->pos.z));
 			/*cout << "voy a  en: {" << dir[0] << ", " << dir[1] << ", " <<
-				dir[2] << "}" << endl;*/
+				dir[2] << "}" << endl; */
 		}
-		
-		
-		
 	}
 	if (glm::length(pos - posP) <= 2*tam && !es->per->modoDios) {
 		//cout << "MUERTO MATAO" << endl;
@@ -195,7 +194,7 @@ void CalaveraBase3D::seguir() {
 }
 
 bool CalaveraBase3D::vivo() {
-	vector<shared_ptr<Bala3D>> * b = es->getBalas();
+	std::vector<shared_ptr<Bala3D>> * b = es->getBalas();
 	int i = 0;
 	while (i < b->size()) {
 		if (glm::length(pos - b->at(i)->pos) < tam + 0.25f + b->at(i)->tam) {

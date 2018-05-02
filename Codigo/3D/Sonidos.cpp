@@ -180,15 +180,15 @@ void Sonidos::play(int * b, ALuint buf, glm::vec3 pos, string sf) {
 	ALsizei frequency;
 	ALenum format;
 	
-	cout << "SONIDOS 0 " << alGetError() << endl;
+	//cout << "SONIDOS 0 " << alGetError() << endl;
 	//SI DESCOMENTAS ESTA LINEA VA PERO TIENE Q IR LEYENDO ESO SOLO UNA VEZ
 	if (*b == -1) {
 		cout << "CARGAAAAAAAAAAAAAAAANDO" << endl;
 		*b=Sonidos::loadWavFile(sf, &buf, &size, &frequency, &format);
 	}
-	cout << "SONIDOS 1 " << alGetError() << endl;
+	//cout << "SONIDOS 1 " << alGetError() << endl;
 	alGenSources((ALuint)1, &sources[viejaI]);
-	cout << "SONIDOS 2 " << alGetError() << endl;
+	//cout << "SONIDOS 2 " << alGetError() << endl;
 	// check for errors
 	alSourcef(sources[viejaI], AL_PITCH, 1);
 	// check for errors
@@ -201,18 +201,17 @@ void Sonidos::play(int * b, ALuint buf, glm::vec3 pos, string sf) {
 	alSourcei(sources[viejaI], AL_LOOPING, AL_FALSE);
 	// check for errros
 	alSourcei(sources[viejaI], AL_BUFFER, buffers[*b]);
-	cout << "SONIDOS 3 " << alGetError() << endl;
+	//cout << "SONIDOS 3 " << alGetError() << endl;
 	alSourcePlay(sources[viejaI]);
 
-	cout << "SONIDOS 4 " << alGetError() << endl;
+	//cout << "SONIDOS 4 " << alGetError() << endl;
 
 	do {
 		alGetSourcei(sources[viejaI], AL_SOURCE_STATE, &state);
 		this_thread::sleep_for(chrono::milliseconds(100));
 	} while (state == AL_PLAYING);
 
-	// Clean up sources and buffers
-	cout << "PETO" << endl;
+	// Clean up sources and buffers;
 	alDeleteSources(1, &sources[viejaI]);
 	//delete our buffer
 	//alDeleteBuffers(1, &buffers[viejaI]);

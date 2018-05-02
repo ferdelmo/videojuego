@@ -112,7 +112,6 @@ void Personaje3D::morir() {
 }
 //dispara un escopetazo
 void Personaje3D::escopetazo() {
-
 	//thread t(&Sonidos::play, &Sonido, buffer, pos, "../DevilDaggers/videojuego/Codigo/Musica/musical001.wav");
 	//t.detach();
 	int n = 8;
@@ -237,7 +236,7 @@ void Personaje3D::controlesInFrame() {
 	if (camaraActual==0) {
 		pos.y = 1;
 		Camara a;
-		a.FoV = 60;
+		a.FoV = camaras[0].FoV;
 		a.View = glm::lookAt(
 			pos, // Camera is at (4,3,3), in World Space
 			pos + direccion, // and looks at the origin
