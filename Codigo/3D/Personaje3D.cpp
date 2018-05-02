@@ -76,6 +76,7 @@ Personaje3D::Personaje3D(glm::vec3 pos, Escena3D * es, GLFWwindow * window, Cama
 		100.0f             // Plano de corte lejano. Tan pequeño como se pueda.
 	);
 	camaras[0] = a;
+	vivo = true;
 	a.View = glm::lookAt(
 		glm::vec3(0,1,0), // Camera is at (4,3,3), in World Space
 		glm::vec3(0,1,0) + glm::vec3(1, 0, 0), // and looks at the origin
@@ -92,6 +93,7 @@ Personaje3D::Personaje3D(glm::vec3 pos, Escena3D * es, GLFWwindow * window, Cama
 	persoCam = this;
 	glfwSetScrollCallback(window, scroll_callback);
 	Sonido = -1;
+	opciones = new Opciones();
 }
 
 void Personaje3D::addGema() {
@@ -102,8 +104,10 @@ void Personaje3D::addGema() {
 void Personaje3D::morir() {
 	cout << "muerto" << endl;
 	vivo = false;
-	thread t(&Sonidos::play, &Sonido, buffer, pos, "../DevilDaggers/videojuego/Codigo/Musica/muerte.wav");
-	t.detach();
+	if (opciones->sonido == 1) {
+		thread t(&Sonidos::play, &Sonido, buffer, pos, "../DevilDaggers/videojuego/Codigo/Musica/muerte.wav");
+		t.detach();
+	}
 	//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/muerte.wav", NULL, 0, NULL);
 }
 //dispara un escopetazo

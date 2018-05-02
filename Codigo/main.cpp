@@ -65,54 +65,54 @@ void displayText(float x, float y, int r, int g, int b, string str) {
 }
 
 string canciones[6] = { "1.mp3", "2.mp3", "3.mp3", "4.mp3", "5.mp3", "6.mp3" };
-int duraciones[6] = { 268, 146, 261, 344, 215, 268 };
+int duraciones[6] = { 276, 146, 210, 205, 245, 219 };
 
 void playSong(int indice) {
 	if (indice == 1) {
-		//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/1.mp3", NULL, 0, NULL);
+		mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/1.mp3", NULL, 0, NULL);
 	}
 	else if (indice == 2) {
-		//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/2.mp3", NULL, 0, NULL);
+		mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/2.mp3", NULL, 0, NULL);
 	}
 	else if (indice == 3) {
-		//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/3.mp3", NULL, 0, NULL);
+		mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/3.mp3", NULL, 0, NULL);
 	}
 	else if (indice == 4) {
-		//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/4.mp3", NULL, 0, NULL);
+		mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/4.mp3", NULL, 0, NULL);
 	}
 	else if (indice == 5) {
-		//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/5.mp3", NULL, 0, NULL);
+		mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/5.mp3", NULL, 0, NULL);
 	}
 	else {
-		//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/6.mp3", NULL, 0, NULL);
+		mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/6.mp3", NULL, 0, NULL);
 	}
 }
 
 void stopSong(int indice) {
 	if (indice == 1) {
-		//mciSendString("pause ../DevilDaggers/videojuego/Codigo/Musica/1.mp3", NULL, 0, NULL);
+		mciSendString("pause ../DevilDaggers/videojuego/Codigo/Musica/1.mp3", NULL, 0, NULL);
 	}
 	else if (indice == 2) {
-		//mciSendString("pause ../DevilDaggers/videojuego/Codigo/Musica/2.mp3", NULL, 0, NULL);
+		mciSendString("pause ../DevilDaggers/videojuego/Codigo/Musica/2.mp3", NULL, 0, NULL);
 	}
 	else if (indice == 3) {
-		//mciSendString("pause ../DevilDaggers/videojuego/Codigo/Musica/3.mp3", NULL, 0, NULL);
+		mciSendString("pause ../DevilDaggers/videojuego/Codigo/Musica/3.mp3", NULL, 0, NULL);
 	}
 	else if (indice == 4) {
-		//mciSendString("pause ../DevilDaggers/videojuego/Codigo/Musica/4.mp3", NULL, 0, NULL);
+		mciSendString("pause ../DevilDaggers/videojuego/Codigo/Musica/4.mp3", NULL, 0, NULL);
 	}
 	else if (indice == 5) {
-		//mciSendString("pause ../DevilDaggers/videojuego/Codigo/Musica/5.mp3", NULL, 0, NULL);
+		mciSendString("pause ../DevilDaggers/videojuego/Codigo/Musica/5.mp3", NULL, 0, NULL);
 	}
 	else {
-		//mciSendString("pause ../DevilDaggers/videojuego/Codigo/Musica/6.mp3", NULL, 0, NULL);
+		mciSendString("pause ../DevilDaggers/videojuego/Codigo/Musica/6.mp3", NULL, 0, NULL);
 	}
 }
 int main(int argc, char **argv) {
 	glfwInit();
 
 	srand(time(NULL));
-	int indice = rand() % 6 + 1;
+	
 	/*const GLFWvidmode *res = glfwGetVideoMode(glfwGetPrimaryMonitor());
 	GLFWwindow* window = glfwCreateWindow(res->width, res->height, "GAME", nullptr,
 	nullptr);*/
@@ -198,7 +198,12 @@ int main(int argc, char **argv) {
 	bool estabaMuerto = false;
 	//glfwSetInputMode(window, GLFW_STICKY_MOUSE_BUTTONS, 0);
 	clock_t puntuacion = clock(), finPunt = clock();
-	playSong(indice);
+	clock_t lastEspectador = clock();
+	float tTotalEspec = 0.0;
+	int indice = rand() % 6 + 1;
+	if (opciones.sonido == 1) {
+		playSong(indice);
+	}
 	clock_t tiempecito = clock();
 	int antigua = opciones.resolucion;
 	bool gameover = true;
@@ -230,32 +235,69 @@ int main(int argc, char **argv) {
 	Personaje3D per3D({ 0, 1, 0 }, &es3D, window, &cam3D, perObj);
 	Partida3D aux3D(&es3D);
 	Partida3D * par3D = &aux3D;
+	es3D.add(make_shared<Personaje3D>(per3D));
 	bool ratonActualizado = false;
 	bool modo3D = true;
-
+	bool parado = false;
+	bool tiempoInicializado = false;
 	Sonidos::genBuffs();
-	
+	clock_t puntuacion3D = clock();
+	//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/6.mp3", NULL, 0, NULL);
 	while (!glfwWindowShouldClose(window))
 	{
-		/*if (estabaMuerto && es.getPer()->vivo) {
-			mciSendString("pause ../DevilDaggers/videojuego/Codigo/Musica/gameOver.wav", NULL, 0, NULL);
-			estabaMuerto = false;
-			tiempecito = clock();
-			indice = rand() % 6 + 1;
-			playSong(indice);
+		cout << puntuacion3D << endl;
+		if (mode == 2 && opciones.modo == 2 && es3D.espectador && tiempoInicializado) {
+			//cout << "espectadooor" << endl;
+			//espectando = true;
+			lastEspectador = clock();
 		}
-		if (!es.getPer()->vivo) {
-			cout << "parando cancion " << indice << endl;
-			estabaMuerto = true;
-			stopSong(indice);
-			mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/gameOver.wav", NULL, 0, NULL);
+		if (mode == 2 && opciones.modo == 2 && !es3D.espectador && tiempoInicializado) {
+			//cout << "volvemos a jugar " << endl;
+			puntuacion3D += (clock() - lastEspectador)/* / (CLOCKS_PER_SEC / 1000) / 1000.0f*/;
+			lastEspectador = clock();
 		}
-		if (int(clock() - tiempecito) / CLOCKS_PER_SEC >= duraciones[indice - 1]) {
-			tiempecito = clock();
-			indice = rand() % 6 + 1;
-			playSong(indice);
-			//PlaySound(TEXT("../DevilDaggers/videojuego/Codigo/Musica/quack.wav"), NULL, SND_ASYNC);
+		//cout << "puntuacion: " << puntuacion3D << endl;
+		/*if (opciones.modo == 2 && !es3D.espectador) {
+			puntuacion3D += (clock() - lastEspectador) / (CLOCKS_PER_SEC / 1000) / 1000.0f;
+			lastEspectador = clock();
 		}*/
+		//cout << "espectador " << es3D.espectador << endl;
+		if (opciones.sonido == 1) {
+			if ((opciones.modo == 2 && estabaMuerto && es3D.per->vivo) || 
+				(opciones.modo == 1 && estabaMuerto && es.getPer()->vivo)) {
+				//cout << "pausando cancion game over " << endl;
+				mciSendString("pause ../DevilDaggers/videojuego/Codigo/Musica/gameOver.wav", NULL, 0, NULL);
+				estabaMuerto = false;
+				tiempecito = clock();
+				indice = rand() % 6 + 1;
+				playSong(indice);
+			}
+			if (opciones.modo == 2 && !es3D.per->vivo || opciones.modo == 1 && !es.getPer()->vivo) {
+				//cout << "parando cancion " << indice << endl;
+				estabaMuerto = true;
+				stopSong(indice);
+				mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/gameOver.wav", NULL, 0, NULL);
+			}
+			if (int(clock() - tiempecito) / CLOCKS_PER_SEC >= duraciones[indice - 1] && !parado) {
+				//cout << "cambiando cancion" << endl;
+				tiempecito = clock();
+				indice = rand() % 6 + 1;
+				playSong(indice);
+				//PlaySound(TEXT("../DevilDaggers/videojuego/Codigo/Musica/quack.wav"), NULL, SND_ASYNC);
+			}
+			if (parado) {
+				//cout << "inicializando cancion" << endl;
+				tiempecito = clock();
+				indice = rand() % 6 + 1;
+				playSong(indice);
+			}
+			parado = false;
+		}
+		else if(opciones.sonido == 2 && !parado){
+			//cout << "no quiero sonido, parando todas las canciones" << endl;
+			parado = true;
+			stopSong(1); stopSong(2); stopSong(3); stopSong(4); stopSong(5); stopSong(6);
+		}
 		//BORRA EL FONDO
 		modo3D = opciones.modo == 2;
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -320,7 +362,6 @@ int main(int argc, char **argv) {
 				glDisable(GL_DEPTH_TEST);
 				// Accept fragment if it closer to the camera than the former one
 				//glDepthFunc(GL_LESS);
-
 				// Cull triangles which normal is not towards the camera
 				glDisable(GL_CULL_FACE);
 				//BORRA EL FONDO
@@ -488,6 +529,7 @@ int main(int argc, char **argv) {
 			else {
 				//chrono c++11
 				inicio = clock();
+
 				glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 				ratonActualizado = false; 
 				glEnable(GL_DEPTH_TEST);
@@ -498,6 +540,10 @@ int main(int argc, char **argv) {
 				string tiempo;
 				//BORRA EL FONDO
 				if (es3D.per->vivo) {
+					if (!tiempoInicializado) {
+						tiempoInicializado = true;
+						lastEspectador = clock();
+					}
 					//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 					//renderiza escena
 					//glDepthMask(GL_FALSE);
@@ -508,7 +554,8 @@ int main(int argc, char **argv) {
 					es3D.moverObjetos();
 					par3D->actualizar();
 					
-					tiempo = to_string((clock() - puntuacion) / (CLOCKS_PER_SEC / 1000) / 1000.0f);
+					//tiempo = to_string((clock() - puntuacion) / (CLOCKS_PER_SEC / 1000) / 1000.0f);
+					tiempo = to_string(puntuacion3D / (CLOCKS_PER_SEC / 1000) / 1000.0f);
 					tiempo = tiempo.substr(0, tiempo.size() - 3);
 	
 					text3D.printText3D("ASESINADAS:", 20, 550, 17);
@@ -538,6 +585,7 @@ int main(int argc, char **argv) {
 					}
 				}
 				else {
+					tiempoInicializado = false;
 					if (gameover) {
 						fstream f;
 						int i = 0;
@@ -558,7 +606,9 @@ int main(int argc, char **argv) {
 					glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
 					);
 					cam.actualizarMVP();*/
-					float PUNTOS = (finPunt - puntuacion) / (CLOCKS_PER_SEC / 1000) / 1000.0f;
+					//float PUNTOS = (finPunt - puntuacion) / (CLOCKS_PER_SEC / 1000) / 1000.0f;
+					float PUNTOS = puntuacion3D / (CLOCKS_PER_SEC / 1000) / 1000.0f;
+					cout << "puntos = " << puntuacion3D << endl;
 					tiempo = to_string(PUNTOS);
 					tiempo = tiempo.substr(0, tiempo.size() - 3);
 					//cout << tiempo << endl;
@@ -579,7 +629,7 @@ int main(int argc, char **argv) {
 					f.renderizar();
 					text3D.end_string_renderer();
 					if (!ratonActualizado) {
-						cout << "muerto y no actualizado" << endl;
+						//cout << "muerto y no actualizado" << endl;
 						glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 						ratonActualizado = true;
 					}
@@ -587,6 +637,9 @@ int main(int argc, char **argv) {
 						cout << "PULSADO Intentar de nuevo" << endl;
 						cout << "_______________________" << endl;
 						ratonActualizado = false;
+						lastEspectador = clock();
+						tiempoInicializado = false;
+						puntuacion3D = 0;
 						es3D.reset();
 						Personaje3D per3D = Personaje3D({ 0, 1, 0 }, &es3D, window, &cam3D, perObj);
 						//evita perder teclas entre frames
@@ -630,6 +683,7 @@ int main(int argc, char **argv) {
 					else if (x > 0.1 && x < 0.4 && y>-1 && y < -0.6 && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && pulsado) {
 						cout << "PULSADO Menu" << endl;
 						cout << "_______________________" << endl;
+						tiempoInicializado = false;
 						mode = 1;
 						ofstream f(puntuaciones.fich);
 						int k = -1;

@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include "Render3D.h"
 #include "../Camara.h"
-
+#include "../Opciones.h"
 #include <al.h>
 #include <alc.h>
 
@@ -22,6 +22,7 @@ using namespace std;
 
 class Escena3D;
 
+class Opciones;
 
 class Personaje3D : public Render3D {
 public:
@@ -45,8 +46,8 @@ public:
 	GLuint shaderProgramBala;
 
 	Escena3D * es;
-	bool modoDios = true;
-
+	bool modoDios = false;
+	Opciones* opciones;
 	int up, down, left, right;
 
 	Camara camaras[2];

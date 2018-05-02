@@ -92,8 +92,11 @@ void CalaveraBase3D::seguir() {
 	if (double(clock() - tiempoSonido) / CLOCKS_PER_SEC >= intervalo) {
 		//intervalo = distribution3(gen);
 		tiempoSonido = clock();
-		thread t(&Sonidos::play, &Sonido, buffer, pos, "../DevilDaggers/videojuego/Codigo/Musica/calavera2.wav");
-		t.detach();
+		if (es->per->opciones->sonido == 1) {
+			thread t(&Sonidos::play, &Sonido, buffer, pos, "../DevilDaggers/videojuego/Codigo/Musica/calavera2.wav");
+			t.detach();
+		}
+		
 	}
 	if (nivel == 1) { //NORMALES
 		glm::vec3 vecDir = posP - pos; // vector movimiento
