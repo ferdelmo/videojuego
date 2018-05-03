@@ -73,11 +73,11 @@ CalaveraBase3D::CalaveraBase3D(glm::vec3 pos, glm::vec3 dir, Escena3D * es, GLFW
 	}
 	else if (nivel == 2) {
 		cambiarColor({ 0,1,0 });
-		vida = 50;
+		vida = 50* log10(es->per->numGemas) + 1;
 	}
 	else {
 		cambiarColor({ 0,0,1 });
-		vida = 50;
+		vida = 50 * log10(es->per->numGemas) + 1;
 	}
 
 	velRot = 0.085+distribution(gen)*0.005;
@@ -124,7 +124,7 @@ void CalaveraBase3D::seguir() {
 		dirAux = dirAux / glm::length(dirAux);
 		double alpha = glm::dot(mira, dirAux) / (glm::length(mira)*glm::length(dirAux));
 		alpha = acos(alpha);
-		cout << alpha << endl;
+
 		if (glm::length(pos - posP) <= es->limite ) { // esta cerca, y no de frente al jugador, busca la espalda
 			llegar = true;
 			pillada = false;

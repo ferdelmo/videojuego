@@ -64,8 +64,8 @@ void Partida3D::generarDaga1() {
 				daga1p = false;
 				daga1sec = 15;
 			}
-			else if (daga1sec > 10) {
-				daga1sec = daga1sec - 0.15;
+			else if (daga1sec > 5) {
+				daga1sec = daga1sec - 0.75;
 			}
 			cout << "Genera cada: " << daga1sec << endl;;
 			daga1 = clock();
@@ -84,8 +84,8 @@ void Partida3D::generarDaga2() {
 				daga2p = false;
 				daga2sec = 25;
 			}
-			else if (daga2sec > 10) {
-				daga2sec = daga2sec - 0.2;
+			else if (daga2sec > 5) {
+				daga2sec = daga2sec - 0.75;
 			}
 			cout << "Genera cada: " << daga2sec << endl;
 			daga2 = clock();
@@ -103,8 +103,8 @@ void Partida3D::generarDaga3() {
 				daga3p = false;
 				daga3sec = 30;
 			}
-			else if (daga3sec > 10) {
-				daga3sec = daga3sec - 0.25;
+			else if (daga3sec > 5) {
+				daga3sec = daga3sec - 1;
 			}
 			cout << "Genera cada: " << daga3sec << endl;;
 			daga3 = clock();

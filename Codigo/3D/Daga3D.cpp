@@ -58,6 +58,7 @@ Daga3D::Daga3D(glm::vec3 pos, glm::vec3 dir, Escena3D * es, GLFWwindow* window, 
 		Escena3D es3D;
 		Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/gema.obj", cubo.vertices, cubo.uvs, cubo.normals);
 		shared_ptr<Gema3D> sg = make_shared<Gema3D>(Gema3D(posIni, { 1,1,0 }, es, window, cam, cubo));
+		sg->iden = i;
 		es->add(sg);
 		gemas.push_back(sg);
 	}
@@ -135,14 +136,19 @@ bool Daga3D::sigueVivo() {
 	vector<shared_ptr<Bala3D>> * b = es->getBalas();
 	int i = 0;
 	while (i < b->size()) {
-		if (glm::length(pos - b->at(i)->pos) < tam + b->at(i)->tam) {
+		if (glm::length(pos - b->at(i)->pos) < tam*2 + b->at(i)->tam) {
 			b->erase(b->begin() + i);
 		}
+		/*float aux = b->at(i)->pos.y - pos.y+4;
+		cout << aux << endl;
+		if (glm::length(pos - b->at(i)->pos) < 1.6*tam*aux/4 + b->at(i)->tam && aux>0 && aux<10) {
+		b->erase(b->begin() + i);
+		}*/
 		else {
 			i++;
 		}
 	}
-	 i = 0;
+	i = 0;
 	while (i < gemas.size()) {
 		bool siguenViva = gemas[i]->colisionBala();
 		if (!siguenViva) {
@@ -186,14 +192,14 @@ void Daga3D::mover() {
 		nueva.z = -direccion.x*sin(ang) + direccion.z*cos(ang);
 		direccion = nueva;
 
-		GLfloat div = 2 * pi / gemas.size(); //para colocarlas alrededor de la torre
+		GLfloat div = 2 * pi / nivel; //para colocarlas alrededor de la torre
 		for (int i = 0; i < gemas.size(); i++) {
 			/*nuevaX = pos[0] + (tam * cos(orientacion+i*div));
 			nuevaY = pos[1] + (tam * sin(orientacion + i*div));*/
 
 			glm::vec3 nueva = direccion;
-			nueva.x = direccion.x*cos(i*div) + direccion.z*sin(i*div);
-			nueva.z = -direccion.x*sin(i*div) + direccion.z*cos(i*div);
+			nueva.x = direccion.x*cos(gemas[i]->iden*div) + direccion.z*sin(gemas[i]->iden*div);
+			nueva.z = -direccion.x*sin(gemas[i]->iden*div) + direccion.z*cos(gemas[i]->iden*div);
 			glm::vec3 pollas = nueva * glm::vec3({ tam, 0, tam });
 			nuevaPos = pos + pollas + glm::vec3({ 0,2,0 });
 
@@ -202,7 +208,7 @@ void Daga3D::mover() {
 			gemas[i]->direccion = nueva;
 		}
 		if (glm::length(pos - es->per->pos) <= tam + es->per->tam && !es->per->modoDios) {
-			//a->morir();
+			es->per->morir();
 		}
 		//cout << int(clock() - tiempecito) / CLOCKS_PER_SEC << endl;
 		if ((int(clock() - tiempecito) / CLOCKS_PER_SEC) % tiempoGen == 0 && generadas != int(clock() - tiempecito) / CLOCKS_PER_SEC) {

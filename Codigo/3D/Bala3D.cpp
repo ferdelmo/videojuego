@@ -31,7 +31,7 @@ Bala3D::Bala3D(glm::vec3 pos, glm::vec3 dir, GLFWwindow* window, Camara * c, Obj
 		cambiarColor({0,1,1 });
 	}
 	else {
-		danyo = 20;
+		danyo = 25;
 		cambiarColor({ 1,0,1 });
 	}
 }

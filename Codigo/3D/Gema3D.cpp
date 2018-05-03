@@ -45,7 +45,7 @@ bool Gema3D::colisionBala() {
 	int i = 0;
 	while (i < b->size()) {
 		//cout << distancia(pos[0], pos[1], b[i].pos[0], b[i].pos[1]) << endl;
-		if (glm::length(pos - b->at(i)->pos) < tam + b->at(i)->tam) {
+		if (glm::length(pos - b->at(i)->pos) < 1.25*tam + b->at(i)->tam) {
 			vida -= b->at(i)->danyo;
 			b->erase(b->begin() + i);
 			cout << "colision " << endl;

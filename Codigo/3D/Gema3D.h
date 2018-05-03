@@ -40,6 +40,7 @@ public:
 	ALsizei frequency;
 	ALenum format;
 	int Sonido = -1;
+	int iden = 1;
 
 public:
 

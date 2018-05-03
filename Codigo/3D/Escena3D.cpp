@@ -163,6 +163,7 @@ void Escena3D::reset() {
 	dagas.clear();
 	gemas.clear();
 	per.reset();
+	balas.clear();
 	//fon.reset();
 	fin = false;
 	calavsMatadas = 0;

@@ -39,7 +39,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
 
 //CONSTRUCTOR POR DEFECTO
 Personaje3D::Personaje3D(glm::vec3 pos, Escena3D * es, GLFWwindow * window, Camara * c, Obj3D obj)
-	: Render3D(window, "../DevilDaggers/videojuego/Codigo/Shaders/3D.vert", "../DevilDaggers/videojuego/Codigo/Shaders/3D.frag", c,obj, { 0,1,1 },1) {
+	: Render3D(window, "../DevilDaggers/videojuego/Codigo/Shaders/3D.vert", "../DevilDaggers/videojuego/Codigo/Shaders/3D.frag", c,obj, { 0.3,0.3,0.3 },1) {
 	this->es = es;
 	this->pos = pos;
 	//prepara las balas
@@ -162,7 +162,6 @@ void Personaje3D::controlesInFrame() {
 		angVert += (lastYpos - y) * sensibilidad * 0.01;
 	}
 
-	cout << angVert << endl;
 
 	glm::vec3 dirAux = { cos(glm::radians(angHoriz)) * cos(glm::radians(angVert)),
 		sin(glm::radians(angVert)),
