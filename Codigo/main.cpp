@@ -231,7 +231,7 @@ int main(int argc, char **argv) {
 	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/plano.obj", plano.vertices, plano.uvs, plano.normals);
 	Obj3D cubo, perObj;
 	Escena3D es3D;
-	es3D.entrenarRed();
+	//es3D.entrenarRed();
 	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/cubo.obj", cubo.vertices, cubo.uvs, cubo.normals);
 	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/arma.obj", perObj.vertices, perObj.uvs, perObj.normals);
 	Personaje3D per3D({ 0, 1, 0 }, &es3D, window, &cam3D, perObj);
@@ -245,6 +245,7 @@ int main(int argc, char **argv) {
 	Sonidos::genBuffs();
 	clock_t puntuacion3D = clock();
 	//mciSendString("play ../DevilDaggers/videojuego/Codigo/Musica/6.mp3", NULL, 0, NULL);
+	bool confirmSalir = false;
 	while (!glfwWindowShouldClose(window))
 	{
 		//cout << puntuacion3D << endl;
@@ -620,7 +621,7 @@ int main(int argc, char **argv) {
 					text3D.end_string_renderer();
 					text3D.printText3D("ASESINADAS:", 300, 260, 17);
 					text3D.printText3D(to_string(es3D.calavsMatadas).c_str(), 500, 260, 17); 
-						text3D.printText3D("TIEMPO:", 300, 200, 17);
+					text3D.printText3D("TIEMPO:", 300, 200, 17);
 					text3D.printText3D(tiempo.c_str(), 470, 200, 17);
 					text3D.printText3D("GEMAS:", 300, 140, 17);
 					text3D.printText3D(to_string(es3D.per->numGemas).c_str(), 410, 140, 17);
@@ -725,14 +726,36 @@ int main(int argc, char **argv) {
 		}
 		else if (mode == 3) {
 			text3D.init_string_renderer();
-			mode = opciones.renderizar();
+			if (!confirmSalir) {
+				mode = opciones.renderizar();
+				if (mode != 3 && antigua != opciones.resolucion) {
+					confirmSalir = true;
+					mode = 3;
+				}
+			}
+			else {
+				//mode = 100;
+				int auxIndice = opciones.resolucion;
+				text3D.init_string_renderer();
+				text3D.printText3D("CAMBIAR LA RESOLUCION CERRARA EL JUEGO", 100, 300, 14);
+				text3D.printText3D("DESEA CONTINUAR ?", 200, 260, 14); 
+				text3D.printText3D("PUELSE S PARA CONTINUAR, N PARA NO", 150, 220, 14);
+				int state = glfwGetKey(window, GLFW_KEY_S);
+				if (state == GLFW_PRESS) {
+					mode = 100;
+				}
+				state = glfwGetKey(window, GLFW_KEY_N);
+				if (state == GLFW_PRESS) {
+					mode = 3;
+					confirmSalir = false;
+				}
+				text3D.end_string_renderer();
+			}
+			
 			//pinta lo que haya en los buffers
 			glfwSwapBuffers(window);
 			//lee los eventos
 			glfwPollEvents();
-			if (mode != 3 && antigua != opciones.resolucion) {
-				mode = 100;
-			}
 			text3D.end_string_renderer();
 		}
 		else if (mode == 4) {
