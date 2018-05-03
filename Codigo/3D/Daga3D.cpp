@@ -100,7 +100,7 @@ Daga3D::Daga3D(glm::vec3 pos, glm::vec3 dir, Escena3D * es, GLFWwindow* window, 
 
 void Daga3D::GenerarCalaveras(int n) {
 	Obj3D cubo;
-	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/CALAVERA.obj", cubo.vertices, cubo.uvs, cubo.normals);
+	Render3D::loadOBJ("../DevilDaggers/videojuego/Codigo/3D/CALAVERAREC.obj", cubo.vertices, cubo.uvs, cubo.normals);
 	glm::vec3 posVieja = pos;
 	pos = pos + glm::vec3({ 0,2,0 });
 	if (nivel == 1) {
