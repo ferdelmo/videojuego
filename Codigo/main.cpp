@@ -724,6 +724,7 @@ int main(int argc, char **argv) {
 			}	
 		}
 		else if (mode == 3) {
+			text3D.init_string_renderer();
 			mode = opciones.renderizar();
 			//pinta lo que haya en los buffers
 			glfwSwapBuffers(window);
@@ -732,13 +733,16 @@ int main(int argc, char **argv) {
 			if (mode != 3 && antigua != opciones.resolucion) {
 				mode = 100;
 			}
+			text3D.end_string_renderer();
 		}
 		else if (mode == 4) {
+			text3D.init_string_renderer();
 			mode = puntuaciones.renderizar();
 			//pinta lo que haya en los buffers
 			glfwSwapBuffers(window);
 			//lee los eventos
 			glfwPollEvents();
+			text3D.end_string_renderer();
 		}
 		else if (mode == 5) {
 			mode = creditos.renderizar();
